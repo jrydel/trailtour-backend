@@ -6,7 +6,7 @@ import cz.jr.trailtour.backend.core.Parser;
 import cz.jr.trailtour.backend.core.ParserResult;
 import cz.jr.trailtour.backend.repository.AthleteRepository;
 import cz.jr.trailtour.backend.repository.ResultRepository;
-import cz.jr.trailtour.backend.repository.SegmentRepository;
+import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entity.Athlete;
 import cz.jr.trailtour.backend.repository.entity.Result;
 import cz.jr.trailtour.backend.repository.entity.Stage;
@@ -23,11 +23,11 @@ import java.util.List;
 @Service
 public class ScraperService {
 
-    private final SegmentRepository segmentService;
+    private final StageRepository segmentService;
     private final AthleteRepository athleteRepository;
     private final ResultRepository resultRepository;
 
-    public ScraperService(SegmentRepository segmentService, AthleteRepository athleteRepository, ResultRepository resultRepository) {
+    public ScraperService(StageRepository segmentService, AthleteRepository athleteRepository, ResultRepository resultRepository) {
         this.segmentService = segmentService;
         this.athleteRepository = athleteRepository;
         this.resultRepository = resultRepository;

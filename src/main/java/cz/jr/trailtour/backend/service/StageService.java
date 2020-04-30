@@ -1,6 +1,6 @@
 package cz.jr.trailtour.backend.service;
 
-import cz.jr.trailtour.backend.repository.SegmentRepository;
+import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entity.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,24 +11,24 @@ import java.util.List;
  * Created by Jiří Rýdel on 4/19/20, 1:26 PM
  */
 @Service
-public class SegmentService {
+public class StageService {
 
-    private final SegmentRepository segmentRepository;
+    private final StageRepository stageRepository;
 
     @Autowired
-    public SegmentService(SegmentRepository segmentRepository) {
-        this.segmentRepository = segmentRepository;
+    public StageService(StageRepository stageRepository) {
+        this.stageRepository = stageRepository;
     }
 
     public List<Stage> getAll() {
-        return segmentRepository.findAll();
+        return stageRepository.findAll();
     }
 
     public Stage save(Stage stage) {
-        return segmentRepository.saveAndFlush(stage);
+        return stageRepository.saveAndFlush(stage);
     }
 
     public void delete(Stage stage) {
-        segmentRepository.delete(stage);
+        stageRepository.delete(stage);
     }
 }
