@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * Created by Jiří Rýdel on 4/19/20, 1:22 PM
  */
 @Entity
-@Table(catalog = Constants.DATABASE_NAME, name = "segment")
+@Table(catalog = Constants.DATABASE_NAME, name = "stage")
 public class Stage extends DatabaseEntity {
 
     @JsonProperty(value = "country")
