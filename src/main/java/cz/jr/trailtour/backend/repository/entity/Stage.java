@@ -19,7 +19,7 @@ public class Stage extends DatabaseEntity {
     private String country;
     @JsonProperty(value = "number")
     @Column(name = "number")
-    private String number;
+    private int number;
     @JsonProperty(value = "name")
     @Column(name = "name")
     private String name;
@@ -47,11 +47,11 @@ public class Stage extends DatabaseEntity {
         this.country = country;
     }
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
