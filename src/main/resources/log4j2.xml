@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration finished="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">%5p %t - %d{yyyy-MM-dd HH:mm:ss.SSS}; - %c [%thread] - %m%n</Property>
+    </Properties>
+    <CustomLevels>
+        <CustomLevel name="SQL" intLevel="550"/>
+    </CustomLevels>
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache" level="ERROR"/>
+        <Logger name="org.springframework" level="INFO"/>
+        <!--        <Logger name="org.springframework.jdbc.core.JdbcTemplate" level="DEBUG"/>-->
+        <!--        <Logger name="org.springframework.jdbc.core.StatementCreatorUtils" level="TRACE"/>-->
+        <Logger name="org.hibernate" level="ERROR"/>
+        <Logger name="com.zaxxer" level="ERROR"/>
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
