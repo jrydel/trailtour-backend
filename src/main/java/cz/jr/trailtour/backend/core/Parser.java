@@ -59,8 +59,14 @@ public class Parser {
             int position = root.get("rank").asInt();
 
             String date = resultElement.text();
-            String time = element.child(6).text();
+            LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MMM d, yyyy"));
 
+            // skip vsechny pred kvetnem 2020
+            if (localDate.isBefore(LocalDate.of(2020, 5, 1))) {
+                continue;
+            }
+
+            String time = element.child(6).text();
             String name = element.child(1).text();
 
             Athlete athlete = new Athlete();
@@ -71,7 +77,7 @@ public class Parser {
 
             Result result = new Result();
             result.setAthleteId(athlete.getId());
-            result.setSegmentId(segmentId);
+            result.setStageId(segmentId);
             result.setActivityId(activityId);
             result.setPosition(position);
             result.setDate(LocalDate.parse(date, DateTimeFormatter.ofPattern("MMM d, yyyy")));

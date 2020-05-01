@@ -1,7 +1,7 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.AthleteRepository;
-import cz.jr.trailtour.backend.repository.entity.Athlete;
+import cz.jr.trailtour.backend.repository.entity.AthleteWeb;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -19,8 +19,8 @@ public class AthleteService {
         this.athleteRepository = athleteRepository;
     }
 
-    public List<Athlete> getAll() throws SQLException {
-        return athleteRepository.getAll();
+    public List<AthleteWeb> getAll() throws SQLException {
+        return athleteRepository.getAllWeb();
     }
 
 }

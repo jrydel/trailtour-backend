@@ -2,6 +2,8 @@ package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
 import cz.jr.trailtour.backend.repository.entity.Athlete;
+import cz.jr.trailtour.backend.repository.entity.AthleteWeb;
+import cz.jr.trailtour.backend.repository.entity.Club;
 import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import cz.jr.trailtour.backend.repository.mysql.Param;
 import cz.jr.trailtour.backend.repository.mysql.UpsertParam;
@@ -28,13 +30,21 @@ public class AthleteRepository extends MysqlRepository {
         }), new Object[]{athlete.getId(), athlete.getName(), athlete.getGender().toString()});
     }
 
-    public List<Athlete> getAll() throws SQLException {
-        return selectList("SELECT id, club_id, name, gender FROM trailtour.athlete", new Object[]{}, rs -> {
-            Athlete athlete = new Athlete();
-            athlete.setId(rs.getLong("id"));
-            athlete.setClubId(rs.getLong("club_id"));
-            athlete.setName(rs.getString("name"));
-            athlete.setGender(Athlete.Gender.valueOf(rs.getString("gender")));
+    public List<AthleteWeb> getAllWeb() throws SQLException {
+        return selectList("SELECT a.id, a.name, a.gender, b.id, b.name FROM trailtour.athlete a LEFT JOIN trailtour.club b ON a.club_id = b.id", new Object[]{}, rs -> {
+            AthleteWeb athlete = new AthleteWeb();
+            athlete.setId(rs.getLong("a.id"));
+            athlete.setName(rs.getString("a.name"));
+            athlete.setGender(Athlete.Gender.valueOf(rs.getString("a.gender")));
+
+            long clubId = rs.getLong("b.id");
+            if (!rs.wasNull()) {
+                Club club = new Club();
+                club.setId(clubId);
+                club.setName(rs.getString("b.name"));
+                athlete.setClub(club);
+            }
+
             return athlete;
         });
     }

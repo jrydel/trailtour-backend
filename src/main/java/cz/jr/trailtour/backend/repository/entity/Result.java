@@ -1,6 +1,8 @@
 package cz.jr.trailtour.backend.repository.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import cz.jr.trailtour.backend.config.Constants;
 
 import java.time.LocalDate;
 
@@ -8,8 +10,9 @@ import java.time.LocalDate;
  * Created by Jiří Rýdel on 4/29/20, 3:02 PM
  */
 public class Result {
-    @JsonProperty(value = "segmentId")
-    private long segmentId;
+
+    @JsonProperty(value = "stageId")
+    private long stageId;
     @JsonProperty(value = "athleteId")
     private long athleteId;
     @JsonProperty(value = "activityId")
@@ -17,16 +20,17 @@ public class Result {
     @JsonProperty(value = "position")
     private int position;
     @JsonProperty(value = "date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
     private LocalDate date;
     @JsonProperty(value = "time")
     private long time;
 
-    public long getSegmentId() {
-        return segmentId;
+    public long getStageId() {
+        return stageId;
     }
 
-    public void setSegmentId(long stageId) {
-        this.segmentId = stageId;
+    public void setStageId(long stageId) {
+        this.stageId = stageId;
     }
 
     public long getAthleteId() {

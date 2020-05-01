@@ -12,20 +12,10 @@ public class Athlete extends DatabaseEntity {
         F
     }
 
-    @JsonProperty(value = "clubId")
-    private Long clubId;
     @JsonProperty(value = "name")
     private String name;
     @JsonProperty(value = "gender")
     private Gender gender;
-
-    public Long getClubId() {
-        return clubId;
-    }
-
-    public void setClubId(Long clubId) {
-        this.clubId = clubId;
-    }
 
     public String getName() {
         return name;
