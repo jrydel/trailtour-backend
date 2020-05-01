@@ -47,6 +47,16 @@ public class StageRepository extends MysqlRepository {
                 new UpsertParam("elevation"),
                 new UpsertParam("latitude"),
                 new UpsertParam("longitude")
-        }), new Object[]{stage.getId(), stage.getCountry(), stage.getName(), stage.getType(), stage.getDistance(), stage.getElevation(), stage.getLatitude(), stage.getLongitude()});
+        }), new Object[]{
+                stage.getId(),
+                stage.getCountry(),
+                stage.getNumber(),
+                stage.getName(),
+                stage.getType(),
+                stage.getDistance(),
+                stage.getElevation(),
+                stage.getLatitude(),
+                stage.getLongitude()
+        });
     }
 }
