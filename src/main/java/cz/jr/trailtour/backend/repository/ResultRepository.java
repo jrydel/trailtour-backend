@@ -22,7 +22,7 @@ public class ResultRepository extends MysqlRepository {
 
     public void saveResult(Result result) throws SQLException {
         execute(generateUpsert("trailtour.result", new Param[]{
-                new Param("segment_id"),
+                new Param("stage_id"),
                 new Param("athlete_id"),
                 new UpsertParam("activity_id"),
                 new UpsertParam("position"),
