@@ -23,7 +23,7 @@ public class Stage extends DatabaseEntity {
     @JsonProperty(value = "name")
     @Column(name = "name")
     private String name;
-    @JsonProperty(value = "latitude")
+    @JsonProperty(value = "type")
     @Column(name = "type")
     private String type;
     @JsonProperty(value = "distance")
@@ -32,7 +32,7 @@ public class Stage extends DatabaseEntity {
     @JsonProperty(value = "elevation")
     @Column(name = "elevation")
     private Integer elevation;
-    @JsonProperty(value = "type")
+    @JsonProperty(value = "latitude")
     @Column(name = "latitude")
     private Double latitude;
     @JsonProperty(value = "longitude")
