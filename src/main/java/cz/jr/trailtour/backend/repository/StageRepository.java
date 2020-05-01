@@ -21,7 +21,7 @@ public class StageRepository extends MysqlRepository {
     }
 
     public List<Stage> getAll() throws SQLException {
-        return selectList("SELECT a.id, a.country, a.number, a.name, a.type, a.distance, a.elevation, a.latitude, a.longitude FROM trailtour.stage", new Object[]{}, rs -> {
+        return selectList("SELECT a.id, a.country, a.number, a.name, a.type, a.distance, a.elevation, a.latitude, a.longitude FROM trailtour.stage a", new Object[]{}, rs -> {
             Stage stage = new Stage();
             stage.setId(rs.getLong("a.id"));
             stage.setCountry(rs.getString("a.country"));
