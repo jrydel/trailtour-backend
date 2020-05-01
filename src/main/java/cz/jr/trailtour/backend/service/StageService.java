@@ -5,6 +5,7 @@ import cz.jr.trailtour.backend.repository.entity.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -20,15 +21,11 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public List<Stage> getAll() {
-        return stageRepository.findAll();
+    public List<Stage> getAll() throws SQLException {
+        return stageRepository.getAll();
     }
 
-    public Stage save(Stage stage) {
+    public int save(Stage stage) throws SQLException {
         return stageRepository.save(stage);
-    }
-
-    public void delete(Stage stage) {
-        stageRepository.delete(stage);
     }
 }

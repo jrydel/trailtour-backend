@@ -3,7 +3,6 @@ package cz.jr.trailtour.backend.repository.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.jr.trailtour.backend.config.Constants;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -15,28 +14,20 @@ import javax.persistence.Table;
 public class Stage extends DatabaseEntity {
 
     @JsonProperty(value = "country")
-    @Column(name = "country")
     private String country;
     @JsonProperty(value = "number")
-    @Column(name = "number")
     private int number;
     @JsonProperty(value = "name")
-    @Column(name = "name")
     private String name;
     @JsonProperty(value = "type")
-    @Column(name = "type")
     private String type;
     @JsonProperty(value = "distance")
-    @Column(name = "distance")
     private Double distance;
     @JsonProperty(value = "elevation")
-    @Column(name = "elevation")
     private Integer elevation;
     @JsonProperty(value = "latitude")
-    @Column(name = "latitude")
     private Double latitude;
     @JsonProperty(value = "longitude")
-    @Column(name = "longitude")
     private Double longitude;
 
     public String getCountry() {

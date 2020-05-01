@@ -1,6 +1,6 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entity.AthleteWeb;
+import cz.jr.trailtour.backend.repository.entity.Athlete;
 import cz.jr.trailtour.backend.service.AthleteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,8 +25,8 @@ public class AthleteControler {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getAthletesWeb", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<AthleteWeb>> scrap() throws SQLException {
+    @GetMapping(value = "/getAthletes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Athlete>> scrap() throws SQLException {
         return new ResponseEntity<>(athleteService.getAll(), HttpStatus.OK);
     }
 }

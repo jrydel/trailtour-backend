@@ -12,49 +12,43 @@ import java.time.LocalDate;
 public class Result {
 
     @JsonProperty(value = "stageId")
-    private long stageId;
-    @JsonProperty(value = "athleteId")
-    private long athleteId;
+    private Long stageId;
+    @JsonProperty(value = "athlete")
+    private Athlete athlete;
     @JsonProperty(value = "activityId")
-    private long activityId;
-    @JsonProperty(value = "position")
-    private int position;
+    private Long activityId;
     @JsonProperty(value = "date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
     private LocalDate date;
     @JsonProperty(value = "time")
-    private long time;
+    private Integer time;
+    @JsonProperty(value = "position")
+    private Integer position;
+    @JsonProperty(value = "pointsStrava")
+    private Double pointsStrava;
 
-    public long getStageId() {
+    public Long getStageId() {
         return stageId;
     }
 
-    public void setStageId(long stageId) {
+    public void setStageId(Long stageId) {
         this.stageId = stageId;
     }
 
-    public long getAthleteId() {
-        return athleteId;
+    public Athlete getAthlete() {
+        return athlete;
     }
 
-    public void setAthleteId(long athleteId) {
-        this.athleteId = athleteId;
+    public void setAthlete(Athlete athlete) {
+        this.athlete = athlete;
     }
 
-    public long getActivityId() {
+    public Long getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(long activityId) {
+    public void setActivityId(Long activityId) {
         this.activityId = activityId;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public LocalDate getDate() {
@@ -65,11 +59,27 @@ public class Result {
         this.date = date;
     }
 
-    public long getTime() {
+    public Integer getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(Integer time) {
         this.time = time;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public Double getPointsStrava() {
+        return pointsStrava;
+    }
+
+    public void setPointsStrava(Double pointsStrava) {
+        this.pointsStrava = pointsStrava;
     }
 }

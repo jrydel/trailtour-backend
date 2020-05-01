@@ -1,7 +1,7 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.ResultRepository;
-import cz.jr.trailtour.backend.repository.entity.ResultWeb;
+import cz.jr.trailtour.backend.repository.entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class ResultService {
         this.resultRepository = resultRepository;
     }
 
-    public List<ResultWeb> getResultsWeb(long stageId) throws SQLException {
-        return resultRepository.getResultsWeb(stageId);
+    public List<Result> getResults(long stageId) throws SQLException {
+        return resultRepository.getResults(stageId);
     }
 }

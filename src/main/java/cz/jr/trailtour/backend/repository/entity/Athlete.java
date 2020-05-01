@@ -16,6 +16,8 @@ public class Athlete extends DatabaseEntity {
     private String name;
     @JsonProperty(value = "gender")
     private Gender gender;
+    @JsonProperty(value = "club")
+    private Club club;
 
     public String getName() {
         return name;
@@ -31,5 +33,13 @@ public class Athlete extends DatabaseEntity {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public Club getClub() {
+        return club;
+    }
+
+    public void setClub(Club club) {
+        this.club = club;
     }
 }

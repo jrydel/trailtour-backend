@@ -2,11 +2,8 @@ package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
 import cz.jr.trailtour.backend.repository.entity.Athlete;
-import cz.jr.trailtour.backend.repository.entity.AthleteWeb;
 import cz.jr.trailtour.backend.repository.entity.Club;
 import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
-import cz.jr.trailtour.backend.repository.mysql.Param;
-import cz.jr.trailtour.backend.repository.mysql.UpsertParam;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -22,17 +19,9 @@ public class AthleteRepository extends MysqlRepository {
         super(dataSource);
     }
 
-    public void saveAthlete(Athlete athlete) throws SQLException {
-        execute(generateUpsert("trailtour.athlete", new Param[]{
-                new Param("id"),
-                new UpsertParam("name"),
-                new UpsertParam("gender")
-        }), new Object[]{athlete.getId(), athlete.getName(), athlete.getGender().toString()});
-    }
-
-    public List<AthleteWeb> getAllWeb() throws SQLException {
+    public List<Athlete> getAll() throws SQLException {
         return selectList("SELECT a.id, a.name, a.gender, b.id, b.name FROM trailtour.athlete a LEFT JOIN trailtour.club b ON a.club_id = b.id", new Object[]{}, rs -> {
-            AthleteWeb athlete = new AthleteWeb();
+            Athlete athlete = new Athlete();
             athlete.setId(rs.getLong("a.id"));
             athlete.setName(rs.getString("a.name"));
             athlete.setGender(Athlete.Gender.valueOf(rs.getString("a.gender")));
