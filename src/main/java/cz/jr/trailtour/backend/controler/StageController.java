@@ -37,8 +37,8 @@ public class StageController {
     }
 
     @CrossOrigin
-    @PostMapping(path = "/saveSegment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> saveSegment(@RequestBody Stage stage) {
+    @PostMapping(path = "/saveStage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> saveStage(@RequestBody Stage stage) {
         stageService.save(stage);
         return new ResponseEntity<>(HttpStatus.OK);
     }
