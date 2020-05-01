@@ -24,11 +24,8 @@ public class Stage extends DatabaseEntity {
     @Column(name = "name")
     private String name;
     @JsonProperty(value = "latitude")
-    @Column(name = "latitude")
-    private Double latitude;
-    @JsonProperty(value = "longitude")
-    @Column(name = "longitude")
-    private Double longitude;
+    @Column(name = "type")
+    private String type;
     @JsonProperty(value = "distance")
     @Column(name = "distance")
     private Double distance;
@@ -36,8 +33,11 @@ public class Stage extends DatabaseEntity {
     @Column(name = "elevation")
     private Integer elevation;
     @JsonProperty(value = "type")
-    @Column(name = "type")
-    private String type;
+    @Column(name = "latitude")
+    private Double latitude;
+    @JsonProperty(value = "longitude")
+    @Column(name = "longitude")
+    private Double longitude;
 
     public String getCountry() {
         return country;
@@ -63,20 +63,12 @@ public class Stage extends DatabaseEntity {
         this.name = name;
     }
 
-    public Double getLatitude() {
-        return latitude;
+    public String getType() {
+        return type;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Double getDistance() {
@@ -95,11 +87,19 @@ public class Stage extends DatabaseEntity {
         this.elevation = elevation;
     }
 
-    public String getType() {
-        return type;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

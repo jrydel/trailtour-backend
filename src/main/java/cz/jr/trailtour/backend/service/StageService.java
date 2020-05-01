@@ -25,7 +25,7 @@ public class StageService {
     }
 
     public Stage save(Stage stage) {
-        return stageRepository.saveAndFlush(stage);
+        return stageRepository.save(stage);
     }
 
     public void delete(Stage stage) {
