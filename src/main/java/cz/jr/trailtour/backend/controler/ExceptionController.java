@@ -27,6 +27,7 @@ public class ExceptionController {
     }
 
     private Map<String, String> convertException(Throwable t) {
+        LOG.error("Error.", t);
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         result.put("message", Utils.convertMessages(t));
         result.put("stackTrace", ExceptionUtils.getStackTrace(t));
