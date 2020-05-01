@@ -23,13 +23,14 @@ public class ResultRepository extends MysqlRepository {
     }
 
     public List<Result> getResults(long stageId) throws SQLException {
-        return selectList("SELECT a.activity_id, a.date, a.time, a.position, b.id, b.name, b.gender, c.id, c.name FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id LEFT JOIN trailtour.club c on c.id = b.club_id WHERE a.stage_id = ?", new Object[]{stageId}, rs -> {
+        return selectList("SELECT a.activity_id, a.date, a.time, a.position, a.points_strava, b.id, b.name, b.gender, c.id, c.name FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id LEFT JOIN trailtour.club c on c.id = b.club_id WHERE a.stage_id = ?", new Object[]{stageId}, rs -> {
             Result result = new Result();
             result.setStageId(stageId);
             result.setActivityId(rs.getLong("a.activity_id"));
             result.setDate(LocalDate.parse(rs.getString("a.date"), DateTimeFormatter.ISO_DATE));
             result.setTime(rs.getInt("a.time"));
             result.setPosition(rs.getInt("a.position"));
+            result.setPointsStrava(rs.getDouble("a.points_strava"));
 
             Athlete athlete = new Athlete();
             athlete.setId(rs.getLong("b.id"));
