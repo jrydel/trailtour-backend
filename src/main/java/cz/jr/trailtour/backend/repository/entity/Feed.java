@@ -22,6 +22,8 @@ public class Feed {
     private String athleteName;
     @JsonProperty(value = "stageId")
     private Long stageId;
+    @JsonProperty(value = "stageNumber")
+    private int stageNumber;
     @JsonProperty(value = "stageName")
     private String stageName;
     @JsonProperty(value = "time")
@@ -68,6 +70,14 @@ public class Feed {
 
     public void setStageId(Long stageId) {
         this.stageId = stageId;
+    }
+
+    public int getStageNumber() {
+        return stageNumber;
+    }
+
+    public void setStageNumber(int stageNumber) {
+        this.stageNumber = stageNumber;
     }
 
     public String getStageName() {
