@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.jr.trailtour.backend.config.Constants;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by Jiří Rýdel on 5/2/20, 1:44 PM
  */
 public class Feed {
 
-    @JsonProperty(value = "date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
-    private LocalDate date;
+    @JsonProperty(value = "dateTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TIME_FORMAT)
+    private LocalDateTime dateTime;
     @JsonProperty(value = "activityId")
     private Long activityId;
     @JsonProperty(value = "athleteId")
@@ -29,12 +29,13 @@ public class Feed {
     @JsonProperty(value = "position")
     private int position;
 
-    public LocalDate getDate() {
-        return date;
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Long getActivityId() {
