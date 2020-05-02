@@ -24,7 +24,7 @@ public class ResultRepository extends MysqlRepository {
     }
 
     public List<Feed> getFeed(int limit) throws SQLException {
-        return selectList("SELECT a.activity_id, a.date, a.time, a.position, b.id, b.name, c.id, c.name FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id JOIN trailtour.stage c ON c.id = a.stage_id LIMIT ?", new Object[]{limit}, rs -> {
+        return selectList("SELECT a.activity_id, a.date, a.time, a.position, b.id, b.name, c.id, c.name FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id JOIN trailtour.stage c ON c.id = a.stage_id ORDER BY a.updated DESC LIMIT ?", new Object[]{limit}, rs -> {
             Feed feed = new Feed();
             feed.setActivityId(rs.getLong("a.activity_id"));
             feed.setDate(LocalDate.parse(rs.getString("a.date"), DateTimeFormatter.ISO_DATE));
