@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.ResultRepository;
+import cz.jr.trailtour.backend.repository.entity.Feed;
 import cz.jr.trailtour.backend.repository.entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ public class ResultService {
     @Autowired
     public ResultService(ResultRepository resultRepository) {
         this.resultRepository = resultRepository;
+    }
+
+    public List<Feed> getFeed(int limit) throws SQLException {
+        return resultRepository.getFeed(limit);
     }
 
     public List<Result> getResults(long stageId) throws SQLException {

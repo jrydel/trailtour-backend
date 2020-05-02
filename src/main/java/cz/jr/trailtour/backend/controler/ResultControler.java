@@ -1,5 +1,6 @@
 package cz.jr.trailtour.backend.controler;
 
+import cz.jr.trailtour.backend.repository.entity.Feed;
 import cz.jr.trailtour.backend.repository.entity.Result;
 import cz.jr.trailtour.backend.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,14 @@ public class ResultControler {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/getFeed", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Feed>> getFeed(@RequestParam("limit") int limit) throws SQLException {
+        return new ResponseEntity<>(resultService.getFeed(limit), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/getResults", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Result>> getResultsWeb(@RequestParam("stageId") long stageId) throws SQLException {
+    public ResponseEntity<List<Result>> getResults(@RequestParam("stageId") long stageId) throws SQLException {
         return new ResponseEntity<>(resultService.getResults(stageId), HttpStatus.OK);
     }
 }

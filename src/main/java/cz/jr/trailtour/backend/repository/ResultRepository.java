@@ -3,6 +3,7 @@ package cz.jr.trailtour.backend.repository;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.jr.trailtour.backend.repository.entity.Athlete;
 import cz.jr.trailtour.backend.repository.entity.Club;
+import cz.jr.trailtour.backend.repository.entity.Feed;
 import cz.jr.trailtour.backend.repository.entity.Result;
 import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,21 @@ public class ResultRepository extends MysqlRepository {
 
     public ResultRepository(HikariDataSource dataSource) {
         super(dataSource);
+    }
+
+    public List<Feed> getFeed(int limit) throws SQLException {
+        return selectList("SELECT a.activity_id, a.date, a.time, a.position, b.id, b.name, c.id, c.name FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id JOIN trailtour.stage c ON c.id = a.stage_id LIMIT ?", new Object[]{limit}, rs -> {
+            Feed feed = new Feed();
+            feed.setActivityId(rs.getLong("a.activity_id"));
+            feed.setDate(LocalDate.parse(rs.getString("a.date"), DateTimeFormatter.ISO_DATE));
+            feed.setTime(rs.getInt("a.time"));
+            feed.setPosition(rs.getInt("a.position"));
+            feed.setAthleteId(rs.getLong("b.id"));
+            feed.setAthleteName(rs.getString("b.name"));
+            feed.setStageId(rs.getLong("c.id"));
+            feed.setStageName(rs.getString("c.name"));
+            return feed;
+        });
     }
 
     public List<Result> getResults(long stageId) throws SQLException {

@@ -26,7 +26,7 @@ public class AthleteControler {
 
     @CrossOrigin
     @GetMapping(value = "/getAthletes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Athlete>> scrap() throws SQLException {
+    public ResponseEntity<List<Athlete>> getAthletes() throws SQLException {
         return new ResponseEntity<>(athleteService.getAll(), HttpStatus.OK);
     }
 }
