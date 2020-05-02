@@ -23,7 +23,7 @@ public class Stage extends DatabaseEntity {
     private Double latitude;
     @JsonProperty(value = "longitude")
     private Double longitude;
-    @JsonProperty(value = "longitude")
+    @JsonProperty(value = "stravaCount")
     private Integer stravaCount;
 
     public String getCountry() {
