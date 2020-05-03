@@ -26,11 +26,12 @@ public class Feed {
     private int stageNumber;
     @JsonProperty(value = "stageName")
     private String stageName;
+    @JsonProperty(value = "stageCountry")
+    private String stageCountry;
     @JsonProperty(value = "time")
     private int time;
     @JsonProperty(value = "position")
     private int position;
-
 
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -86,6 +87,14 @@ public class Feed {
 
     public void setStageName(String stageName) {
         this.stageName = stageName;
+    }
+
+    public String getStageCountry() {
+        return stageCountry;
+    }
+
+    public void setStageCountry(String stageCountry) {
+        this.stageCountry = stageCountry;
     }
 
     public int getTime() {
