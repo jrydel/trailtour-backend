@@ -32,6 +32,12 @@ public class StageController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/getStage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Stage> defaultResponse(@RequestParam(value = "id") Long id) throws SQLException {
+        return new ResponseEntity<>(stageService.get(id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/getStages", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Stage>> getStages() throws SQLException {
         return new ResponseEntity<>(stageService.getAll(), HttpStatus.OK);

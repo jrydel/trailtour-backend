@@ -20,6 +20,23 @@ public class StageRepository extends MysqlRepository {
         super(dataSource);
     }
 
+    public Stage get(long stageId) throws SQLException {
+        return selectObject("SELECT a.country, a.number, a.name, a.type, a.distance, a.elevation, a.latitude, a.longitude, COUNT(*) AS count_strava FROM trailtour.stage a LEFT JOIN trailtour.result b ON a.id = b.stage_id GROUP BY a.id WHERE a.id = ?", new Object[]{stageId}, rs -> {
+            Stage stage = new Stage();
+            stage.setId(stageId);
+            stage.setCountry(rs.getString("a.country"));
+            stage.setNumber(rs.getInt("a.number"));
+            stage.setName(rs.getString("a.name"));
+            stage.setType(rs.getString("a.type"));
+            stage.setDistance(rs.getDouble("a.distance"));
+            stage.setElevation(rs.getInt("a.elevation"));
+            stage.setLatitude(rs.getDouble("a.latitude"));
+            stage.setLongitude(rs.getDouble("a.longitude"));
+            stage.setStravaCount(rs.getInt("count_strava"));
+            return stage;
+        });
+    }
+
     public List<Stage> getAll() throws SQLException {
         return selectList("SELECT a.id, a.country, a.number, a.name, a.type, a.distance, a.elevation, a.latitude, a.longitude, COUNT(*) AS count_strava FROM trailtour.stage a LEFT JOIN trailtour.result b ON a.id = b.stage_id GROUP BY a.id", new Object[]{}, rs -> {
             Stage stage = new Stage();

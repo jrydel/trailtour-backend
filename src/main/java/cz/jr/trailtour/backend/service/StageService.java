@@ -21,6 +21,10 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
+    public Stage get(long stageId) throws SQLException {
+        return stageRepository.get(stageId);
+    }
+
     public List<Stage> getAll() throws SQLException {
         return stageRepository.getAll();
     }
