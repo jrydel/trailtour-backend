@@ -25,6 +25,11 @@ public class StageService {
         return stageRepository.get(stageId);
     }
 
+    public Stage get(String country, int number) throws SQLException {
+        Long stageId = stageRepository.getStageId(country, number);
+        return get(stageId);
+    }
+
     public List<Stage> getAll() throws SQLException {
         return stageRepository.getAll();
     }

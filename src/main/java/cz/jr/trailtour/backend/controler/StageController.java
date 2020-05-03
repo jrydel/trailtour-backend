@@ -32,9 +32,15 @@ public class StageController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getStage", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> defaultResponse(@RequestParam(value = "id") Long id) throws SQLException {
+    @GetMapping(value = "/getStageById", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Stage> getStageById(@RequestParam(value = "id") Long id) throws SQLException {
         return new ResponseEntity<>(stageService.get(id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getStageByCountryNumber", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Stage> getStageByCountryNumber(@RequestParam(value = "country") String country, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(stageService.get(country, number), HttpStatus.OK);
     }
 
     @CrossOrigin
