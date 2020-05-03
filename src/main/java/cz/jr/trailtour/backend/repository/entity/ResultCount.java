@@ -11,6 +11,8 @@ public class ResultCount {
     private int male;
     @JsonProperty(value = "F")
     private int female;
+    @JsonProperty(value = "C")
+    private int club;
 
     public int getMale() {
         return male;
@@ -26,5 +28,13 @@ public class ResultCount {
 
     public void setFemale(int female) {
         this.female = female;
+    }
+
+    public int getClub() {
+        return club;
+    }
+
+    public void setClub(int club) {
+        this.club = club;
     }
 }

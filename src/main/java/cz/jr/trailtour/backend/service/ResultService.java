@@ -44,6 +44,7 @@ public class ResultService {
         ResultCount resultCount = new ResultCount();
         resultCount.setMale(maleCount);
         resultCount.setFemale(femaleCount);
+        resultCount.setClub(0);
         return resultCount;
     }
 }
