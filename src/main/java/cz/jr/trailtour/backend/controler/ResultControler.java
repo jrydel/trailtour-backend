@@ -39,4 +39,10 @@ public class ResultControler {
     public ResponseEntity<List<Result>> getResults(@RequestParam("stageId") long stageId) throws SQLException {
         return new ResponseEntity<>(resultService.getResults(stageId), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/getResults", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Result>> getResults(@RequestParam("country") String country, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(resultService.getResults(country, number), HttpStatus.OK);
+    }
 }

@@ -20,6 +20,10 @@ public class StageRepository extends MysqlRepository {
         super(dataSource);
     }
 
+    public Long getStageId(String country, int number) throws SQLException {
+        return selectObject("SELECT id FROM trailtour.stage WHERE country = ? AND number = ?", new Object[]{country, number}, rs -> rs.getObject("id", Long.class));
+    }
+
     public Stage get(long stageId) throws SQLException {
         return selectObject("SELECT a.country, a.number, a.name, a.type, a.distance, a.elevation, a.latitude, a.longitude, COUNT(*) AS count_strava FROM trailtour.stage a LEFT JOIN trailtour.result b ON a.id = b.stage_id WHERE a.id = ? GROUP by a.id", new Object[]{stageId}, rs -> {
             Stage stage = new Stage();
