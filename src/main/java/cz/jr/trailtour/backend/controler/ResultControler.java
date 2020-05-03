@@ -2,6 +2,7 @@ package cz.jr.trailtour.backend.controler;
 
 import cz.jr.trailtour.backend.repository.entity.Feed;
 import cz.jr.trailtour.backend.repository.entity.Result;
+import cz.jr.trailtour.backend.repository.entity.ResultCount;
 import cz.jr.trailtour.backend.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,11 @@ public class ResultControler {
     @GetMapping(value = "/getResultsByCountryNumber", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Result>> getResultsByCountryNumber(@RequestParam("country") String country, @RequestParam(value = "number") int number) throws SQLException {
         return new ResponseEntity<>(resultService.getResults(country, number), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getResultsCount", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResultCount> getResultsCount(@RequestParam("country") String country, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(resultService.getResultsCount(country, number), HttpStatus.OK);
     }
 }
