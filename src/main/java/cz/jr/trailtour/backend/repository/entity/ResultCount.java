@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ResultCount {
 
-    @JsonProperty(value = "male")
+    @JsonProperty(value = "M")
     private int male;
-    @JsonProperty(value = "female")
+    @JsonProperty(value = "F")
     private int female;
 
     public int getMale() {
