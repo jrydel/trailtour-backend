@@ -69,6 +69,6 @@ public class ResultRepository extends MysqlRepository {
     }
 
     public int getResultsCount(String gender, long stageId) throws SQLException {
-        return select("SELECT COUNT(*) as count FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_id = ?", new Object[]{gender, stageId}, rs -> rs.getInt("count"));
+        return selectObject("SELECT COUNT(*) as count FROM trailtour.result a JOIN trailtour.athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_id = ?", new Object[]{gender, stageId}, rs -> rs.getInt("count"));
     }
 }
