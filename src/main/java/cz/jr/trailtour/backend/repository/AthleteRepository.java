@@ -19,8 +19,8 @@ public class AthleteRepository extends MysqlRepository {
         super(dataSource);
     }
 
-    public List<Athlete> getAll() throws SQLException {
-        return selectList("SELECT a.id, a.name, a.gender, b.id, b.name FROM trailtour.athlete a LEFT JOIN trailtour.club b ON a.club_id = b.id", new Object[]{}, rs -> {
+    public List<Athlete> getAll(String database) throws SQLException {
+        return selectList("SELECT a.id, a.name, a.gender, b.id, b.name FROM " + database + ".athlete a LEFT JOIN " + database + ".club b ON a.club_id = b.id WHERE a.status = ?", new Object[]{"enabled"}, rs -> {
             Athlete athlete = new Athlete();
             athlete.setId(rs.getLong("a.id"));
             athlete.setName(rs.getString("a.name"));

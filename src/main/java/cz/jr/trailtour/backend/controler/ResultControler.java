@@ -31,25 +31,25 @@ public class ResultControler {
 
     @CrossOrigin
     @GetMapping(value = "/getFeed", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Feed>> getFeed(@RequestParam("limit") int limit) throws SQLException {
-        return new ResponseEntity<>(resultService.getFeed(limit), HttpStatus.OK);
+    public ResponseEntity<List<Feed>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit) throws SQLException {
+        return new ResponseEntity<>(resultService.getFeed(database, limit), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getResultsById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Result>> getResultsById(@RequestParam("stageId") long stageId) throws SQLException {
-        return new ResponseEntity<>(resultService.getResults(stageId), HttpStatus.OK);
+    public ResponseEntity<List<Result>> getResultsById(@RequestParam(value = "database") String database, @RequestParam("stageId") long stageId) throws SQLException {
+        return new ResponseEntity<>(resultService.getResultsById(database, stageId), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getResultsByCountryNumber", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Result>> getResultsByCountryNumber(@RequestParam("country") String country, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(resultService.getResults(country, number), HttpStatus.OK);
+    @GetMapping(value = "/getResultsByNumber", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Result>> getResultsByNumber(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(resultService.getResultsByNumber(database, number), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getResultsCount", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResultCount> getResultsCount(@RequestParam("country") String country, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(resultService.getResultsCount(country, number), HttpStatus.OK);
+    public ResponseEntity<ResultCount> getResultsCount(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(resultService.getResultsCount(database, number), HttpStatus.OK);
     }
 }

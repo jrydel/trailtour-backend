@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.jr.trailtour.backend.config.Constants;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 3:02 PM
@@ -15,17 +16,19 @@ public class Result {
     private Long stageId;
     @JsonProperty(value = "athlete")
     private Athlete athlete;
-    @JsonProperty(value = "activityId")
-    private Long activityId;
-    @JsonProperty(value = "date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
-    private LocalDate date;
-    @JsonProperty(value = "time")
-    private Integer time;
-    @JsonProperty(value = "position")
-    private Integer position;
-    @JsonProperty(value = "pointsStrava")
-    private Double pointsStrava;
+    @JsonProperty(value = "strava")
+    private Strava strava;
+    @JsonProperty(value = "points")
+    private BigDecimal points;
+    @JsonProperty(value = "pointsTrailtour")
+    private BigDecimal pointsTrailtour;
+
+    @JsonProperty(value = "updated")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TIME_FORMAT)
+    private LocalDateTime updated;
+    @JsonProperty(value = "created")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TIME_FORMAT)
+    private LocalDateTime created;
 
     public Long getStageId() {
         return stageId;
@@ -43,43 +46,43 @@ public class Result {
         this.athlete = athlete;
     }
 
-    public Long getActivityId() {
-        return activityId;
+    public Strava getStrava() {
+        return strava;
     }
 
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
+    public void setStrava(Strava strava) {
+        this.strava = strava;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public BigDecimal getPoints() {
+        return points;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setPoints(BigDecimal points) {
+        this.points = points;
     }
 
-    public Integer getTime() {
-        return time;
+    public BigDecimal getPointsTrailtour() {
+        return pointsTrailtour;
     }
 
-    public void setTime(Integer time) {
-        this.time = time;
+    public void setPointsTrailtour(BigDecimal pointsTrailtour) {
+        this.pointsTrailtour = pointsTrailtour;
     }
 
-    public Integer getPosition() {
-        return position;
+    public LocalDateTime getUpdated() {
+        return updated;
     }
 
-    public void setPosition(Integer position) {
-        this.position = position;
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 
-    public Double getPointsStrava() {
-        return pointsStrava;
+    public LocalDateTime getCreated() {
+        return created;
     }
 
-    public void setPointsStrava(Double pointsStrava) {
-        this.pointsStrava = pointsStrava;
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 }

@@ -33,25 +33,25 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getStageById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> getStageById(@RequestParam(value = "id") Long id) throws SQLException {
-        return new ResponseEntity<>(stageService.get(id), HttpStatus.OK);
+    public ResponseEntity<Stage> getStageById(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
+        return new ResponseEntity<>(stageService.getById(database, id), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getStageByCountryNumber", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> getStageByCountryNumber(@RequestParam(value = "country") String country, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(stageService.get(country, number), HttpStatus.OK);
+    @GetMapping(value = "/getStageByNumber", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Stage> getStageByNumber(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(stageService.getByNumber(database, number), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getStages", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Stage>> getStages() throws SQLException {
-        return new ResponseEntity<>(stageService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<Stage>> getStages(@RequestParam(value = "database") String database) throws SQLException {
+        return new ResponseEntity<>(stageService.getAll(database), HttpStatus.OK);
     }
 
     @CrossOrigin
     @PostMapping(path = "/saveStage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> saveStage(@RequestBody Stage stage) throws SQLException {
-        return new ResponseEntity<>(stageService.save(stage), HttpStatus.OK);
+    public ResponseEntity<Integer> saveStage(@RequestParam(value = "database") String database, @RequestBody Stage stage) throws SQLException {
+        return new ResponseEntity<>(stageService.save(database, stage), HttpStatus.OK);
     }
 }

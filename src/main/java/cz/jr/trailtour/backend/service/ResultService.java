@@ -8,6 +8,7 @@ import cz.jr.trailtour.backend.repository.entity.ResultCount;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,23 +25,30 @@ public class ResultService {
         this.stageRepository = stageRepository;
     }
 
-    public List<Feed> getFeed(int limit) throws SQLException {
-        return resultRepository.getFeed(limit);
+    public List<Feed> getFeed(String database, int limit) throws SQLException {
+        return resultRepository.getFeed(database, limit);
     }
 
-    public List<Result> getResults(long stageId) throws SQLException {
-        return resultRepository.getResults(stageId);
+    public List<Result> getResultsById(String database, long stageId) throws SQLException {
+        return resultRepository.getResults(database, stageId);
     }
 
-    public List<Result> getResults(String country, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(country, number);
-        return getResults(stageId);
+    public List<Result> getResultsByNumber(String database, int number) throws SQLException {
+        Long stageId = stageRepository.getStageId(database, number);
+        if (stageId == null) {
+            return new ArrayList<>();
+        }
+        return getResultsById(database, stageId);
     }
 
-    public ResultCount getResultsCount(String country, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(country, number);
-        int maleCount = resultRepository.getResultsCount("M", stageId);
-        int femaleCount = resultRepository.getResultsCount("F", stageId);
+    public ResultCount getResultsCount(String database, int number) throws SQLException {
+        Long stageId = stageRepository.getStageId(database, number);
+        if (stageId == null) {
+            return null;
+        }
+
+        int maleCount = resultRepository.getResultsCount(database, "M", stageId);
+        int femaleCount = resultRepository.getResultsCount(database, "F", stageId);
         ResultCount resultCount = new ResultCount();
         resultCount.setMale(maleCount);
         resultCount.setFemale(femaleCount);

@@ -19,8 +19,8 @@ public class AthleteService {
         this.athleteRepository = athleteRepository;
     }
 
-    public List<Athlete> getAll() throws SQLException {
-        return athleteRepository.getAll();
+    public List<Athlete> getAll(String database) throws SQLException {
+        return athleteRepository.getAll(database);
     }
 
 }

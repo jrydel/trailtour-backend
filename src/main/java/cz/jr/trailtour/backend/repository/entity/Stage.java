@@ -23,6 +23,10 @@ public class Stage extends DatabaseEntity {
     private Double latitude;
     @JsonProperty(value = "longitude")
     private Double longitude;
+    @JsonProperty(value = "trailtourUrl")
+    private String trailtourUrl;
+    @JsonProperty(value = "mapyczUrl")
+    private String mapyczUrl;
     @JsonProperty(value = "activities")
     private Integer activities;
 
@@ -88,6 +92,22 @@ public class Stage extends DatabaseEntity {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getTrailtourUrl() {
+        return trailtourUrl;
+    }
+
+    public void setTrailtourUrl(String trailtourUrl) {
+        this.trailtourUrl = trailtourUrl;
+    }
+
+    public String getMapyczUrl() {
+        return mapyczUrl;
+    }
+
+    public void setMapyczUrl(String mapyczUrl) {
+        this.mapyczUrl = mapyczUrl;
     }
 
     public Integer getActivities() {

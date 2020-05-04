@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
  */
 public class Feed {
 
-    @JsonProperty(value = "dateTime")
+    @JsonProperty(value = "created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TIME_FORMAT)
-    private LocalDateTime dateTime;
+    private LocalDateTime created;
     @JsonProperty(value = "activityId")
     private Long activityId;
     @JsonProperty(value = "athleteId")
@@ -33,12 +33,12 @@ public class Feed {
     @JsonProperty(value = "position")
     private int position;
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getCreated() {
+        return created;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
     public Long getActivityId() {

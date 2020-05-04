@@ -21,20 +21,23 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public Stage get(long stageId) throws SQLException {
-        return stageRepository.get(stageId);
+    public Stage getById(String database, long stageId) throws SQLException {
+        return stageRepository.get(database, stageId);
     }
 
-    public Stage get(String country, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(country, number);
-        return get(stageId);
+    public Stage getByNumber(String database, int number) throws SQLException {
+        Long stageId = stageRepository.getStageId(database, number);
+        if (stageId == null) {
+            return null;
+        }
+        return getById(database, stageId);
     }
 
-    public List<Stage> getAll() throws SQLException {
-        return stageRepository.getAll();
+    public List<Stage> getAll(String database) throws SQLException {
+        return stageRepository.getAll(database);
     }
 
-    public int save(Stage stage) throws SQLException {
-        return stageRepository.save(stage);
+    public int save(String database, Stage stage) throws SQLException {
+        return stageRepository.save(database, stage);
     }
 }
