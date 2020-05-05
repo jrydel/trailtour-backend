@@ -1,8 +1,8 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entity.Feed;
-import cz.jr.trailtour.backend.repository.entity.Result;
-import cz.jr.trailtour.backend.repository.entity.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.Result;
+import cz.jr.trailtour.backend.repository.entities.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,25 +31,19 @@ public class ResultControler {
 
     @CrossOrigin
     @GetMapping(value = "/getFeed", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Feed>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit) throws SQLException {
+    public ResponseEntity<List<FeedResult>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit) throws SQLException {
         return new ResponseEntity<>(resultService.getFeed(database, limit), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getResultsById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Result>> getResultsById(@RequestParam(value = "database") String database, @RequestParam("stageId") long stageId) throws SQLException {
-        return new ResponseEntity<>(resultService.getResultsById(database, stageId), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping(value = "/getResultsByNumber", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Result>> getResultsByNumber(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(resultService.getResultsByNumber(database, number), HttpStatus.OK);
+    @GetMapping(value = "/getResults", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Result>> getResults(@RequestParam(value = "database") String database, @RequestParam("number") Integer number) throws SQLException {
+        return new ResponseEntity<>(resultService.get(database, number), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getResultsCount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultCount> getResultsCount(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(resultService.getResultsCount(database, number), HttpStatus.OK);
+        return new ResponseEntity<>(resultService.getCounts(database, number), HttpStatus.OK);
     }
 }

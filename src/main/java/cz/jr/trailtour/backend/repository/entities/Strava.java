@@ -1,4 +1,4 @@
-package cz.jr.trailtour.backend.repository.entity;
+package cz.jr.trailtour.backend.repository.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

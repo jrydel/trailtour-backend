@@ -1,4 +1,4 @@
-package cz.jr.trailtour.backend.repository.entity;
+package cz.jr.trailtour.backend.repository.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Club extends DatabaseEntity {
 
     @JsonProperty(value = "name")
-    private String name;
+    private final String name;
+
+    public Club(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

@@ -1,7 +1,7 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.AthleteRepository;
-import cz.jr.trailtour.backend.repository.entity.Athlete;
+import cz.jr.trailtour.backend.repository.entities.Athlete;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;

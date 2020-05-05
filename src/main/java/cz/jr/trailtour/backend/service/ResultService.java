@@ -1,14 +1,14 @@
 package cz.jr.trailtour.backend.service;
 
+import cz.jr.trailtour.backend.repository.AthleteRepository;
 import cz.jr.trailtour.backend.repository.ResultRepository;
 import cz.jr.trailtour.backend.repository.StageRepository;
-import cz.jr.trailtour.backend.repository.entity.Feed;
-import cz.jr.trailtour.backend.repository.entity.Result;
-import cz.jr.trailtour.backend.repository.entity.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.Result;
+import cz.jr.trailtour.backend.repository.entities.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,36 +19,25 @@ public class ResultService {
 
     private final ResultRepository resultRepository;
     private final StageRepository stageRepository;
+    private final AthleteRepository athleteRepository;
 
-    public ResultService(ResultRepository resultRepository, StageRepository stageRepository) {
+    public ResultService(ResultRepository resultRepository, StageRepository stageRepository, AthleteRepository athleteRepository) {
         this.resultRepository = resultRepository;
         this.stageRepository = stageRepository;
+        this.athleteRepository = athleteRepository;
     }
 
-    public List<Feed> getFeed(String database, int limit) throws SQLException {
+    public List<FeedResult> getFeed(String database, int limit) throws SQLException {
         return resultRepository.getFeed(database, limit);
     }
 
-    public List<Result> getResultsById(String database, long stageId) throws SQLException {
-        return resultRepository.getResults(database, stageId);
+    public List<Result> get(String database, int stageNumber) throws SQLException {
+        return resultRepository.getResults(database, stageNumber);
     }
 
-    public List<Result> getResultsByNumber(String database, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(database, number);
-        if (stageId == null) {
-            return new ArrayList<>();
-        }
-        return getResultsById(database, stageId);
-    }
-
-    public ResultCount getResultsCount(String database, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(database, number);
-        if (stageId == null) {
-            return null;
-        }
-
-        int maleCount = resultRepository.getResultsCount(database, "M", stageId);
-        int femaleCount = resultRepository.getResultsCount(database, "F", stageId);
+    public ResultCount getCounts(String database, int number) throws SQLException {
+        int maleCount = resultRepository.getResultsCount(database, "M", number);
+        int femaleCount = resultRepository.getResultsCount(database, "F", number);
         ResultCount resultCount = new ResultCount();
         resultCount.setMale(maleCount);
         resultCount.setFemale(femaleCount);

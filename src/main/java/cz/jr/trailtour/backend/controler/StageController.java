@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entity.Stage;
+import cz.jr.trailtour.backend.repository.entities.Stage;
+import cz.jr.trailtour.backend.repository.entities.StageData;
 import cz.jr.trailtour.backend.service.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,20 +33,14 @@ public class StageController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getStageById", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> getStageById(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
-        return new ResponseEntity<>(stageService.getById(database, id), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping(value = "/getStageByNumber", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> getStageByNumber(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
-        return new ResponseEntity<>(stageService.getByNumber(database, number), HttpStatus.OK);
+    @GetMapping(value = "/getStage", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<StageData> getStage(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
+        return new ResponseEntity<>(stageService.get(database, number), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getStages", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Stage>> getStages(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<List<StageData>> getStages(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(stageService.getAll(database), HttpStatus.OK);
     }
 

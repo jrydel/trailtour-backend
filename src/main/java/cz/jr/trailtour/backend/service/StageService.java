@@ -1,7 +1,8 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.StageRepository;
-import cz.jr.trailtour.backend.repository.entity.Stage;
+import cz.jr.trailtour.backend.repository.entities.Stage;
+import cz.jr.trailtour.backend.repository.entities.StageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +22,11 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public Stage getById(String database, long stageId) throws SQLException {
-        return stageRepository.get(database, stageId);
+    public StageData get(String database, int number) throws SQLException {
+        return stageRepository.get(database, number);
     }
 
-    public Stage getByNumber(String database, int number) throws SQLException {
-        Long stageId = stageRepository.getStageId(database, number);
-        if (stageId == null) {
-            return null;
-        }
-        return getById(database, stageId);
-    }
-
-    public List<Stage> getAll(String database) throws SQLException {
+    public List<StageData> getAll(String database) throws SQLException {
         return stageRepository.getAll(database);
     }
 

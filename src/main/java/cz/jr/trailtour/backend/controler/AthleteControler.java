@@ -1,6 +1,6 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entity.Athlete;
+import cz.jr.trailtour.backend.repository.entities.Athlete;
 import cz.jr.trailtour.backend.service.AthleteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
