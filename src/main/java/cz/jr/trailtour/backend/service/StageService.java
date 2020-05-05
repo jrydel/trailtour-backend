@@ -26,8 +26,12 @@ public class StageService {
         return stageRepository.get(database, number);
     }
 
-    public List<StageData> getAll(String database) throws SQLException {
+    public List<Stage> getAll(String database) throws SQLException {
         return stageRepository.getAll(database);
+    }
+
+    public List<StageData> getAllData(String database) throws SQLException {
+        return stageRepository.getAllData(database);
     }
 
     public int save(String database, Stage stage) throws SQLException {
