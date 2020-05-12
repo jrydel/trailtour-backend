@@ -33,4 +33,19 @@ public class AthleteRepository extends MysqlRepository {
         });
     }
 
+    public Athlete get(String database, long id) throws SQLException {
+        return selectObject("SELECT a.name, a.gender, a.club_name, a.points, a.points_trailtour, a.abuser FROM " + database + ".athlete a WHERE a.id = ?", new Object[]{id}, rs -> {
+            Athlete athlete = new Athlete();
+            athlete.setId(id);
+            athlete.setName(rs.getString("a.name"));
+            athlete.setGender(rs.getString("a.gender"));
+            athlete.setClub(rs.getString("a.club_name"));
+            athlete.setPoints(rs.getObject("a.points", Double.class));
+            athlete.setPointsTrailtour(rs.getObject("a.points_trailtour", Double.class));
+            athlete.setAbuser(rs.getBoolean("a.abuser"));
+
+            return athlete;
+        });
+    }
+
 }

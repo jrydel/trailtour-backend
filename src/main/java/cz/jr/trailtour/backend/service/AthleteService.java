@@ -23,4 +23,8 @@ public class AthleteService {
         return athleteRepository.getAll(database);
     }
 
+    public Athlete get(String database, long id) throws SQLException {
+        return athleteRepository.get(database, id);
+    }
+
 }

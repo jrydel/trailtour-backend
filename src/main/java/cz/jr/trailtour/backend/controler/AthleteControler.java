@@ -30,4 +30,10 @@ public class AthleteControler {
     public ResponseEntity<List<Athlete>> getAthletes(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(athleteService.getAll(database), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAthlete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Athlete> getAthlete(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
+        return new ResponseEntity<>(athleteService.get(database, id), HttpStatus.OK);
+    }
 }
