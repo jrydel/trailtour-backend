@@ -1,8 +1,8 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.StageRepository;
-import cz.jr.trailtour.backend.repository.entities.Stage;
-import cz.jr.trailtour.backend.repository.entities.StageData;
+import cz.jr.trailtour.backend.repository.entities.stage.Stage;
+import cz.jr.trailtour.backend.repository.entities.stage.StageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

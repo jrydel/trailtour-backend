@@ -1,8 +1,8 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
-import cz.jr.trailtour.backend.repository.entities.Stage;
-import cz.jr.trailtour.backend.repository.entities.StageData;
+import cz.jr.trailtour.backend.repository.entities.stage.Stage;
+import cz.jr.trailtour.backend.repository.entities.stage.StageData;
 import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import cz.jr.trailtour.backend.repository.mysql.Param;
 import cz.jr.trailtour.backend.repository.mysql.UpsertParam;

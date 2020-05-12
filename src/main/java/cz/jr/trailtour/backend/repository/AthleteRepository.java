@@ -32,4 +32,5 @@ public class AthleteRepository extends MysqlRepository {
             return athlete;
         });
     }
+
 }

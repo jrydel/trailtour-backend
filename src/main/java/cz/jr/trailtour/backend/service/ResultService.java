@@ -5,6 +5,7 @@ import cz.jr.trailtour.backend.repository.ResultRepository;
 import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,10 @@ public class ResultService {
 
     public List<FeedResult> getFeed(String database, int limit) throws SQLException {
         return resultRepository.getFeed(database, limit);
+    }
+
+    public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
+        return resultRepository.getAthleteResults(database, athleteId);
     }
 
     public List<Result> get(String database, int stageNumber) throws SQLException {

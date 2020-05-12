@@ -1,7 +1,7 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entities.Stage;
-import cz.jr.trailtour.backend.repository.entities.StageData;
+import cz.jr.trailtour.backend.repository.entities.stage.Stage;
+import cz.jr.trailtour.backend.repository.entities.stage.StageData;
 import cz.jr.trailtour.backend.service.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

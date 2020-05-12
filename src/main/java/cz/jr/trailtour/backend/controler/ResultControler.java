@@ -2,6 +2,7 @@ package cz.jr.trailtour.backend.controler;
 
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.ResultCount;
+import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,12 @@ public class ResultControler {
     @GetMapping(value = "/getResults", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Result>> getResults(@RequestParam(value = "database") String database, @RequestParam("number") Integer number) throws SQLException {
         return new ResponseEntity<>(resultService.get(database, number), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAthleteResults", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<AthleteResult>> getAthleteResults(@RequestParam(value = "database") String database, @RequestParam("athleteId") Long athleteId) throws SQLException {
+        return new ResponseEntity<>(resultService.getAthleteResults(database, athleteId), HttpStatus.OK);
     }
 
     @CrossOrigin

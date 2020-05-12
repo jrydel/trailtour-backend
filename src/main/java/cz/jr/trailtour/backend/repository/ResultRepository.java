@@ -5,6 +5,8 @@ import cz.jr.trailtour.backend.repository.entities.Athlete;
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.StravaResult;
 import cz.jr.trailtour.backend.repository.entities.TrailtourResult;
+import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
+import cz.jr.trailtour.backend.repository.entities.athlete.AthleteStage;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedAthlete;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedStage;
@@ -106,6 +108,44 @@ public class ResultRepository extends MysqlRepository {
                     trailtourResult.setTime(rs.getObject("a.time_trailtour", Integer.class));
                     trailtourResult.setPoints(rs.getObject("a.points_trailtour", Double.class));
                     result.setTrailtourResult(trailtourResult);
+
+                    return result;
+                });
+    }
+
+    public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
+        return selectList(
+                "SELECT " +
+                        "a.activity_id, " +
+                        "a.position, " +
+                        "a.date, " +
+                        "a.time, " +
+                        "a.points, " +
+                        "a.time_trailtour, " +
+                        "a.points_trailtour, " +
+                        "b.number, " +
+                        "b.name " +
+                        "FROM " + database + ".result a " + "JOIN " + database + ".stage b ON b.number = a.stage_number " +
+                        "WHERE a.athlete_id = ?", new Object[]{athleteId}, rs -> {
+                    AthleteResult result = new AthleteResult();
+
+                    StravaResult stravaResult = new StravaResult();
+                    stravaResult.setActivityId(rs.getObject("a.activity_id", Long.class));
+                    stravaResult.setPosition(rs.getObject("a.position", Integer.class));
+                    stravaResult.setDate(rs.getString("a.date"));
+                    stravaResult.setTime(rs.getObject("a.time", Integer.class));
+                    stravaResult.setPoints(rs.getObject("a.points", Double.class));
+                    result.setStravaResult(stravaResult);
+
+                    TrailtourResult trailtourResult = new TrailtourResult();
+                    trailtourResult.setTime(rs.getObject("a.time_trailtour", Integer.class));
+                    trailtourResult.setPoints(rs.getObject("a.points_trailtour", Double.class));
+                    result.setTrailtourResult(trailtourResult);
+
+                    AthleteStage stage = new AthleteStage();
+                    stage.setNumber(rs.getInt("b.number"));
+                    stage.setName(rs.getString("b.name"));
+                    result.setStage(stage);
 
                     return result;
                 });
