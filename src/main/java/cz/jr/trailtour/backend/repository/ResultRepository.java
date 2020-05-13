@@ -40,8 +40,8 @@ public class ResultRepository extends MysqlRepository {
                         "c.number, " +
                         "c.name " +
                         "FROM " + database + ".result a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id JOIN " + database + ".stage c ON c.number = a.stage_number " +
-                        "WHERE a.activity_id IS NOT NULL AND b.status = ?" +
-                        "ORDER BY a.created DESC LIMIT ?", new Object[]{"enabled", limit}, rs -> {
+                        "WHERE a.activity_id IS NOT NULL " +
+                        "ORDER BY a.created DESC LIMIT ?", new Object[]{limit}, rs -> {
                     FeedResult result = new FeedResult();
                     result.setActivityId(rs.getLong("a.activity_id"));
                     result.setTime(rs.getInt("a.time"));
@@ -83,7 +83,7 @@ public class ResultRepository extends MysqlRepository {
                         "b.points, " +
                         "b.points_trailtour " +
                         "FROM " + database + ".result a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
-                        "WHERE b.status = ? AND a.stage_number = ?", new Object[]{"enabled", stageNumber}, rs -> {
+                        "WHERE a.stage_number = ?", new Object[]{stageNumber}, rs -> {
                     Result result = new Result();
 
                     Athlete athlete = new Athlete();
@@ -152,6 +152,6 @@ public class ResultRepository extends MysqlRepository {
     }
 
     public int getResultsCount(String database, String gender, int stageNumber) throws SQLException {
-        return selectObject("SELECT COUNT(*) as count FROM " + database + ".result a JOIN " + database + ".athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_number = ? AND b.status = ?", new Object[]{gender, stageNumber, "enabled"}, rs -> rs.getInt("count"));
+        return selectObject("SELECT COUNT(*) as count FROM " + database + ".result a JOIN " + database + ".athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_number = ?", new Object[]{gender, stageNumber}, rs -> rs.getInt("count"));
     }
 }

@@ -19,7 +19,7 @@ public class AthleteRepository extends MysqlRepository {
     }
 
     public List<Athlete> getAll(String database) throws SQLException {
-        return selectList("SELECT a.id, a.name, a.gender, a.club_name, a.points, a.points_trailtour, a.abuser FROM " + database + ".athlete a WHERE a.status = ?", new Object[]{"enabled"}, rs -> {
+        return selectList("SELECT a.id, a.name, a.gender, a.club_name, a.points, a.points_trailtour, a.abuser FROM " + database + ".athlete a", new Object[]{}, rs -> {
             Athlete athlete = new Athlete();
             athlete.setId(rs.getLong("a.id"));
             athlete.setName(rs.getString("a.name"));
