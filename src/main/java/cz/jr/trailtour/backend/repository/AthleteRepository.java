@@ -25,8 +25,8 @@ public class AthleteRepository extends MysqlRepository {
             athlete.setName(rs.getString("a.name"));
             athlete.setGender(rs.getString("a.gender"));
             athlete.setClub(rs.getString("a.club_name"));
-            athlete.setPoints(rs.getObject("a.points", Double.class));
-            athlete.setPointsTrailtour(rs.getObject("a.points_trailtour", Double.class));
+//            athlete.setPoints(rs.getObject("a.points", Double.class));
+//            athlete.setPointsTrailtour(rs.getObject("a.points_trailtour", Double.class));
             athlete.setAbuser(rs.getBoolean("a.abuser"));
 
             return athlete;
@@ -40,8 +40,8 @@ public class AthleteRepository extends MysqlRepository {
             athlete.setName(rs.getString("a.name"));
             athlete.setGender(rs.getString("a.gender"));
             athlete.setClub(rs.getString("a.club_name"));
-            athlete.setPoints(rs.getObject("a.points", Double.class));
-            athlete.setPointsTrailtour(rs.getObject("a.points_trailtour", Double.class));
+//            athlete.setPoints(rs.getObject("a.points", Double.class));
+//            athlete.setPointsTrailtour(rs.getObject("a.points_trailtour", Double.class));
             athlete.setAbuser(rs.getBoolean("a.abuser"));
 
             return athlete;

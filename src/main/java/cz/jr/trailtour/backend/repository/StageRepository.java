@@ -22,14 +22,14 @@ public class StageRepository extends MysqlRepository {
     }
 
     public StageData get(String database, int number) throws SQLException {
-        return selectObject("SELECT a.name, a.url, a.distance, a.elevation, a.type, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".result b ON a.number = b.stage_number WHERE a.number = ? GROUP by a.number", new Object[]{number}, rs -> {
+        return selectObject("SELECT a.name, a.type, a.distance, a.elevation, a.url, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".result b ON a.number = b.stage_number WHERE a.number = ? GROUP by a.number", new Object[]{number}, rs -> {
             StageData stage = new StageData();
             stage.setNumber(number);
             stage.setName(rs.getString("a.name"));
-            stage.setUrl(rs.getString("a.url"));
+            stage.setType(rs.getString("a.type"));
             stage.setDistance(rs.getInt("a.distance"));
             stage.setElevation(rs.getInt("a.elevation"));
-            stage.setType(rs.getString("a.type"));
+            stage.setTrailtourUrl(rs.getString("a.url"));
             stage.setStravaUrl(rs.getString("a.strava_url"));
             stage.setStravaData(rs.getString("a.strava_data"));
             stage.setMapyczUrl(rs.getString("a.mapycz_url"));
@@ -43,7 +43,7 @@ public class StageRepository extends MysqlRepository {
             Stage stage = new Stage();
             stage.setNumber(rs.getInt("a.number"));
             stage.setName(rs.getString("a.name"));
-            stage.setUrl(rs.getString("a.url"));
+            stage.setTrailtourUrl(rs.getString("a.url"));
             stage.setDistance(rs.getInt("a.distance"));
             stage.setElevation(rs.getInt("a.elevation"));
             stage.setType(rs.getString("a.type"));
@@ -59,7 +59,7 @@ public class StageRepository extends MysqlRepository {
             StageData stage = new StageData();
             stage.setNumber(rs.getInt("a.number"));
             stage.setName(rs.getString("a.name"));
-            stage.setUrl(rs.getString("a.url"));
+            stage.setTrailtourUrl(rs.getString("a.url"));
             stage.setDistance(rs.getInt("a.distance"));
             stage.setElevation(rs.getInt("a.elevation"));
             stage.setType(rs.getString("a.type"));
@@ -81,7 +81,7 @@ public class StageRepository extends MysqlRepository {
                 new UpsertParam("type")
         }), new Object[]{
                 stage.getNumber(),
-                stage.getUrl(),
+                stage.getTrailtourUrl(),
                 stage.getName(),
                 stage.getDistance(),
                 stage.getElevation(),

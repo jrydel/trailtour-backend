@@ -1,15 +1,11 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
-import cz.jr.trailtour.backend.repository.entities.Athlete;
-import cz.jr.trailtour.backend.repository.entities.Result;
-import cz.jr.trailtour.backend.repository.entities.StravaResult;
-import cz.jr.trailtour.backend.repository.entities.TrailtourResult;
+import cz.jr.trailtour.backend.repository.entities.*;
 import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
 import cz.jr.trailtour.backend.repository.entities.athlete.AthleteStage;
-import cz.jr.trailtour.backend.repository.entities.feed.FeedAthlete;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
-import cz.jr.trailtour.backend.repository.entities.feed.FeedStage;
+import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
 
@@ -29,9 +25,9 @@ public class ResultRepository extends MysqlRepository {
     public List<FeedResult> getFeed(String database, int limit) throws SQLException {
         return selectList(
                 "SELECT " +
-                        "a.activity_id, " +
-                        "a.time, " +
+                        "a.id, " +
                         "a.position, " +
+                        "a.time, " +
                         "a.created, " +
                         "b.id, " +
                         "b.name, " +
@@ -39,21 +35,23 @@ public class ResultRepository extends MysqlRepository {
                         "b.abuser, " +
                         "c.number, " +
                         "c.name " +
-                        "FROM " + database + ".result a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id JOIN " + database + ".stage c ON c.number = a.stage_number " +
-                        "WHERE a.activity_id IS NOT NULL " +
+                        "FROM " + database + ".activity a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id JOIN " + database + ".stage c ON c.number = a.stage_number " +
                         "ORDER BY a.created DESC LIMIT ?", new Object[]{limit}, rs -> {
                     FeedResult result = new FeedResult();
-                    result.setActivityId(rs.getLong("a.activity_id"));
-                    result.setTime(rs.getInt("a.time"));
-                    result.setPosition(rs.getInt("a.position"));
-                    result.setCreated(rs.getTimestamp("a.created").toLocalDateTime());
 
-                    FeedStage stage = new FeedStage();
+                    Activity activity = new Activity();
+                    activity.setId(rs.getLong("a.id "));
+                    activity.setPosition(rs.getInt("a.position"));
+                    activity.setTime(rs.getInt("a.time"));
+                    activity.setCreated(rs.getTimestamp("a.created").toLocalDateTime());
+                    result.setActivity(activity);
+
+                    Stage stage = new Stage();
                     stage.setNumber(rs.getInt("c.number"));
                     stage.setName(rs.getString("c.name"));
                     result.setStage(stage);
 
-                    FeedAthlete athlete = new FeedAthlete();
+                    Athlete athlete = new Athlete();
                     athlete.setId(rs.getLong("b.id"));
                     athlete.setName(rs.getString("b.name"));
                     athlete.setAbuser(rs.getBoolean("b.abuser"));
@@ -91,8 +89,6 @@ public class ResultRepository extends MysqlRepository {
                     athlete.setName(rs.getString("b.name"));
                     athlete.setGender(rs.getString("b.gender"));
                     athlete.setClub(rs.getString("b.club_name"));
-                    athlete.setPoints(rs.getObject("b.points", Double.class));
-                    athlete.setPointsTrailtour(rs.getObject("b.points_trailtour", Double.class));
                     athlete.setAbuser(rs.getBoolean("b.abuser"));
                     result.setAthlete(athlete);
 

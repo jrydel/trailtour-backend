@@ -11,14 +11,14 @@ public class Stage {
     private int number;
     @JsonProperty(value = "name")
     private String name;
-    @JsonProperty(value = "url")
-    private String url;
+    @JsonProperty(value = "type")
+    private String type;
     @JsonProperty(value = "distance")
     private int distance;
     @JsonProperty(value = "elevation")
     private int elevation;
-    @JsonProperty(value = "type")
-    private String type;
+    @JsonProperty(value = "trailtourUrl")
+    private String trailtourUrl;
     @JsonProperty(value = "stravaUrl")
     private String stravaUrl;
     @JsonProperty(value = "mapyczUrl")
@@ -42,12 +42,12 @@ public class Stage {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getType() {
+        return type;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getDistance() {
@@ -66,12 +66,12 @@ public class Stage {
         this.elevation = elevation;
     }
 
-    public String getType() {
-        return type;
+    public String getTrailtourUrl() {
+        return trailtourUrl;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTrailtourUrl(String trailtourUrl) {
+        this.trailtourUrl = trailtourUrl;
     }
 
     public String getStravaUrl() {
