@@ -40,7 +40,7 @@ public class ResultRepository extends MysqlRepository {
                     FeedResult result = new FeedResult();
 
                     Activity activity = new Activity();
-                    activity.setId(rs.getLong("a.id "));
+                    activity.setId(rs.getLong("a.id"));
                     activity.setPosition(rs.getInt("a.position"));
                     activity.setTime(rs.getInt("a.time"));
                     activity.setCreated(rs.getTimestamp("a.created").toLocalDateTime());
