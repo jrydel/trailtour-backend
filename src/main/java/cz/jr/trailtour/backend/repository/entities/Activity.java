@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.jr.trailtour.backend.config.Constants;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -17,6 +18,9 @@ public class Activity {
     private int position;
     @JsonProperty(value = "time")
     private int time;
+    @JsonProperty(value = "date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_FORMAT)
+    private LocalDate date;
     @JsonProperty(value = "created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATE_TIME_FORMAT)
     private LocalDateTime created;
@@ -43,6 +47,14 @@ public class Activity {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public LocalDateTime getCreated() {

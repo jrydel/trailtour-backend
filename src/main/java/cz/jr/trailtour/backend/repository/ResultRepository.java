@@ -65,24 +65,31 @@ public class ResultRepository extends MysqlRepository {
     public List<Result> getResults(String database, int stageNumber) throws SQLException {
         return selectList(
                 "SELECT " +
-                        "a.activity_id, " +
                         "a.position, " +
-                        "a.date, " +
-                        "a.time, " +
-                        "a.points, " +
+                        "a.position_trailtour, " +
                         "a.time_trailtour, " +
+                        "a.points, " +
                         "a.points_trailtour, " +
-                        "a.created, " +
                         "b.id, " +
                         "b.name, " +
                         "b.gender, " +
                         "b.club_name, " +
                         "b.abuser, " +
-                        "b.points, " +
-                        "b.points_trailtour " +
-                        "FROM " + database + ".result a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
-                        "WHERE a.stage_number = ?", new Object[]{stageNumber}, rs -> {
+                        "c.id, " +
+                        "c.date, " +
+                        "c.time " +
+                        "FROM " + database + ".athlete_result a JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
+                        "LEFT JOIN " + database + ".activity c ON c.stage_number = a.stage_number AND c.athlete_id = b.id AND c.date = (SELECT MAX(date) FROM " + database + ".activity x WHERE x.stage_number = a.stage_number AND x.athlete_id = a.athlete_id) " +
+                        "WHERE a.stage_number = ? AND a.date = (SELECT MAX(date) FROM " + database + ".athlete_result WHERE stage_number = ?)", new Object[]{stageNumber, stageNumber}, rs -> {
                     Result result = new Result();
+
+                    ActivityResult activityResult = new ActivityResult();
+                    activityResult.setPosition(rs.getObject("a.position", Integer.class));
+                    activityResult.setTrailtourPosition(rs.getObject("a.position_trailtour", Integer.class));
+                    activityResult.setTrailtourTime(rs.getObject("a.time_trailtour", Integer.class));
+                    activityResult.setPoints(rs.getObject("a.points", Double.class));
+                    activityResult.setTrailtourPoints(rs.getObject("a.points_trailtour", Double.class));
+                    result.setActivityResult(activityResult);
 
                     Athlete athlete = new Athlete();
                     athlete.setId(rs.getLong("b.id"));
@@ -92,18 +99,14 @@ public class ResultRepository extends MysqlRepository {
                     athlete.setAbuser(rs.getBoolean("b.abuser"));
                     result.setAthlete(athlete);
 
-                    StravaResult stravaResult = new StravaResult();
-                    stravaResult.setActivityId(rs.getObject("a.activity_id", Long.class));
-                    stravaResult.setPosition(rs.getObject("a.position", Integer.class));
-                    stravaResult.setDate(rs.getString("a.date"));
-                    stravaResult.setTime(rs.getObject("a.time", Integer.class));
-                    stravaResult.setPoints(rs.getObject("a.points", Double.class));
-                    result.setStravaResult(stravaResult);
-
-                    TrailtourResult trailtourResult = new TrailtourResult();
-                    trailtourResult.setTime(rs.getObject("a.time_trailtour", Integer.class));
-                    trailtourResult.setPoints(rs.getObject("a.points_trailtour", Double.class));
-                    result.setTrailtourResult(trailtourResult);
+                    Long activityId = rs.getObject("c.id", Long.class);
+                    if (activityId != null) {
+                        Activity activity = new Activity();
+                        activity.setId(activityId);
+                        activity.setDate(rs.getDate("c.date").toLocalDate());
+                        activity.setTime(rs.getInt("c.time"));
+                        result.setActivity(activity);
+                    }
 
                     return result;
                 });

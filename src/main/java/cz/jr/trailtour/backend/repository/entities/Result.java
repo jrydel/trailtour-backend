@@ -9,10 +9,10 @@ public class Result {
 
     @JsonProperty(value = "athlete")
     private Athlete athlete;
-    @JsonProperty(value = "stravaResult")
-    private StravaResult stravaResult;
-    @JsonProperty(value = "trailtourResult")
-    private TrailtourResult trailtourResult;
+    @JsonProperty(value = "activity")
+    private Activity activity;
+    @JsonProperty(value = "activityResult")
+    private ActivityResult activityResult;
 
     public Athlete getAthlete() {
         return athlete;
@@ -22,19 +22,19 @@ public class Result {
         this.athlete = athlete;
     }
 
-    public StravaResult getStravaResult() {
-        return stravaResult;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setStravaResult(StravaResult stravaResult) {
-        this.stravaResult = stravaResult;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
     }
 
-    public TrailtourResult getTrailtourResult() {
-        return trailtourResult;
+    public ActivityResult getActivityResult() {
+        return activityResult;
     }
 
-    public void setTrailtourResult(TrailtourResult trailtourResult) {
-        this.trailtourResult = trailtourResult;
+    public void setActivityResult(ActivityResult activityResult) {
+        this.activityResult = activityResult;
     }
 }
