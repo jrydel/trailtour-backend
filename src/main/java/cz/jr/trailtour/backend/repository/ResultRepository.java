@@ -158,6 +158,6 @@ public class ResultRepository extends MysqlRepository {
     }
 
     public int getResultsCount(String database, String gender, int stageNumber) throws SQLException {
-        return selectObject("SELECT COUNT(*) as count FROM " + database + ".athlete_result a JOIN " + database + ".athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_number = ?", new Object[]{gender, stageNumber}, rs -> rs.getInt("count"));
+        return selectObject("SELECT COUNT(*) as count FROM " + database + ".athlete_result a JOIN " + database + ".athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_number = ? AND a.timestamp = (SELECT MAX(timestamp) FROM " + database + ".athlete_result)", new Object[]{gender, stageNumber}, rs -> rs.getInt("count"));
     }
 }
