@@ -80,7 +80,7 @@ public class ResultRepository extends MysqlRepository {
                         "c.time " +
                         "FROM " + database + ".athlete_result a JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
                         "JOIN " + database + ".activity c ON c.stage_number = a.stage_number AND c.athlete_id = b.id AND c.date = (SELECT MAX(date) FROM " + database + ".activity x WHERE x.stage_number = a.stage_number AND x.athlete_id = a.athlete_id) " +
-                        "WHERE a.stage_number = ? AND a.timestamp = (SELECT MAX(timestamp) FROM " + database + ".athlete_result)", new Object[]{stageNumber, stageNumber}, rs -> {
+                        "WHERE a.stage_number = ? AND a.timestamp = (SELECT MAX(timestamp) FROM " + database + ".athlete_result)", new Object[]{stageNumber}, rs -> {
                     Result result = new Result();
 
                     ActivityResult activityResult = new ActivityResult();
