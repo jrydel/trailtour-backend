@@ -22,7 +22,7 @@ public class StageRepository extends MysqlRepository {
     }
 
     public StageData get(String database, int number) throws SQLException {
-        return selectObject("SELECT a.name, a.type, a.distance, a.elevation, a.url, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".result b ON a.number = b.stage_number WHERE a.number = ? GROUP by a.number", new Object[]{number}, rs -> {
+        return selectObject("SELECT a.name, a.type, a.distance, a.elevation, a.url, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".athlete_result b ON a.number = b.stage_number AND b.timestamp = (SELECT MAX(x.timestamp) FROM " + database + ".athlete_result x WHERE x.stage_number = a.number) WHERE a.number = ? GROUP by a.number", new Object[]{number}, rs -> {
             StageData stage = new StageData();
             stage.setNumber(number);
             stage.setName(rs.getString("a.name"));
@@ -39,7 +39,7 @@ public class StageRepository extends MysqlRepository {
     }
 
     public List<Stage> getAll(String database) throws SQLException {
-        return selectList("SELECT a.number, a.name, a.url, a.distance, a.elevation, a.type, a.strava_url, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".result b ON a.number = b.stage_number GROUP by a.number", new Object[]{}, rs -> {
+        return selectList("SELECT a.number, a.name, a.url, a.distance, a.elevation, a.type, a.strava_url, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".athlete_result b ON a.number = b.stage_number AND b.timestamp = (SELECT MAX(x.timestamp) FROM " + database + ".athlete_result x WHERE x.stage_number = a.number) GROUP by a.number", new Object[]{}, rs -> {
             Stage stage = new Stage();
             stage.setNumber(rs.getInt("a.number"));
             stage.setName(rs.getString("a.name"));
@@ -55,7 +55,7 @@ public class StageRepository extends MysqlRepository {
     }
 
     public List<StageData> getAllData(String database) throws SQLException {
-        return selectList("SELECT a.number, a.name, a.url, a.distance, a.elevation, a.type, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".result b ON a.number = b.stage_number GROUP by a.number", new Object[]{}, rs -> {
+        return selectList("SELECT a.number, a.name, a.url, a.distance, a.elevation, a.type, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a LEFT JOIN " + database + ".athlete_result b ON a.number = b.stage_number AND b.timestamp = (SELECT MAX(x.timestamp) FROM " + database + ".athlete_result x WHERE x.stage_number = a.number) GROUP by a.number", new Object[]{}, rs -> {
             StageData stage = new StageData();
             stage.setNumber(rs.getInt("a.number"));
             stage.setName(rs.getString("a.name"));

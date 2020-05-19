@@ -13,8 +13,6 @@ public class Athlete extends DatabaseEntity {
     private String gender;
     @JsonProperty(value = "club")
     private String club;
-    @JsonProperty(value = "abuser")
-    private boolean abuser;
 
     public String getName() {
         return name;
@@ -38,13 +36,5 @@ public class Athlete extends DatabaseEntity {
 
     public void setClub(String club) {
         this.club = club;
-    }
-
-    public boolean isAbuser() {
-        return abuser;
-    }
-
-    public void setAbuser(boolean abuser) {
-        this.abuser = abuser;
     }
 }

@@ -1,42 +1,43 @@
 package cz.jr.trailtour.backend.repository.entities.athlete;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import cz.jr.trailtour.backend.repository.entities.StravaResult;
-import cz.jr.trailtour.backend.repository.entities.TrailtourResult;
+import cz.jr.trailtour.backend.repository.entities.Activity;
+import cz.jr.trailtour.backend.repository.entities.ActivityResult;
+import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 
 /**
  * Created by Jiří Rýdel on 5/11/20, 12:13 PM
  */
 public class AthleteResult {
 
+    @JsonProperty(value = "activityResult")
+    private ActivityResult activityResult;
+    @JsonProperty(value = "activity")
+    private Activity activity;
     @JsonProperty(value = "stage")
-    private AthleteStage stage;
-    @JsonProperty(value = "stravaResult")
-    private StravaResult stravaResult;
-    @JsonProperty(value = "trailtourResult")
-    private TrailtourResult trailtourResult;
+    private Stage stage;
 
-    public AthleteStage getStage() {
+    public ActivityResult getActivityResult() {
+        return activityResult;
+    }
+
+    public void setActivityResult(ActivityResult activityResult) {
+        this.activityResult = activityResult;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public Stage getStage() {
         return stage;
     }
 
-    public void setStage(AthleteStage stage) {
+    public void setStage(Stage stage) {
         this.stage = stage;
-    }
-
-    public StravaResult getStravaResult() {
-        return stravaResult;
-    }
-
-    public void setStravaResult(StravaResult stravaResult) {
-        this.stravaResult = stravaResult;
-    }
-
-    public TrailtourResult getTrailtourResult() {
-        return trailtourResult;
-    }
-
-    public void setTrailtourResult(TrailtourResult trailtourResult) {
-        this.trailtourResult = trailtourResult;
     }
 }
