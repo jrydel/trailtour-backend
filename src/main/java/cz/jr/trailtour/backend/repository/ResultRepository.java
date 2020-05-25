@@ -66,28 +66,25 @@ public class ResultRepository extends BaseRepository {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
-                        "a.id, " +
-                        "a.name, " +
-                        "a.gender, " +
-                        "a.club_name, " +
-                        "b.id, " +
-                        "b.date, " +
+                        "a.position, " +
+                        "a.points, " +
                         "b.position, " +
+                        "b.points, " +
                         "b.time, " +
+                        "c.id, " +
+                        "c.date, " +
                         "c.position, " +
-                        "c.points, " +
-                        "d.position, " +
-                        "d.points, " +
-                        "d.time " +
-                        "FROM " + database + ".athlete a " +
-                        "JOIN " + database + ".activity b ON b.athlete_id = a.id AND b.date = (SELECT MAX(e.date) FROM " + database + ".activity e WHERE e.athlete_id = a.id AND e.stage_number = ?) " +
-                        "JOIN " + database + ".athlete_result c ON c.athlete_id = a.id AND c.timestamp = ? AND c.stage_number = ? " +
-                        "LEFT JOIN " + database + ".athlete_result_trailtour d ON d.athlete_id = a.id AND d.timestamp = ? AND d.stage_number = ? " +
-                        "WHERE a.status = ?",
+                        "c.time, " +
+                        "d.id, " +
+                        "d.name, " +
+                        "d.gender, " +
+                        "d.club_name " +
+                        "FROM " + database + ".athlete_result a " +
+                        "LEFT JOIN " + database + ".athlete_result_trailtour b ON b.athlete_id = a.athlete_id AND b.stage_number = a.stage_number AND b.timestamp = a.timestamp " +
+                        "JOIN " + database + ".activity c ON c.athlete_id = a.athlete_id AND c.stage_number = a.stage_number AND c.date = (SELECT MAX(e.date) FROM " + database + ".activity e WHERE e.athlete_id = c.athlete_id AND e.stage_number = c.stage_number) " +
+                        "JOIN " + database + ".athlete d ON d.id = a.athlete_id " +
+                        "WHERE a.timestamp = ? AND a.stage_number = ? AND d.status = ?",
                 new Object[]{
-                        stageNumber,
-                        java.sql.Timestamp.valueOf(lastResultUpdate),
-                        stageNumber,
                         java.sql.Timestamp.valueOf(lastResultUpdate),
                         stageNumber,
                         "enabled"
@@ -96,25 +93,25 @@ public class ResultRepository extends BaseRepository {
                     Result result = new Result();
 
                     Activity activity = new Activity();
-                    activity.setId(rs.getLong("b.id"));
-                    activity.setDate(rs.getDate("b.date").toLocalDate());
-                    activity.setPosition(rs.getInt("b.position"));
-                    activity.setTime(rs.getInt("b.time"));
+                    activity.setId(rs.getLong("c.id"));
+                    activity.setDate(rs.getDate("c.date").toLocalDate());
+                    activity.setPosition(rs.getInt("c.position"));
+                    activity.setTime(rs.getInt("c.time"));
                     result.setActivity(activity);
 
                     Athlete athlete = new Athlete();
-                    athlete.setId(rs.getLong("a.id"));
-                    athlete.setName(rs.getString("a.name"));
-                    athlete.setGender(rs.getString("a.gender"));
-                    athlete.setClub(rs.getString("a.club_name"));
+                    athlete.setId(rs.getLong("d.id"));
+                    athlete.setName(rs.getString("d.name"));
+                    athlete.setGender(rs.getString("d.gender"));
+                    athlete.setClub(rs.getString("d.club_name"));
                     result.setAthlete(athlete);
 
                     ActivityResult activityResult = new ActivityResult();
-                    activityResult.setPosition(rs.getObject("c.position", Integer.class));
-                    activityResult.setPoints(rs.getObject("c.points", Double.class));
-                    activityResult.setTrailtourPosition(rs.getObject("d.position", Integer.class));
-                    activityResult.setTrailtourPoints(rs.getObject("d.points", Double.class));
-                    activityResult.setTrailtourTime(rs.getObject("d.time", Integer.class));
+                    activityResult.setPosition(rs.getObject("a.position", Integer.class));
+                    activityResult.setPoints(rs.getObject("a.points", Double.class));
+                    activityResult.setTrailtourPosition(rs.getObject("b.position", Integer.class));
+                    activityResult.setTrailtourPoints(rs.getObject("b.points", Double.class));
+                    activityResult.setTrailtourTime(rs.getObject("b.time", Integer.class));
                     result.setActivityResult(activityResult);
 
                     return result;
