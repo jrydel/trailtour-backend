@@ -18,6 +18,6 @@ public class BaseRepository extends MysqlRepository {
     }
 
     public LocalDateTime getLastResultUpdate(String database) throws SQLException {
-        return selectObject("SELECT MAX(timestamp) as max FROM " + database + ".athlete_result", new Object[]{}, rs -> rs.getTimestamp("max").toLocalDateTime());
+        return selectObject("SELECT MAX(timestamp) as max FROM " + database + ".strava_requests", new Object[]{}, rs -> rs.getTimestamp("max").toLocalDateTime());
     }
 }
