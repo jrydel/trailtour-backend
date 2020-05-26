@@ -38,7 +38,7 @@ public class AthleteRepository extends BaseRepository {
                     Ladder ladder = new Ladder();
                     ladder.setPosition(rs.getObject("b.position", Integer.class));
                     ladder.setPoints(rs.getObject("b.points", Double.class));
-                    ladder.setPosition(rs.getObject("c.position", Integer.class));
+                    ladder.setTrailtourPosition(rs.getObject("c.position", Integer.class));
                     ladder.setTrailtourPoints(rs.getObject("c.points", Double.class));
                     athlete.setLadder(ladder);
 
@@ -66,7 +66,7 @@ public class AthleteRepository extends BaseRepository {
                     Ladder ladder = new Ladder();
                     ladder.setPosition(rs.getObject("b.position", Integer.class));
                     ladder.setPoints(rs.getObject("b.points", Double.class));
-                    ladder.setPosition(rs.getObject("c.position", Integer.class));
+                    ladder.setTrailtourPosition(rs.getObject("c.position", Integer.class));
                     ladder.setTrailtourPoints(rs.getObject("c.points", Double.class));
                     athlete.setLadder(ladder);
 
