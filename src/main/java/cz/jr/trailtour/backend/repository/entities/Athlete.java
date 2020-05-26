@@ -13,6 +13,8 @@ public class Athlete extends DatabaseEntity {
     private String gender;
     @JsonProperty(value = "club")
     private String club;
+    @JsonProperty(value = "ladder")
+    private Ladder ladder;
 
     public String getName() {
         return name;
@@ -36,5 +38,13 @@ public class Athlete extends DatabaseEntity {
 
     public void setClub(String club) {
         this.club = club;
+    }
+
+    public Ladder getLadder() {
+        return ladder;
+    }
+
+    public void setLadder(Ladder ladder) {
+        this.ladder = ladder;
     }
 }
