@@ -48,7 +48,7 @@ public class AthleteRepository extends BaseRepository {
 
     public Athlete get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
-        return selectObject("SELECT a.name, a.gender, a.club_name FROM " + database + ".athlete a " +
+        return selectObject("SELECT a.name, a.gender, a.club_name, b.position, b.points, c.position, c.points FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".athlete_ladder b ON b.athlete_id = a.id AND b.timestamp = ? " +
                         "LEFT JOIN " + database + ".athlete_ladder_trailtour c ON c.athlete_id = a.id AND c.timestamp = b.timestamp " +
                         "WHERE a.id = ?",
