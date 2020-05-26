@@ -24,7 +24,9 @@ public class AthleteRepository extends BaseRepository {
         return selectList("SELECT a.id, a.name, a.gender, a.club_name, b.position, b.points, c.position, c.points FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".athlete_ladder b ON b.athlete_id = a.athlete_id AND b.timestamp = ? " +
                         "LEFT JOIN " + database + ".athlete_ladder_trailtour c ON c.athlete_id = a.id AND c.timestamp = b.timestamp",
-                new Object[]{},
+                new Object[]{
+                        java.sql.Timestamp.valueOf(lastResultUpdate)
+                },
                 rs -> {
                     Athlete athlete = new Athlete();
                     athlete.setId(rs.getLong("a.id"));
@@ -45,11 +47,15 @@ public class AthleteRepository extends BaseRepository {
     }
 
     public Athlete get(String database, long id) throws SQLException {
+        LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectObject("SELECT a.name, a.gender, a.club_name FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".athlete_ladder b ON b.athlete_id = a.athlete_id AND b.timestamp = ? " +
                         "LEFT JOIN " + database + ".athlete_ladder_trailtour c ON c.athlete_id = a.id AND c.timestamp = b.timestamp " +
                         "WHERE a.id = ?",
-                new Object[]{id},
+                new Object[]{
+                        java.sql.Timestamp.valueOf(lastResultUpdate),
+                        id
+                },
                 rs -> {
                     Athlete athlete = new Athlete();
                     athlete.setId(id);
