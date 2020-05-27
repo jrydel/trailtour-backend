@@ -40,6 +40,12 @@ public class StageController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/getStageInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StageInfo>> getStageInfo(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
+        return new ResponseEntity<>(stageService.getInfo(database, number), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/getStages", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Stage>> getStages(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(stageService.getAll(database), HttpStatus.OK);

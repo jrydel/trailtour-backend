@@ -3,9 +3,6 @@ package cz.jr.trailtour.backend.repository.entities.stage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.jr.trailtour.backend.repository.entities.Coordinates;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Jiří Rýdel on 4/19/20, 1:22 PM
  */
@@ -29,11 +26,11 @@ public class Stage {
     private String mapyczUrl;
     @JsonProperty(value = "activities")
     private int activities;
+    @JsonProperty(value = "infos")
+    private int infos;
 
     @JsonProperty(value = "coordinates")
     private Coordinates coordinates;
-    @JsonProperty(value = "info")
-    private final List<StageInfo> stageInfoList = new ArrayList<>();
 
     public int getNumber() {
         return number;
@@ -113,9 +110,5 @@ public class Stage {
 
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
-    }
-
-    public List<StageInfo> getStageInfoList() {
-        return stageInfoList;
     }
 }

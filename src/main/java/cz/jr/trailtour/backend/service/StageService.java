@@ -39,6 +39,10 @@ public class StageService {
         return stageRepository.save(database, stage);
     }
 
+    public List<StageInfo> getInfo(String database, int number) throws SQLException {
+        return stageRepository.getInfo(database, number);
+    }
+
     public int saveInfo(String database, StageInfo stageInfo) throws SQLException {
         return stageRepository.saveInfo(database, stageInfo);
     }

@@ -26,7 +26,7 @@ public class StageRepository extends BaseRepository {
     public StageData get(String database, int number) throws SQLException {
         LocalDateTime update = getLastResultUpdate(database);
 
-        StageData stageData = selectObject("SELECT a.name, a.type, a.distance, a.elevation, a.url, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a " +
+        return selectObject("SELECT a.name, a.type, a.distance, a.elevation, a.url, a.strava_url, a.strava_data, a.mapycz_url, COUNT(*) AS activities FROM " + database + ".stage a " +
                         "LEFT JOIN " + database + ".athlete_result b ON a.number = b.stage_number " +
                         "WHERE a.number = ? AND b.timestamp = ? GROUP by a.number",
                 new Object[]{number, Timestamp.valueOf(update)},
@@ -44,18 +44,16 @@ public class StageRepository extends BaseRepository {
                     stage.setActivities(rs.getInt("activities"));
                     return stage;
                 });
+    }
 
-        List<StageInfo> stageInfoList = selectList("SELECT author, content, created FROM " + database + ".stage_info WHERE stage_number = ?", new Object[]{number}, rs -> {
+    public List<StageInfo> getInfo(String database, int number) throws SQLException {
+        return selectList("SELECT author, content, created FROM " + database + ".stage_info WHERE stage_number = ?", new Object[]{number}, rs -> {
             StageInfo stageInfo = new StageInfo();
             stageInfo.setAuthor(rs.getString("author"));
             stageInfo.setContent(rs.getString("content"));
             stageInfo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             return stageInfo;
         });
-
-        stageData.getStageInfoList().addAll(stageInfoList);
-
-        return stageData;
     }
 
     public List<Stage> getAll(String database) throws SQLException {
