@@ -2,6 +2,7 @@ package cz.jr.trailtour.backend.controler;
 
 import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import cz.jr.trailtour.backend.repository.entities.stage.StageData;
+import cz.jr.trailtour.backend.repository.entities.stage.StageInfo;
 import cz.jr.trailtour.backend.service.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,5 +55,11 @@ public class StageController {
     @PostMapping(path = "/saveStage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> saveStage(@RequestParam(value = "database") String database, @RequestBody Stage stage) throws SQLException {
         return new ResponseEntity<>(stageService.save(database, stage), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/saveStageInfo", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> saveStageInfo(@RequestParam(value = "database") String database, @RequestBody StageInfo stageInfo) throws SQLException {
+        return new ResponseEntity<>(stageService.saveInfo(database, stageInfo), HttpStatus.OK);
     }
 }

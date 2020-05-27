@@ -3,6 +3,7 @@ package cz.jr.trailtour.backend.service;
 import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import cz.jr.trailtour.backend.repository.entities.stage.StageData;
+import cz.jr.trailtour.backend.repository.entities.stage.StageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,9 @@ public class StageService {
 
     public int save(String database, Stage stage) throws SQLException {
         return stageRepository.save(database, stage);
+    }
+
+    public int saveInfo(String database, StageInfo stageInfo) throws SQLException {
+        return stageRepository.saveInfo(database, stageInfo);
     }
 }
