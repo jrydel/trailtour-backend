@@ -13,6 +13,8 @@ public class StageInfo {
 
     @JsonProperty(value = "author")
     private String author;
+    @JsonProperty(value = "title")
+    private String title;
     @JsonProperty(value = "content")
     private String content;
     @JsonProperty(value = "created")
@@ -25,6 +27,14 @@ public class StageInfo {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

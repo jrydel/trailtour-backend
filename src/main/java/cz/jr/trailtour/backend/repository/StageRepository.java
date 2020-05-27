@@ -57,9 +57,10 @@ public class StageRepository extends BaseRepository {
     }
 
     public List<StageInfo> getInfo(String database, int number) throws SQLException {
-        return selectList("SELECT author, content, created FROM " + database + ".stage_info WHERE stage_number = ?", new Object[]{number}, rs -> {
+        return selectList("SELECT author, title, content, created FROM " + database + ".stage_info WHERE stage_number = ?", new Object[]{number}, rs -> {
             StageInfo stageInfo = new StageInfo();
             stageInfo.setAuthor(rs.getString("author"));
+            stageInfo.setTitle(rs.getString("title"));
             stageInfo.setContent(rs.getString("content"));
             stageInfo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             return stageInfo;
