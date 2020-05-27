@@ -34,7 +34,6 @@ public class AthleteRepository extends BaseRepository {
                     athlete.setGender(rs.getString("a.gender"));
                     athlete.setClub(rs.getString("a.club_name"));
 
-
                     Ladder ladder = new Ladder();
                     ladder.setPosition(rs.getObject("b.position", Integer.class));
                     ladder.setPoints(rs.getObject("b.points", Double.class));

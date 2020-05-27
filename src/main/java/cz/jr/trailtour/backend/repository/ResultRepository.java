@@ -1,10 +1,7 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
-import cz.jr.trailtour.backend.repository.entities.Activity;
-import cz.jr.trailtour.backend.repository.entities.ActivityResult;
-import cz.jr.trailtour.backend.repository.entities.Athlete;
-import cz.jr.trailtour.backend.repository.entities.Result;
+import cz.jr.trailtour.backend.repository.entities.*;
 import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.repository.entities.stage.Stage;
@@ -122,50 +119,60 @@ public class ResultRepository extends BaseRepository {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
-                        "a.id, " +
-                        "a.date, " +
-                        "a.position, " +
-                        "a.time, " +
-                        "b.number, " +
-                        "b.name, " +
+                        "a.number, " +
+                        "a.name, " +
+                        "JSON_EXTRACT(a.strava_data , '$.latlng[0][0]') AS latitude, " +
+                        "JSON_EXTRACT(a.strava_data , '$.latlng[0][1]') AS longitude, " +
+                        "b.id, " +
+                        "b.date, " +
+                        "b.position, " +
+                        "b.time, " +
                         "c.position, " +
                         "c.points, " +
                         "d.position, " +
                         "d.points, " +
                         "d.time " +
-                        "FROM " + database + ".activity a " +
-                        "JOIN " + database + ".stage b ON b.number = a.stage_number " +
-                        "LEFT JOIN " + database + ".athlete_result c ON c.athlete_id = a.athlete_id AND c.timestamp = ? AND c.stage_number = a.stage_number " +
-                        "LEFT JOIN " + database + ".athlete_result_trailtour d ON d.athlete_id = a.athlete_id AND d.timestamp = ? AND d.stage_number = a.stage_number " +
-                        "WHERE a.athlete_id = ? AND a.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = a.stage_number AND x.athlete_id = a.athlete_id) ",
+                        "FROM " + database + " .stage a " +
+                        "LEFT JOIN " + database + ".activity b ON b.stage_number = a.number AND b.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = b.stage_number AND x.athlete_id = ?)" +
+                        "LEFT JOIN " + database + ".athlete_result c ON c.athlete_id = b.athlete_id AND c.timestamp = ? AND c.stage_number = a.number " +
+                        "LEFT JOIN " + database + ".athlete_result_trailtour d ON d.athlete_id = b.athlete_id AND d.timestamp = ? AND d.stage_number = a.number",
                 new Object[]{
+                        athleteId,
                         java.sql.Timestamp.valueOf(lastResultUpdate),
-                        java.sql.Timestamp.valueOf(lastResultUpdate),
-                        athleteId
+                        java.sql.Timestamp.valueOf(lastResultUpdate)
                 }, rs -> {
 
                     AthleteResult result = new AthleteResult();
 
-                    Activity activity = new Activity();
-                    activity.setId(rs.getLong("a.id"));
-                    activity.setDate(rs.getDate("a.date").toLocalDate());
-                    activity.setPosition(rs.getInt("a.position"));
-                    activity.setTime(rs.getInt("a.time"));
-                    result.setActivity(activity);
-
                     Stage stage = new Stage();
-                    stage.setNumber(rs.getInt("b.number"));
-                    stage.setName(rs.getString("b.name"));
+                    stage.setNumber(rs.getInt("a.number"));
+                    stage.setName(rs.getString("a.name"));
+
+                    Coordinates coordinates = new Coordinates();
+                    coordinates.setLatitude(rs.getDouble("latitude"));
+                    coordinates.setLongitude(rs.getDouble("longitude"));
+                    stage.setCoordinates(coordinates);
+
                     result.setStage(stage);
 
-                    ActivityResult activityResult = new ActivityResult();
-                    activityResult.setPosition(rs.getObject("c.position", Integer.class));
-                    activityResult.setPoints(rs.getObject("c.points", Double.class));
-                    activityResult.setTrailtourPosition(rs.getObject("d.position", Integer.class));
-                    activityResult.setTrailtourPoints(rs.getObject("d.points", Double.class));
-                    activityResult.setTrailtourTime(rs.getObject("d.time", Integer.class));
-                    result.setActivityResult(activityResult);
+                    Long activityId = rs.getObject("b.id", Long.class);
+                    if (activityId != null) {
+                        Activity activity = new Activity();
+                        activity.setId(activityId);
+                        activity.setDate(rs.getDate("b.date").toLocalDate());
+                        activity.setPosition(rs.getInt("b.position"));
+                        activity.setTime(rs.getInt("b.time"));
+                        result.setActivity(activity);
 
+                        ActivityResult activityResult = new ActivityResult();
+                        activityResult.setPosition(rs.getObject("c.position", Integer.class));
+                        activityResult.setPoints(rs.getObject("c.points", Double.class));
+                        activityResult.setTrailtourPosition(rs.getObject("d.position", Integer.class));
+                        activityResult.setTrailtourPoints(rs.getObject("d.points", Double.class));
+                        activityResult.setTrailtourTime(rs.getObject("d.time", Integer.class));
+                        result.setActivityResult(activityResult);
+                    }
+                    
                     return result;
                 });
     }
