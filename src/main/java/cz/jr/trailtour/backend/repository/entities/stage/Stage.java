@@ -104,6 +104,14 @@ public class Stage {
         this.activities = activities;
     }
 
+    public int getInfos() {
+        return infos;
+    }
+
+    public void setInfos(int infos) {
+        this.infos = infos;
+    }
+
     public Coordinates getCoordinates() {
         return coordinates;
     }
