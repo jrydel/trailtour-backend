@@ -133,10 +133,11 @@ public class ResultRepository extends BaseRepository {
                         "d.points, " +
                         "d.time " +
                         "FROM " + database + " .stage a " +
-                        "LEFT JOIN " + database + ".activity b ON b.stage_number = a.number AND b.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = b.stage_number AND x.athlete_id = ?)" +
+                        "LEFT JOIN " + database + ".activity b ON b.stage_number = a.number AND b.athlete_id = ? AND b.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = b.stage_number AND x.athlete_id = ?)" +
                         "LEFT JOIN " + database + ".athlete_result c ON c.athlete_id = b.athlete_id AND c.timestamp = ? AND c.stage_number = a.number " +
                         "LEFT JOIN " + database + ".athlete_result_trailtour d ON d.athlete_id = b.athlete_id AND d.timestamp = ? AND d.stage_number = a.number",
                 new Object[]{
+                        athleteId,
                         athleteId,
                         java.sql.Timestamp.valueOf(lastResultUpdate),
                         java.sql.Timestamp.valueOf(lastResultUpdate)
@@ -172,7 +173,7 @@ public class ResultRepository extends BaseRepository {
                         activityResult.setTrailtourTime(rs.getObject("d.time", Integer.class));
                         result.setActivityResult(activityResult);
                     }
-                    
+
                     return result;
                 });
     }
