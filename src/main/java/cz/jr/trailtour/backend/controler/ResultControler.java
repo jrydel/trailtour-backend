@@ -32,8 +32,8 @@ public class ResultControler {
 
     @CrossOrigin
     @GetMapping(value = "/getFeed", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FeedResult>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit) throws SQLException {
-        return new ResponseEntity<>(resultService.getFeed(database, limit), HttpStatus.OK);
+    public ResponseEntity<List<FeedResult>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit, @RequestParam("offset") int offset) throws SQLException {
+        return new ResponseEntity<>(resultService.getFeed(database, limit, offset), HttpStatus.OK);
     }
 
     @CrossOrigin

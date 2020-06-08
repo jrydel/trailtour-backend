@@ -28,8 +28,8 @@ public class ResultService {
         this.athleteRepository = athleteRepository;
     }
 
-    public List<FeedResult> getFeed(String database, int limit) throws SQLException {
-        return resultRepository.getFeed(database, limit);
+    public List<FeedResult> getFeed(String database, int limit, int offset) throws SQLException {
+        return resultRepository.getFeed(database, limit, offset);
     }
 
     public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {

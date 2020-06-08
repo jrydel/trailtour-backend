@@ -21,7 +21,7 @@ public class ResultRepository extends BaseRepository {
         super(dataSource);
     }
 
-    public List<FeedResult> getFeed(String database, int limit) throws SQLException {
+    public List<FeedResult> getFeed(String database, int limit, int offset) throws SQLException {
         return selectList(
                 "SELECT " +
                         "a.id, " +
@@ -34,7 +34,7 @@ public class ResultRepository extends BaseRepository {
                         "c.number, " +
                         "c.name " +
                         "FROM " + database + ".activity a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id JOIN " + database + ".stage c ON c.number = a.stage_number " +
-                        "ORDER BY a.created DESC LIMIT ?", new Object[]{limit}, rs -> {
+                        "ORDER BY a.created DESC LIMIT ? OFFSET ?", new Object[]{limit, offset}, rs -> {
                     FeedResult result = new FeedResult();
 
                     Activity activity = new Activity();
