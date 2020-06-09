@@ -35,6 +35,10 @@ public class StageService {
         return stageRepository.getAllData(database);
     }
 
+    public List<Stage> getAllFulltext(String database, String match) throws SQLException {
+        return stageRepository.getStagesFulltext(database, match);
+    }
+
     public int save(String database, Stage stage) throws SQLException {
         return stageRepository.save(database, stage);
     }

@@ -23,6 +23,10 @@ public class AthleteService {
         return athleteRepository.getAll(database);
     }
 
+    public List<Athlete> getAllFulltext(String database, String match) throws SQLException {
+        return athleteRepository.getAthletesFulltext(database, match);
+    }
+
     public Athlete get(String database, long id) throws SQLException {
         return athleteRepository.get(database, id);
     }

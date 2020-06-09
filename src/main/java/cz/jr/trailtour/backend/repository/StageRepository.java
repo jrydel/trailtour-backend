@@ -104,6 +104,21 @@ public class StageRepository extends BaseRepository {
         });
     }
 
+    public List<Stage> getStagesFulltext(String database, String match) throws SQLException {
+        return selectList("SELECT a.number, a.name, a.type,a.distance, a.elevation, a.url, a.strava_url, a.mapycz_url FROM " + database + ".stage a WHERE a.number LIKE ? OR a.name LIKE ? LIMIT 10", new Object[]{"%" + match + "%", "%" + match + "%"}, rs -> {
+            Stage stage = new Stage();
+            stage.setNumber(rs.getInt("a.number"));
+            stage.setName(rs.getString("a.name"));
+            stage.setTrailtourUrl(rs.getString("a.url"));
+            stage.setDistance(rs.getInt("a.distance"));
+            stage.setElevation(rs.getInt("a.elevation"));
+            stage.setType(rs.getString("a.type"));
+            stage.setStravaUrl(rs.getString("a.strava_url"));
+            stage.setMapyczUrl(rs.getString("a.mapycz_url"));
+            return stage;
+        });
+    }
+
     public int save(String database, Stage stage) throws SQLException {
         return execute(generateUpsert(database + ".stage", new Param[]{
                 new Param("number"),

@@ -73,4 +73,15 @@ public class AthleteRepository extends BaseRepository {
                 });
     }
 
+    public List<Athlete> getAthletesFulltext(String database, String match) throws SQLException {
+        return selectList("SELECT a.id, a.name, a.gender, a.club_name FROM " + database + ".athlete a WHERE a.id LIKE ? OR a.name LIKE ? LIMIT 10", new Object[]{"%" + match + "%", "%" + match + "%"}, rs -> {
+            Athlete athlete = new Athlete();
+            athlete.setId(rs.getLong("a.id"));
+            athlete.setName(rs.getString("a.name"));
+            athlete.setGender(rs.getString("a.gender"));
+            athlete.setClub(rs.getString("a.club_name"));
+            return athlete;
+        });
+    }
+
 }
