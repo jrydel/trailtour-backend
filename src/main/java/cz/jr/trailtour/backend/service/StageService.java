@@ -23,7 +23,7 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public StageData get(String database, int number) throws SQLException {
+    public Stage get(String database, int number) throws SQLException {
         return stageRepository.get(database, number);
     }
 
