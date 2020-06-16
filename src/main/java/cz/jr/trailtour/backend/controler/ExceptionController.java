@@ -23,7 +23,7 @@ public class ExceptionController {
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Map<String, String>> handleException(Throwable t) {
         LOG.error("Error.", t);
-        return new ResponseEntity<>(convertException(t), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(convertException(t), HttpStatus.NOT_FOUND);
     }
 
     private Map<String, String> convertException(Throwable t) {
