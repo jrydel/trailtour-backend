@@ -22,38 +22,39 @@ public class StageRepository extends BaseRepository {
         super(dataSource);
     }
 
-    public StageData get(String database, int number) throws SQLException {
-        StageData stageData = selectObject("SELECT name, type, distance, elevation, url, strava_url, strava_data, mapycz_url FROM " + database + ".stage WHERE number = ?",
+    public Stage get(String database, int number) throws SQLException {
+        Stage stage = selectObject("SELECT name, type, distance, elevation, url, strava_url, mapycz_url FROM " + database + ".stage WHERE number = ?",
                 new Object[]{number},
                 rs -> {
-                    StageData stage = new StageData();
-                    stage.setNumber(number);
-                    stage.setName(rs.getString("name"));
-                    stage.setType(rs.getString("type"));
-                    stage.setDistance(rs.getInt("distance"));
-                    stage.setElevation(rs.getInt("elevation"));
-                    stage.setTrailtourUrl(rs.getString("url"));
-                    stage.setStravaUrl(rs.getString("strava_url"));
-                    stage.setStravaData(rs.getString("strava_data"));
-                    stage.setMapyczUrl(rs.getString("mapycz_url"));
-                    return stage;
+                    Stage temp = new Stage();
+                    temp.setNumber(number);
+                    temp.setName(rs.getString("name"));
+                    temp.setType(rs.getString("type"));
+                    temp.setDistance(rs.getInt("distance"));
+                    temp.setElevation(rs.getInt("elevation"));
+                    temp.setTrailtourUrl(rs.getString("url"));
+                    temp.setStravaUrl(rs.getString("strava_url"));
+                    temp.setMapyczUrl(rs.getString("mapycz_url"));
+                    return temp;
                 });
 
-        if (stageData == null) {
-            return null;
+        if (stage != null) {
+            Integer activities = selectObject("SELECT COUNT(*) as activities FROM " + database + ".activity a WHERE a.stage_number = ? AND a.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = a.stage_number AND x.athlete_id = a.athlete_id)",
+                    new Object[]{number},
+                    rs -> rs.getInt("activities"));
+            stage.setActivities(activities);
+
+            Integer infos = selectObject("SELECT COUNT(*) as infos FROM " + database + ".stage_info WHERE stage_number = ?",
+                    new Object[]{number},
+                    rs -> rs.getInt("infos"));
+            stage.setInfos(infos);
         }
 
-        Integer activities = selectObject("SELECT COUNT(*) as activities FROM " + database + ".activity a WHERE a.stage_number = ? AND a.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = a.stage_number AND x.athlete_id = a.athlete_id)",
-                new Object[]{number},
-                rs -> rs.getInt("activities"));
-        stageData.setActivities(activities);
+        return stage;
+    }
 
-        Integer infos = selectObject("SELECT COUNT(*) as infos FROM " + database + ".stage_info WHERE stage_number = ?",
-                new Object[]{number},
-                rs -> rs.getInt("infos"));
-        stageData.setInfos(infos);
-
-        return stageData;
+    public String getStravaData(String database, int number) throws SQLException {
+        return selectObject("SELECT strava_data FROM " + database + ".stage WHERE number = ?", new Object[]{number}, rs -> rs.getString("strava_data"));
     }
 
     public List<StageInfo> getInfo(String database, int number) throws SQLException {

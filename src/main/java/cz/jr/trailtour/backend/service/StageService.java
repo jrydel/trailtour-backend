@@ -27,6 +27,10 @@ public class StageService {
         return stageRepository.get(database, number);
     }
 
+    public String getStravaData(String database, int number) throws SQLException {
+        return stageRepository.getStravaData(database, number);
+    }
+
     public List<Stage> getAll(String database) throws SQLException {
         return stageRepository.getAll(database);
     }
