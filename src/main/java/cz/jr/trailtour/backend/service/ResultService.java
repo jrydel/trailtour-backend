@@ -6,11 +6,11 @@ import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.ResultCount;
 import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
-import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 5/1/20, 5:31 PM
@@ -28,7 +28,7 @@ public class ResultService {
         this.athleteRepository = athleteRepository;
     }
 
-    public List<FeedResult> getFeed(String database, int limit, int offset) throws SQLException {
+    public Map<String, Object> getFeed(String database, int limit, int offset) throws SQLException {
         return resultRepository.getFeed(database, limit, offset);
     }
 

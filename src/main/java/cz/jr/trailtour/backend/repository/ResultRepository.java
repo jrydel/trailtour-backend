@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 3:15 PM
@@ -21,8 +24,10 @@ public class ResultRepository extends BaseRepository {
         super(dataSource);
     }
 
-    public List<FeedResult> getFeed(String database, int limit, int offset) throws SQLException {
-        return selectList(
+    public Map<String, Object> getFeed(String database, int limit, int offset) throws SQLException {
+        int count = selectObject("SELECT COUNT(*) AS count FROM " + database + ".activity", new Object[]{}, rs -> rs.getInt("count"));
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
+        List<FeedResult> results = selectList(
                 "SELECT " +
                         "a.id, " +
                         "a.position, " +
@@ -57,6 +62,12 @@ public class ResultRepository extends BaseRepository {
 
                     return result;
                 });
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("lastUpdate", lastUpdate.format(DateTimeFormatter.ISO_DATE_TIME));
+        map.put("count", count);
+        map.put("data", results);
+        return map;
     }
 
     public List<Result> getResults(String database, int stageNumber) throws SQLException {

@@ -3,7 +3,6 @@ package cz.jr.trailtour.backend.controler;
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.ResultCount;
 import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
-import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 5/1/20, 5:32 PM
@@ -32,7 +32,7 @@ public class ResultControler {
 
     @CrossOrigin
     @GetMapping(value = "/getFeed", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<FeedResult>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit, @RequestParam(value = "offset", required = false) Integer offset) throws SQLException {
+    public ResponseEntity<Map<String, Object>> getFeed(@RequestParam(value = "database") String database, @RequestParam("limit") int limit, @RequestParam(value = "offset", required = false) Integer offset) throws SQLException {
         if (offset == null) {
             offset = 0;
         }
