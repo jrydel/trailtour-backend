@@ -194,18 +194,20 @@ public class ResultRepository extends BaseRepository {
 
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
         Map<Integer, Map<String, Object>> result = new HashMap<>();
-        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, activity_time FROM " + database + ".last_data WHERE position = 1", new Object[]{}, rs -> {
+        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, activity_id, activity_time FROM " + database + ".last_data WHERE position = 1", new Object[]{}, rs -> {
             while (rs.next()) {
                 int stageNumber = rs.getInt("stage_number");
                 long athleteId = rs.getLong("athlete_id");
                 String athleteName = rs.getString("athlete_name");
                 String athleteGender = rs.getString("athlete_gender");
+                long activityId = rs.getLong("activity_id");
                 int activityTime = rs.getInt("activity_time");
 
                 Map<String, Object> temp = new HashMap<>();
-                temp.put("id", athleteId);
-                temp.put("name", athleteName);
-                temp.put("time", activityTime);
+                temp.put("athleteId", athleteId);
+                temp.put("athleteName", athleteName);
+                temp.put("activityId", activityId);
+                temp.put("activityTime", activityTime);
 
                 result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
             }
