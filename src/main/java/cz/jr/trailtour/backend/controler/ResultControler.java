@@ -52,6 +52,12 @@ public class ResultControler {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/getKomResults", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<Integer, Map<String, Object>>> CrossOrigin(@RequestParam(value = "database") String database) throws SQLException {
+        return new ResponseEntity<>(resultService.getKomResults(database), HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/getResultsCount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResultCount> getResultsCount(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
         return new ResponseEntity<>(resultService.getCounts(database, number), HttpStatus.OK);

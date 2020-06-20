@@ -32,6 +32,10 @@ public class ResultService {
         return resultRepository.getFeed(database, limit, offset);
     }
 
+    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
+        return resultRepository.getKomResults(database);
+    }
+
     public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
         return resultRepository.getAthleteResults(database, athleteId);
     }

@@ -38,7 +38,9 @@ public class ResultRepository extends BaseRepository {
                         "b.club_name, " +
                         "c.number, " +
                         "c.name " +
-                        "FROM " + database + ".activity a " + "JOIN " + database + ".athlete b ON a.athlete_id = b.id JOIN " + database + ".stage c ON c.number = a.stage_number " +
+                        "FROM " + database + ".activity a " +
+                        "JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
+                        "JOIN " + database + ".stage c ON c.number = a.stage_number " +
                         "ORDER BY a.created DESC LIMIT ? OFFSET ?", new Object[]{limit, offset}, rs -> {
                     FeedResult result = new FeedResult();
 
@@ -128,6 +130,7 @@ public class ResultRepository extends BaseRepository {
 
     public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
+
         return selectList(
                 "SELECT " +
                         "a.number, " +
@@ -187,6 +190,28 @@ public class ResultRepository extends BaseRepository {
 
                     return result;
                 });
+    }
+
+    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
+        Map<Integer, Map<String, Object>> result = new HashMap<>();
+        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, activity_time FROM " + database + ".last_data WHERE position = 1", new Object[]{}, rs -> {
+            while (rs.next()) {
+                int stageNumber = rs.getInt("stage_number");
+                long athleteId = rs.getLong("athlete_id");
+                String athleteName = rs.getString("athlete_name");
+                String athleteGender = rs.getString("athlete_gender");
+                int activityTime = rs.getInt("activity_time");
+
+                Map<String, Object> temp = new HashMap<>();
+                temp.put("id", athleteId);
+                temp.put("name", athleteName);
+                temp.put("time", activityTime);
+
+                result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
+            }
+            return null;
+        });
+        return result;
     }
 
     public int getResultsCount(String database, String gender, int stageNumber) throws SQLException {
