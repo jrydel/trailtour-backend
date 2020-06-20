@@ -53,7 +53,7 @@ public class ResultControler {
 
     @CrossOrigin
     @GetMapping(value = "/getKomResults", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Integer, Map<String, Object>>> CrossOrigin(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<Map<Integer, Map<String, Object>>> getKomResults(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(resultService.getKomResults(database), HttpStatus.OK);
     }
 
