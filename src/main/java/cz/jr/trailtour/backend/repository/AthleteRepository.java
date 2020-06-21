@@ -33,10 +33,10 @@ public class AthleteRepository extends BaseRepository {
                     long clubId = rs.getLong("b.id");
                     String clubName = rs.getString("a.name");
 
-                    Integer position = rs.getObject("b.position", Integer.class);
-                    Double points = rs.getObject("b.points", Double.class);
-                    Integer trailtourPosition = rs.getObject("b.trailtour_position", Integer.class);
-                    Double trailtourPoints = rs.getObject("b.trailtour_points", Double.class);
+                    Integer position = rs.getObject("c.position", Integer.class);
+                    Double points = rs.getObject("c.points", Double.class);
+                    Integer trailtourPosition = rs.getObject("c.trailtour_position", Integer.class);
+                    Double trailtourPoints = rs.getObject("c.trailtour_points", Double.class);
 
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("id", id);
