@@ -4,7 +4,6 @@ import cz.jr.trailtour.backend.repository.AthleteRepository;
 import cz.jr.trailtour.backend.repository.ResultRepository;
 import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entities.Result;
-import cz.jr.trailtour.backend.repository.entities.ResultCount;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -39,13 +38,7 @@ public class ResultService {
         return resultRepository.getResults(database, stageNumber);
     }
 
-    public ResultCount getCounts(String database, int number) throws SQLException {
-//        int maleCount = resultRepository.getResultsCount(database, "M", number);
-//        int femaleCount = resultRepository.getResultsCount(database, "F", number);
-        ResultCount resultCount = new ResultCount();
-//        resultCount.setMale(maleCount);
-//        resultCount.setFemale(femaleCount);
-        resultCount.setClub(0);
-        return resultCount;
+    public Map<String, Integer> getCounts(String database, int number) throws SQLException {
+        return resultRepository.getResultsCounts(database, number);
     }
 }
