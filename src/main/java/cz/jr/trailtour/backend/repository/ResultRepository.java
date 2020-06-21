@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -128,84 +129,26 @@ public class ResultRepository extends BaseRepository {
                 });
     }
 
-    public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
-        LocalDateTime lastResultUpdate = getLastResultUpdate(database);
 
-        return selectList(
-                "SELECT " +
-                        "a.number, " +
-                        "a.name, " +
-                        "JSON_EXTRACT(a.strava_data , '$.latlng[0][0]') AS latitude, " +
-                        "JSON_EXTRACT(a.strava_data , '$.latlng[0][1]') AS longitude, " +
-                        "b.id, " +
-                        "b.date, " +
-                        "b.position, " +
-                        "b.time, " +
-                        "c.position, " +
-                        "c.points, " +
-                        "d.position, " +
-                        "d.points, " +
-                        "d.time " +
-                        "FROM " + database + " .stage a " +
-                        "LEFT JOIN " + database + ".activity b ON b.stage_number = a.number AND b.athlete_id = ? AND b.date = (SELECT MAX(x.date) FROM " + database + ".activity x WHERE x.stage_number = b.stage_number AND x.athlete_id = ?)" +
-                        "LEFT JOIN " + database + ".athlete_result c ON c.athlete_id = b.athlete_id AND c.timestamp = ? AND c.stage_number = a.number " +
-                        "LEFT JOIN " + database + ".athlete_result_trailtour d ON d.athlete_id = b.athlete_id AND d.timestamp = ? AND d.stage_number = a.number",
-                new Object[]{
-                        athleteId,
-                        athleteId,
-                        java.sql.Timestamp.valueOf(lastResultUpdate),
-                        java.sql.Timestamp.valueOf(lastResultUpdate)
-                }, rs -> {
-
-                    AthleteResult result = new AthleteResult();
-
-                    Stage stage = new Stage();
-                    stage.setNumber(rs.getInt("a.number"));
-                    stage.setName(rs.getString("a.name"));
-
-                    Coordinates coordinates = new Coordinates();
-                    coordinates.setLatitude(rs.getDouble("latitude"));
-                    coordinates.setLongitude(rs.getDouble("longitude"));
-                    stage.setCoordinates(coordinates);
-
-                    result.setStage(stage);
-
-                    Long activityId = rs.getObject("b.id", Long.class);
-                    if (activityId != null) {
-                        Activity activity = new Activity();
-                        activity.setId(activityId);
-                        activity.setDate(rs.getDate("b.date").toLocalDate());
-                        activity.setPosition(rs.getInt("b.position"));
-                        activity.setTime(rs.getInt("b.time"));
-                        result.setActivity(activity);
-
-                        ActivityResult activityResult = new ActivityResult();
-                        activityResult.setPosition(rs.getObject("c.position", Integer.class));
-                        activityResult.setPoints(rs.getObject("c.points", Double.class));
-                        activityResult.setTrailtourPosition(rs.getObject("d.position", Integer.class));
-                        activityResult.setTrailtourPoints(rs.getObject("d.points", Double.class));
-                        activityResult.setTrailtourTime(rs.getObject("d.time", Integer.class));
-                        result.setActivityResult(activityResult);
-                    }
-
-                    return result;
-                });
-    }
 
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
         Map<Integer, Map<String, Object>> result = new HashMap<>();
-        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, activity_id, activity_time FROM " + database + ".last_data WHERE position = 1", new Object[]{}, rs -> {
+        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time FROM " + database + ".athlete_data WHERE position = 1", new Object[]{}, rs -> {
             while (rs.next()) {
                 int stageNumber = rs.getInt("stage_number");
                 long athleteId = rs.getLong("athlete_id");
                 String athleteName = rs.getString("athlete_name");
                 String athleteGender = rs.getString("athlete_gender");
+                long clubId = rs.getLong("club_id");
+                String clubName = rs.getString("club_name");
                 long activityId = rs.getLong("activity_id");
                 int activityTime = rs.getInt("activity_time");
 
                 Map<String, Object> temp = new HashMap<>();
                 temp.put("athleteId", athleteId);
                 temp.put("athleteName", athleteName);
+                temp.put("clubId", clubId);
+                temp.put("clubName", clubName);
                 temp.put("activityId", activityId);
                 temp.put("activityTime", activityTime);
 
@@ -216,7 +159,20 @@ public class ResultRepository extends BaseRepository {
         return result;
     }
 
-    public int getResultsCount(String database, String gender, int stageNumber) throws SQLException {
-        return selectObject("SELECT COUNT(*) as count FROM " + database + ".athlete_result a JOIN " + database + ".athlete b ON a.athlete_id = b.id WHERE b.gender = ? AND a.stage_number = ? AND a.timestamp = (SELECT MAX(timestamp) FROM " + database + ".athlete_result)", new Object[]{gender, stageNumber}, rs -> rs.getInt("count"));
+    public Map<String, Integer> getResultsCounts(String database, int stageNumber) throws SQLException {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        select("SELECT athlete_gender, COUNT(*) as count FROM " + database + ".athlete_data WHERE stage_number = ? GROUP BY athlete_gender",
+                new Object[]{stageNumber},
+                rs -> {
+                    while (rs.next()) {
+                        String gender = rs.getString("athlete_gender");
+                        int count = rs.getInt("count");
+
+                        result.put(gender, count);
+                    }
+                    return null;
+                });
+
+        return result;
     }
 }

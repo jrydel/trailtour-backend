@@ -12,25 +12,18 @@ public class Stage {
     private int number;
     @JsonProperty(value = "name")
     private String name;
-    @JsonProperty(value = "type")
-    private String type;
     @JsonProperty(value = "distance")
     private int distance;
     @JsonProperty(value = "elevation")
     private int elevation;
+    @JsonProperty(value = "type")
+    private String type;
     @JsonProperty(value = "trailtourUrl")
     private String trailtourUrl;
     @JsonProperty(value = "stravaUrl")
     private String stravaUrl;
     @JsonProperty(value = "mapyczUrl")
     private String mapyczUrl;
-    @JsonProperty(value = "activities")
-    private int activities;
-    @JsonProperty(value = "infos")
-    private int infos;
-
-    @JsonProperty(value = "coordinates")
-    private Coordinates coordinates;
 
     public int getNumber() {
         return number;
@@ -48,14 +41,6 @@ public class Stage {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public int getDistance() {
         return distance;
     }
@@ -70,6 +55,14 @@ public class Stage {
 
     public void setElevation(int elevation) {
         this.elevation = elevation;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTrailtourUrl() {
@@ -94,29 +87,5 @@ public class Stage {
 
     public void setMapyczUrl(String mapyczUrl) {
         this.mapyczUrl = mapyczUrl;
-    }
-
-    public int getActivities() {
-        return activities;
-    }
-
-    public void setActivities(int activities) {
-        this.activities = activities;
-    }
-
-    public int getInfos() {
-        return infos;
-    }
-
-    public void setInfos(int infos) {
-        this.infos = infos;
-    }
-
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
     }
 }

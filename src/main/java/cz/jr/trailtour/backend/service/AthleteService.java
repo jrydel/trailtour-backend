@@ -1,11 +1,11 @@
 package cz.jr.trailtour.backend.service;
 
 import cz.jr.trailtour.backend.repository.AthleteRepository;
-import cz.jr.trailtour.backend.repository.entities.Athlete;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 2:44 PM
@@ -19,16 +19,19 @@ public class AthleteService {
         this.athleteRepository = athleteRepository;
     }
 
-    public List<Athlete> getAll(String database) throws SQLException {
-        return athleteRepository.getAll(database);
-    }
-
-    public List<Athlete> getAllFulltext(String database, String match) throws SQLException {
-        return athleteRepository.getAthletesFulltext(database, match);
-    }
-
-    public Athlete get(String database, long id) throws SQLException {
+    public Map<String, Object> get(String database, long id) throws SQLException {
         return athleteRepository.get(database, id);
     }
 
+    public Map<String, List<Map<String, Object>>> getAll(String database) throws SQLException {
+        return athleteRepository.getAll(database);
+    }
+
+    public List<Map<String, Object>> getAllFulltext(String database, String match) throws SQLException {
+        return athleteRepository.getFulltext(database, match);
+    }
+
+    public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
+        return athleteRepository.getResults(database, id);
+    }
 }

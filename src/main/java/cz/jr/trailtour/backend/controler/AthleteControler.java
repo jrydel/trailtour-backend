@@ -1,6 +1,5 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entities.Athlete;
 import cz.jr.trailtour.backend.service.AthleteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 2:43 PM
@@ -27,13 +27,19 @@ public class AthleteControler {
 
     @CrossOrigin
     @GetMapping(value = "/getAthletes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Athlete>> getAthletes(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getAthletes(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(athleteService.getAll(database), HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/getAthlete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Athlete> getAthlete(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
+    public ResponseEntity<Map<String, Object>> getAthlete(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
         return new ResponseEntity<>(athleteService.get(database, id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAthleteResults", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Map<String, Object>>> getAthleteResults(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
+        return new ResponseEntity<>(athleteService.getResults(database, id), HttpStatus.OK);
     }
 }

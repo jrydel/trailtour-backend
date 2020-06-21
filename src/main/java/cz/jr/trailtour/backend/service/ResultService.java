@@ -5,7 +5,6 @@ import cz.jr.trailtour.backend.repository.ResultRepository;
 import cz.jr.trailtour.backend.repository.StageRepository;
 import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.ResultCount;
-import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -36,20 +35,16 @@ public class ResultService {
         return resultRepository.getKomResults(database);
     }
 
-    public List<AthleteResult> getAthleteResults(String database, long athleteId) throws SQLException {
-        return resultRepository.getAthleteResults(database, athleteId);
-    }
-
     public List<Result> get(String database, int stageNumber) throws SQLException {
         return resultRepository.getResults(database, stageNumber);
     }
 
     public ResultCount getCounts(String database, int number) throws SQLException {
-        int maleCount = resultRepository.getResultsCount(database, "M", number);
-        int femaleCount = resultRepository.getResultsCount(database, "F", number);
+//        int maleCount = resultRepository.getResultsCount(database, "M", number);
+//        int femaleCount = resultRepository.getResultsCount(database, "F", number);
         ResultCount resultCount = new ResultCount();
-        resultCount.setMale(maleCount);
-        resultCount.setFemale(femaleCount);
+//        resultCount.setMale(maleCount);
+//        resultCount.setFemale(femaleCount);
         resultCount.setClub(0);
         return resultCount;
     }
