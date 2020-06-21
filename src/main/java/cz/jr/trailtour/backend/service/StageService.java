@@ -51,7 +51,7 @@ public class StageService {
         return stageRepository.getAllGPSData(database);
     }
 
-    public Map<Integer, Map<String, Object>> getAllGPSStart(String database) throws SQLException {
+    public List<Map<String, Object>> getAllGPSStart(String database) throws SQLException {
         return stageRepository.getAllGPSStart(database);
     }
 

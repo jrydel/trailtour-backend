@@ -145,19 +145,15 @@ public class StageRepository extends BaseRepository {
         return result;
     }
 
-    public Map<Integer, Map<String, Object>> getAllGPSStart(String database) throws SQLException {
-        Map<Integer, Map<String, Object>> result = new HashMap<>();
-        select("SELECT number, JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage", new Object[]{},
+    public List<Map<String, Object>> getAllGPSStart(String database) throws SQLException {
+        return selectList("SELECT number, JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage", new Object[]{},
                 rs -> {
-                    while (rs.next()) {
-                        Map<String, Object> temp = new LinkedHashMap<>();
-                        temp.put("latitude", rs.getObject("latitude"));
-                        temp.put("longitude", rs.getObject("longitude"));
-                        result.put(rs.getInt("number"), temp);
-                    }
-                    return null;
+                    Map<String, Object> temp = new LinkedHashMap<>();
+                    temp.put("number", rs.getObject("number"));
+                    temp.put("latitude", rs.getObject("latitude"));
+                    temp.put("longitude", rs.getObject("longitude"));
+                    return temp;
                 });
-        return result;
     }
 
     public List<Map<String, Object>> getResults(String database, int number) throws SQLException {

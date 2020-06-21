@@ -76,7 +76,7 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getAllStagesGPSStart", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Integer, Map<String, Object>>> getAllStagesGPSStart(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<List<Map<String, Object>>> getAllStagesGPSStart(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(stageService.getAllGPSStart(database), HttpStatus.OK);
     }
 
