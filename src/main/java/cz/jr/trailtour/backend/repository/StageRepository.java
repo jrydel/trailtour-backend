@@ -149,7 +149,7 @@ public class StageRepository extends BaseRepository {
         return selectList("SELECT number, JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage", new Object[]{},
                 rs -> {
                     Map<String, Object> temp = new LinkedHashMap<>();
-                    temp.put("number", rs.getObject("number"));
+                    temp.put("stage_number", rs.getObject("number"));
                     temp.put("latitude", rs.getObject("latitude"));
                     temp.put("longitude", rs.getObject("longitude"));
                     return temp;
