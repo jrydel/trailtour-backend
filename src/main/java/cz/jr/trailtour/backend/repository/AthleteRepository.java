@@ -31,7 +31,7 @@ public class AthleteRepository extends BaseRepository {
                     String athleteGender = rs.getString("a.gender");
 
                     long clubId = rs.getLong("b.id");
-                    String clubName = rs.getString("a.name");
+                    String clubName = rs.getString("b.name");
 
                     Integer position = rs.getObject("c.position", Integer.class);
                     Double points = rs.getObject("c.points", Double.class);
