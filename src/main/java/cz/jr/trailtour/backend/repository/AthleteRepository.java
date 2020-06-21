@@ -19,16 +19,19 @@ public class AthleteRepository extends BaseRepository {
 
     public Map<String, Object> get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
-        return selectObject("SELECT a.name, a.club_name, a.gender, b.position, b.points, b.trailtour_position, b.trailtour_points FROM " + database + ".athlete a " +
-                        "LEFT JOIN " + database + ".athlete_ladder b ON b.athlete_id = a.id AND b.timestamp = ? WHERE a.id = ?",
+        return selectObject("SELECT a.name, a.gender, b.id, b.name, c.position, c.points, c.trailtour_position, c.trailtour_points FROM " + database + ".athlete a " +
+                        "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
+                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? WHERE a.id = ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastResultUpdate),
                         id
                 },
                 rs -> {
                     String athleteName = rs.getString("a.name");
-                    String ahtleteClub = rs.getString("a.club_name");
                     String athleteGender = rs.getString("a.gender");
+
+                    long clubId = rs.getLong("b.id");
+                    String clubName = rs.getString("a.name");
 
                     Integer position = rs.getObject("b.position", Integer.class);
                     Double points = rs.getObject("b.points", Double.class);
@@ -38,12 +41,13 @@ public class AthleteRepository extends BaseRepository {
                     Map<String, Object> map = new LinkedHashMap<>();
                     map.put("id", id);
                     map.put("name", athleteName);
-                    map.put("club", ahtleteClub);
+                    map.put("club_id", clubId);
+                    map.put("club_name", clubName);
                     map.put("gender", athleteGender);
                     map.put("position", position);
                     map.put("points", points);
-                    map.put("trailtourPosition", trailtourPosition);
-                    map.put("trailtourPoints", trailtourPoints);
+                    map.put("trailtour_position", trailtourPosition);
+                    map.put("trailtour_points", trailtourPoints);
 
                     return map;
                 });
