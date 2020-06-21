@@ -1,8 +1,10 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
-import cz.jr.trailtour.backend.repository.entities.*;
-import cz.jr.trailtour.backend.repository.entities.athlete.AthleteResult;
+import cz.jr.trailtour.backend.repository.entities.Activity;
+import cz.jr.trailtour.backend.repository.entities.ActivityResult;
+import cz.jr.trailtour.backend.repository.entities.Athlete;
+import cz.jr.trailtour.backend.repository.entities.Result;
 import cz.jr.trailtour.backend.repository.entities.feed.FeedResult;
 import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import org.springframework.stereotype.Repository;
@@ -130,7 +132,6 @@ public class ResultRepository extends BaseRepository {
     }
 
 
-
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
         Map<Integer, Map<String, Object>> result = new HashMap<>();
         select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time FROM " + database + ".athlete_data WHERE position = 1", new Object[]{}, rs -> {
@@ -145,12 +146,12 @@ public class ResultRepository extends BaseRepository {
                 int activityTime = rs.getInt("activity_time");
 
                 Map<String, Object> temp = new HashMap<>();
-                temp.put("athleteId", athleteId);
-                temp.put("athleteName", athleteName);
-                temp.put("clubId", clubId);
-                temp.put("clubName", clubName);
-                temp.put("activityId", activityId);
-                temp.put("activityTime", activityTime);
+                temp.put("athlete_id", athleteId);
+                temp.put("athlete_name", athleteName);
+                temp.put("club_id", clubId);
+                temp.put("club_name", clubName);
+                temp.put("activity_id", activityId);
+                temp.put("activity_time", activityTime);
 
                 result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
             }
