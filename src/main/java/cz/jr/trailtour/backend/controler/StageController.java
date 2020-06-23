@@ -86,6 +86,11 @@ public class StageController {
         return new ResponseEntity<>(stageService.getResults(database, number), HttpStatus.OK);
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/getResultsCount", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Integer>> getResultsCount(@RequestParam(value = "database") String database, @RequestParam(value = "number") int number) throws SQLException {
+        return new ResponseEntity<>(stageService.getResultsCounts(database, number), HttpStatus.OK);
+    }
 
     @CrossOrigin
     @GetMapping(value = "/getStageInfos", produces = MediaType.APPLICATION_JSON_VALUE)

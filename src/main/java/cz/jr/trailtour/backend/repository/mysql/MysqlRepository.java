@@ -6,12 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 3:39 PM
@@ -99,6 +98,16 @@ public class MysqlRepository {
                 statement.setObject(1 + i, params[i]);
             }
         }
+    }
+
+    public static Map<String, Object> loadResultSet(ResultSet rs) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        Map<String, Object> map = new LinkedHashMap<>();
+        for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+            String name = rsmd.getColumnLabel(i);
+            map.put(name, rs.getObject(i));
+        }
+        return map;
     }
 
     public String generateUpsert(String table, Param[] params) {

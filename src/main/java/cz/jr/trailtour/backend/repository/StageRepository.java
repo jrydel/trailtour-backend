@@ -177,6 +177,23 @@ public class StageRepository extends BaseRepository {
                     return result;
                 });
     }
+    
+    public Map<String, Integer> getResultsCounts(String database, int stageNumber) throws SQLException {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        select("SELECT athlete_gender, COUNT(*) as count FROM " + database + ".athlete_data WHERE stage_number = ? GROUP BY athlete_gender",
+                new Object[]{stageNumber},
+                rs -> {
+                    while (rs.next()) {
+                        String gender = rs.getString("athlete_gender");
+                        int count = rs.getInt("count");
+
+                        result.put(gender, count);
+                    }
+                    return null;
+                });
+
+        return result;
+    }
 
     public List<Stage> getFulltext(String database, String match) throws SQLException {
         return selectList("SELECT a.number, a.name, a.type,a.distance, a.elevation, a.trailtour_url, a.strava_url, a.mapycz_url FROM " + database + ".stage a WHERE a.number LIKE ? OR a.name LIKE ? LIMIT 10", new Object[]{"%" + match + "%", "%" + match + "%"}, rs -> {

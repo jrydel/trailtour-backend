@@ -63,6 +63,10 @@ public class StageService {
         return stageRepository.getResults(database, number);
     }
 
+    public Map<String, Integer> getResultsCounts(String database, int number) throws SQLException {
+        return stageRepository.getResultsCounts(database, number);
+    }
+
     public List<StageInfo> getInfo(String database, int number) throws SQLException {
         return stageRepository.getInfos(database, number);
     }

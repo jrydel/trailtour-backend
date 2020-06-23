@@ -34,4 +34,12 @@ public class AthleteService {
     public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
         return athleteRepository.getResults(database, id);
     }
+
+    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
+        return athleteRepository.getKomResults(database);
+    }
+
+    public List<Map<String, Object>> getLadder(String database) throws SQLException {
+        return athleteRepository.getLadder(database);
+    }
 }

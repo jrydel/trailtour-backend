@@ -30,15 +30,5 @@ public class ResultService {
         return resultRepository.getFeed(database, limit, offset);
     }
 
-    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
-        return resultRepository.getKomResults(database);
-    }
 
-    public List<Result> get(String database, int stageNumber) throws SQLException {
-        return resultRepository.getResults(database, stageNumber);
-    }
-
-    public Map<String, Integer> getCounts(String database, int number) throws SQLException {
-        return resultRepository.getResultsCounts(database, number);
-    }
 }

@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
+import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -80,6 +81,23 @@ public class ClubRepository extends BaseRepository {
                 });
 
         return result;
+    }
+
+    public List<Map<String, Object>> getLadder(String database) throws SQLException {
+        LocalDateTime lastUdate = getLastResultUpdate(database);
+        return selectList(
+                "SELECT " +
+                        "a.id AS club_id, " +
+                        "a.name AS club_name, " +
+                        "b.position AS position, " +
+                        "b.points AS points, " +
+                        "b.trailtour_position AS trailtour_position, " +
+                        "b.trailtour_points AS trailtour_points " +
+                        "FROM " + database + ".club a " +
+                        "JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastUdate)},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public List<Map<String, Object>> getFulltext(String database, String match) throws SQLException {

@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.repository;
 
 import com.zaxxer.hikari.HikariDataSource;
+import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -126,4 +127,52 @@ public class AthleteRepository extends BaseRepository {
                 });
     }
 
+    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
+        Map<Integer, Map<String, Object>> result = new HashMap<>();
+        select("SELECT stage_number, athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time FROM " + database + ".athlete_data WHERE position = 1", new Object[]{}, rs -> {
+            while (rs.next()) {
+                int stageNumber = rs.getInt("stage_number");
+                long athleteId = rs.getLong("athlete_id");
+                String athleteName = rs.getString("athlete_name");
+                String athleteGender = rs.getString("athlete_gender");
+                long clubId = rs.getLong("club_id");
+                String clubName = rs.getString("club_name");
+                long activityId = rs.getLong("activity_id");
+                int activityTime = rs.getInt("activity_time");
+
+                Map<String, Object> temp = new HashMap<>();
+                temp.put("athlete_id", athleteId);
+                temp.put("athlete_name", athleteName);
+                temp.put("club_id", clubId);
+                temp.put("club_name", clubName);
+                temp.put("activity_id", activityId);
+                temp.put("activity_time", activityTime);
+
+                result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
+            }
+            return null;
+        });
+        return result;
+    }
+
+    public List<Map<String, Object>> getLadder(String database) throws SQLException {
+        LocalDateTime lastUdate = getLastResultUpdate(database);
+        return selectList(
+                "SELECT " +
+                        "a.id AS athlete_id, " +
+                        "a.name AS athlete_name, " +
+                        "a.gender AS athlete_gender, " +
+                        "b.id AS club_id, " +
+                        "b.name AS club_name, " +
+                        "c.position AS position, " +
+                        "c.points AS points, " +
+                        "c.trailtour_position AS trailtour_position, " +
+                        "c.trailtour_points AS trailtour_points " +
+                        "FROM " + database + ".athlete a " +
+                        "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
+                        "JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastUdate)},
+                MysqlRepository::loadResultSet
+        );
+    }
 }
