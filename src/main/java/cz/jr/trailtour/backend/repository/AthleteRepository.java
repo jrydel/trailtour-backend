@@ -171,7 +171,7 @@ public class AthleteRepository extends BaseRepository {
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
                         "WHERE a.gender = ? " +
-                        "ORDER BY position ASC LIMIT ? OFFSET ?",
+                        "ORDER BY position DESC LIMIT ? OFFSET ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastUdate),
                         gender,
@@ -180,5 +180,38 @@ public class AthleteRepository extends BaseRepository {
                 },
                 MysqlRepository::loadResultSet
         );
+    }
+
+    public List<Map<String, Object>> getHistory(String database, List<Long> ids) throws SQLException {
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Long id : ids) {
+            Map<String, Object> map = selectObject(
+                    "SELECT " +
+                            "a.id AS athlete_id, " +
+                            "a.name AS athlete_name, " +
+                            "a.gender AS athlete_gender, " +
+                            "b.id AS club_id, " +
+                            "b.name AS club_name " +
+                            "FROM " + database + ".athlete a " +
+                            "LEFT JOIN " + database + ".club b ON a.club_name = b.name WHERE a.id = ?",
+                    new Object[]{id},
+                    MysqlRepository::loadResultSet
+            );
+            List<Map<String, Object>> map2 = selectList(
+                    "SELECT " +
+                            "a.position AS position, " +
+                            "a.points AS points, " +
+                            "a.trailtour_position AS trailtour_position, " +
+                            "a.trailtour_points AS trailtour_points, " +
+                            "a.timestamp AS timestamp " +
+                            "FROM " + database + ".athlete_ladder a " +
+                            "WHERE a.athlete_id = ? AND a.timestamp = (SELECT MAX(x.timestamp) FROM " + database + ".athlete_ladder x WHERE DATE(x.timestamp) = DATE(a.timestamp) AND x.athlete_id = a.athlete_id)",
+                    new Object[]{id},
+                    MysqlRepository::loadResultSet
+            );
+            map.put("data", map2);
+            result.add(map);
+        }
+        return result;
     }
 }
