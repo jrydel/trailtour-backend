@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,5 +17,10 @@ public class JacksonConfig {
     @Primary
     public ObjectMapper configureObjectMapper() {
         return new ObjectMapper().registerModule(new JavaTimeModule());
+    }
+
+    @Bean
+    public XmlMapper configureXmlMapper() {
+        return new XmlMapper();
     }
 }

@@ -92,6 +92,23 @@ public class MysqlRepository {
         }
     }
 
+    public long executeReturnId(String sql, Object[] params) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            return executeReturnId(connection, sql, params);
+        }
+    }
+
+    public long executeReturnId(Connection connection, String sql, Object[] params) throws SQLException {
+        LOG.debug("[{}] {}", sql, params);
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            initParams(statement, params);
+            statement.executeUpdate();
+            try (ResultSet rs = statement.getGeneratedKeys()) {
+                return rs.getLong("GENERATED_KEY");
+            }
+        }
+    }
+
     public static void initParams(PreparedStatement statement, Object... params) throws SQLException {
         if (params != null && params.length > 0) {
             for (int i = 0; i < params.length; i++) {
