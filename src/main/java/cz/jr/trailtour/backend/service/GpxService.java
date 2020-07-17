@@ -51,7 +51,11 @@ public class GpxService {
 
     }
 
-    private Collection<GpxEntry> parseXml(byte[] data) throws XMLStreamException, JAXBException, IOException {
+    public List<Map<String, Object>> getAllFiles(String database) throws SQLException {
+        return gpxRepository.getAllGpx(database);
+    }
+
+    private Collection<GpxEntry> parseXml(byte[] data) throws XMLStreamException, IOException {
         List<GpxEntry> list = new ArrayList<>();
 
         XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();

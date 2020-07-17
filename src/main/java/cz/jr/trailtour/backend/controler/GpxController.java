@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,5 +38,11 @@ public class GpxController {
     @GetMapping(path = "/getGpx", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> saveGpx(@RequestParam(value = "database") String database, @RequestParam("id") Long id) throws IOException, SQLException, JAXBException, XMLStreamException {
         return new ResponseEntity<>(gpxService.getFile(database, id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/getAllGpx", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Map<String, Object>>> getAllGpx(@RequestParam(value = "database") String database) throws IOException, SQLException, JAXBException, XMLStreamException {
+        return new ResponseEntity<>(gpxService.getAllFiles(database), HttpStatus.OK);
     }
 }
