@@ -34,11 +34,11 @@ public class GpxService {
         this.xmlMapper = xmlMapper;
     }
 
-    public long storeFile(String database, MultipartFile file) throws IOException, SQLException {
+    public void storeFile(String database, MultipartFile file) throws IOException, SQLException {
         if (file.getOriginalFilename() == null) {
             throw new IOException("OriginalFileName is null.");
         }
-        return gpxRepository.saveGpx(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
+        gpxRepository.saveGpx(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
     }
 
     public Map<String, Object> getFile(String database, Long id) throws SQLException, JAXBException, XMLStreamException, IOException {
