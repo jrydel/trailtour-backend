@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class GpxRepository extends BaseRepository {
 
     public List<Map<String, Object>> getAllGpx(String database) throws SQLException {
         return selectList("SELECT id, name FROM " + database + ".gpx", new Object[]{}, rs -> {
-            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("id", rs.getLong("id"));
             map.put("name", rs.getString("name"));
             return map;
