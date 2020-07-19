@@ -110,7 +110,7 @@ public class AthleteRepository extends BaseRepository {
 
     public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
         return selectList(
-                "SELECT stage_number, stage_name, activity_id, activity_time, activity_date, position, points, trailtour_position, trailtour_points FROM " + database + ".athlete_data WHERE athlete_id = ?",
+                "SELECT stage_number, stage_name, activity_id, activity_time, activity_date, position, points, trailtour_position, trailtour_points, trailtour_time FROM " + database + ".athlete_data WHERE athlete_id = ?",
                 new Object[]{id,},
                 rs -> {
                     Map<String, Object> result = new HashMap<>();
@@ -123,6 +123,7 @@ public class AthleteRepository extends BaseRepository {
                     result.put("points", rs.getObject("points"));
                     result.put("trailtour_position", rs.getObject("trailtour_position"));
                     result.put("trailtour_points", rs.getObject("trailtour_points"));
+                    result.put("trailtour_time", rs.getObject("trailtour_time"));
                     return result;
                 });
     }
