@@ -159,7 +159,7 @@ public class StageRepository extends BaseRepository {
 
     public List<Map<String, Object>> getResults(String database, int number) throws SQLException {
         return selectList(
-                "SELECT athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time, position, points, trailtour_position, trailtour_points FROM " + database + ".athlete_data WHERE stage_number = ?",
+                "SELECT athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time, position, points, trailtour_position, trailtour_points, trailtour_time FROM " + database + ".athlete_data WHERE stage_number = ?",
                 new Object[]{number},
                 rs -> {
                     Map<String, Object> result = new LinkedHashMap<>();
@@ -174,10 +174,11 @@ public class StageRepository extends BaseRepository {
                     result.put("points", rs.getObject("points"));
                     result.put("trailtour_position", rs.getObject("trailtour_position"));
                     result.put("trailtour_points", rs.getObject("trailtour_points"));
+                    result.put("trailtour_time", rs.getObject("trailtour_time"));
                     return result;
                 });
     }
-    
+
     public Map<String, Integer> getResultsCounts(String database, int stageNumber) throws SQLException {
         Map<String, Integer> result = new LinkedHashMap<>();
         select("SELECT athlete_gender, COUNT(*) as count FROM " + database + ".athlete_data WHERE stage_number = ? GROUP BY athlete_gender",
