@@ -69,20 +69,25 @@ public class GpxController {
 
     @CrossOrigin
     @GetMapping(path = "/mergeGpx", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> mergeGpx(
+    public ResponseEntity<Map<String, Object>> mergeGpx(
+            @RequestParam(value = "database") String database,
+            @RequestParam(value = "rootPath") Path rootPath,
             @RequestParam(value = "scriptPath") Path scriptPath,
-            @RequestParam(value = "goodPath") Path goodPath,
+            @RequestParam(value = "goodId") Long goodId,
             @RequestParam(value = "goodStart") String goodStart,
             @RequestParam(value = "goodEnd") String goodEnd,
-            @RequestParam(value = "badPath") Path badPath,
+            @RequestParam(value = "badId") Long badId,
             @RequestParam(value = "badStart") String badStart,
             @RequestParam(value = "badEnd") String badEnd,
-            @RequestParam(value = "outputPath") Path outputPath) throws IOException, InterruptedException {
+            @RequestParam(value = "outputPath") Path outputPath) throws IOException, InterruptedException, SQLException {
+
+        Path goodPath = gpxService.createTempGpxFile(database, rootPath, goodId);
+        Path badPath = gpxService.createTempGpxFile(database, rootPath, badId);
 
         ProcessBuilder pb = new ProcessBuilder("python3.6", scriptPath.toString(), goodPath.toString(), badPath.toString(), goodStart, goodEnd, badStart, badEnd, outputPath.toString());
         Process p = pb.start();
         p.waitFor();
 
-        return new ResponseEntity<>(Map.of("status", "ok"), HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("path", outputPath.toString()), HttpStatus.OK);
     }
 }

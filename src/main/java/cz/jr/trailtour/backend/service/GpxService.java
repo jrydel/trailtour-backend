@@ -16,6 +16,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -48,7 +51,11 @@ public class GpxService {
         resultMap.putIfAbsent("name", gpxEntity.getName());
         resultMap.putIfAbsent("content", parseXml(gpxEntity.getContent()));
         return resultMap;
+    }
 
+    public Path createTempGpxFile(String database, Path parentPath, Long id) throws SQLException, IOException {
+        GpxRepository.GpxEntity gpx = gpxRepository.getGpx(database, id);
+        return Files.write(Paths.get(parentPath.toString(), System.currentTimeMillis() + ".gpx"), gpx.getContent());
     }
 
     public List<Map<String, Object>> getAllFiles(String database) throws SQLException {
