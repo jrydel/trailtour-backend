@@ -66,4 +66,23 @@ public class GpxController {
         headers.setContentDisposition(disposition);
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(path = "/mergeGpx", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> mergeGpx(
+            @RequestParam(value = "scriptPath") Path scriptPath,
+            @RequestParam(value = "goodPath") Path goodPath,
+            @RequestParam(value = "goodStart") String goodStart,
+            @RequestParam(value = "goodEnd") String goodEnd,
+            @RequestParam(value = "badPath") Path badPath,
+            @RequestParam(value = "badStart") String badStart,
+            @RequestParam(value = "badEnd") String badEnd,
+            @RequestParam(value = "outputPath") Path outputPath) throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("python3.6", scriptPath.toString(), goodPath.toString(), badPath.toString(), goodStart, goodEnd, badStart, badEnd, outputPath.toString());
+        Process p = pb.start();
+        p.waitFor();
+
+        return new ResponseEntity<>(Map.of("status", "ok"), HttpStatus.OK);
+    }
 }
