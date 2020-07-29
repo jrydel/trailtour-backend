@@ -28,12 +28,4 @@ public class ResultService {
     public Map<String, Object> getFeed(String database, int limit, int offset) throws SQLException {
         return resultRepository.getFeed(database, limit, offset);
     }
-
-    public List<Map<String, Object>> getAthleteLadder(String database) throws SQLException {
-        return resultRepository.getAthleteLadder(database);
-    }
-
-    public List<Map<String, Object>> getClubLaddder(String database) throws SQLException {
-        return resultRepository.getClubLadder(database);
-    }
 }
