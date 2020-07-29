@@ -109,7 +109,7 @@ public class ClubRepository extends BaseRepository {
                 rs -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("id", rs.getLong("b.id"));
-                    map.put("name", rs.getLong("b.name"));
+                    map.put("name", rs.getString("b.name"));
                     map.put("position_trailtour", rs.getInt("position_trailtour"));
                     map.put("points_trailtour", rs.getDouble("points_trailtour"));
                     return map;
