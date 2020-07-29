@@ -115,8 +115,8 @@ public class ClubRepository extends BaseRepository {
                     map.put("athlete_id", rs.getLong("b.id"));
                     map.put("athlete_name", rs.getString("b.name"));
                     map.put("stage_count", rs.getInt("stages"));
-                    map.put("points_trailtour", rs.getDouble("d.trailtour_points"));
-                    map.put("position_trailtour", rs.getInt("d.trailtour_position"));
+                    map.put("trailtour_points", rs.getDouble("d.trailtour_points"));
+                    map.put("trailtour_position", rs.getInt("d.trailtour_position"));
                     return map;
                 }
         );
