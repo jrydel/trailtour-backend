@@ -42,4 +42,10 @@ public class ClubController {
     public ResponseEntity<List<Map<String, Object>>> getClubLadder(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(clubService.getLadder(database), HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/getClubAthletes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Map<String, Object>>> getClubLadder(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
+        return new ResponseEntity<>(clubService.getAllAthletes(database, id), HttpStatus.OK);
+    }
 }

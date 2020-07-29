@@ -27,6 +27,10 @@ public class ClubService {
         return clubRepository.getAll(database);
     }
 
+    public List<Map<String, Object>> getAllAthletes(String database, long id) throws SQLException {
+        return clubRepository.getAllAthletes(database, id);
+    }
+
     public List<Map<String, Object>> getLadder(String database) throws SQLException {
         return clubRepository.getLadder(database);
     }

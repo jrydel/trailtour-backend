@@ -6,10 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Jiří Rýdel on 4/21/20, 1:33 PM
@@ -84,7 +81,7 @@ public class ClubRepository extends BaseRepository {
     }
 
     public List<Map<String, Object>> getLadder(String database) throws SQLException {
-        LocalDateTime lastUdate = getLastResultUpdate(database);
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
                         "a.id AS club_id, " +
@@ -95,8 +92,28 @@ public class ClubRepository extends BaseRepository {
                         "b.trailtour_points AS trailtour_points " +
                         "FROM " + database + ".club a " +
                         "JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ?",
-                new Object[]{java.sql.Timestamp.valueOf(lastUdate)},
+                new Object[]{java.sql.Timestamp.valueOf(lastUpdate)},
                 MysqlRepository::loadResultSet
+        );
+    }
+
+    public List<Map<String, Object>> getAllAthletes(String database, long id) throws SQLException {
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
+        return selectList(
+                "SELECT b.id, b.name, COUNT(c.athlete_id) AS position_trailtour, SUM(c.trailtour_points) AS points_trailtour FROM trailtour.club a " +
+                        "JOIN trailtour.athlete b ON a.name  = b.club_name " +
+                        "LEFT JOIN trailtour.athlete_result c ON c.athlete_id  = b.id " +
+                        "WHERE a.id = ? AND b.status = ? AND c.timestamp = ? " +
+                        "GROUP BY b.id",
+                new Object[]{id, "enabled", java.sql.Timestamp.valueOf(lastUpdate)},
+                rs -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", rs.getLong("b.id"));
+                    map.put("name", rs.getLong("b.name"));
+                    map.put("position_trailtour", rs.getInt("position_trailtour"));
+                    map.put("points_trailtour", rs.getDouble("points_trailtour"));
+                    return map;
+                }
         );
     }
 
