@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,5 +34,17 @@ public class ResultControler {
             offset = 0;
         }
         return new ResponseEntity<>(resultService.getFeed(database, limit, offset), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getAthleteLadder", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Map<String, Object>>> getAthleteLadder(@RequestParam(value = "database") String database) throws SQLException {
+        return new ResponseEntity<>(resultService.getAthleteLadder(database), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/getClubLadder", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Map<String, Object>>> getClubLadder(@RequestParam(value = "database") String database) throws SQLException {
+        return new ResponseEntity<>(resultService.getClubLaddder(database), HttpStatus.OK);
     }
 }

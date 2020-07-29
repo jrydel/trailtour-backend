@@ -73,5 +73,26 @@ public class ResultRepository extends BaseRepository {
         return map;
     }
 
+    public List<Map<String, Object>> getAthleteLadder(String database) throws SQLException {
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
+        return selectList(
+                "SELECT a.id AS athlete_id, a.name AS athlete_name, a.gender AS athlete_gender, b.id AS club_id, b.name AS club_name, c.trailtour_points AS trailtour_points, c.trailtour_position AS trailtour_position FROM trailtour.athlete a " +
+                        "LEFT JOIN trailtour.club b ON a.club_name = b.name AND b.status = ? " +
+                        "LEFT JOIN trailtour.athlete_ladder c ON a.id = c.athlete_id AND c.timestamp = ? " +
+                        "WHERE a.status = ?",
+                new Object[]{"enabled", java.sql.Timestamp.valueOf(lastUpdate), "enabled"},
+                MysqlRepository::loadResultSet
+        );
+    }
 
+    public List<Map<String, Object>> getClubLadder(String database) throws SQLException {
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
+        return selectList(
+                "SELECT a.id AS club_id, a.name AS club_name, b.trailtour_points AS trailtour_points, b.trailtour_position AS trailtour_position FROM trailtour.club a " +
+                        "LEFT JOIN trailtour.club_ladder b ON a.id = b.club_id AND b.timestamp = ? " +
+                        "WHERE a.status = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastUpdate), "enabled"},
+                MysqlRepository::loadResultSet
+        );
+    }
 }

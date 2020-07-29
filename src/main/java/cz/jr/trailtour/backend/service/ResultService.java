@@ -3,7 +3,6 @@ package cz.jr.trailtour.backend.service;
 import cz.jr.trailtour.backend.repository.AthleteRepository;
 import cz.jr.trailtour.backend.repository.ResultRepository;
 import cz.jr.trailtour.backend.repository.StageRepository;
-import cz.jr.trailtour.backend.repository.entities.Result;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -30,5 +29,11 @@ public class ResultService {
         return resultRepository.getFeed(database, limit, offset);
     }
 
+    public List<Map<String, Object>> getAthleteLadder(String database) throws SQLException {
+        return resultRepository.getAthleteLadder(database);
+    }
 
+    public List<Map<String, Object>> getClubLaddder(String database) throws SQLException {
+        return resultRepository.getClubLadder(database);
+    }
 }
