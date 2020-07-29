@@ -112,9 +112,9 @@ public class ClubRepository extends BaseRepository {
                 new Object[]{id, "enabled", java.sql.Timestamp.valueOf(lastUpdate), java.sql.Timestamp.valueOf(lastUpdate)},
                 rs -> {
                     Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("id", rs.getLong("b.id"));
-                    map.put("name", rs.getString("b.name"));
-                    map.put("stages", rs.getInt("stages"));
+                    map.put("athlete_id", rs.getLong("b.id"));
+                    map.put("athlete_name", rs.getString("b.name"));
+                    map.put("stage_count", rs.getInt("stages"));
                     map.put("points_trailtour", rs.getDouble("d.trailtour_points"));
                     map.put("position_trailtour", rs.getInt("d.trailtour_position"));
                     return map;
