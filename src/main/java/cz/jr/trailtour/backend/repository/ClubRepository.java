@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/21/20, 1:33 PM
@@ -100,18 +103,20 @@ public class ClubRepository extends BaseRepository {
     public List<Map<String, Object>> getAllAthletes(String database, long id) throws SQLException {
         LocalDateTime lastUpdate = getLastResultUpdate(database);
         return selectList(
-                "SELECT b.id, b.name, COUNT(c.athlete_id) AS position_trailtour, SUM(c.trailtour_points) AS points_trailtour FROM trailtour.club a " +
+                "SELECT b.id, b.name, COUNT(c.athlete_id) AS stages, d.trailtour_points, d.trailtour_position FROM trailtour.club a " +
                         "JOIN trailtour.athlete b ON a.name  = b.club_name " +
                         "LEFT JOIN trailtour.athlete_result c ON c.athlete_id  = b.id " +
-                        "WHERE a.id = ? AND b.status = ? AND c.timestamp = ? " +
+                        "LEFT JOIN trailtour.athlete_ladder d ON d.athlete_id = b.id " +
+                        "WHERE a.id = ? AND b.status = ? AND c.timestamp = ? AND d.timestamp = ? " +
                         "GROUP BY b.id",
-                new Object[]{id, "enabled", java.sql.Timestamp.valueOf(lastUpdate)},
+                new Object[]{id, "enabled", java.sql.Timestamp.valueOf(lastUpdate), java.sql.Timestamp.valueOf(lastUpdate)},
                 rs -> {
-                    Map<String, Object> map = new HashMap<>();
+                    Map<String, Object> map = new LinkedHashMap<>();
                     map.put("id", rs.getLong("b.id"));
                     map.put("name", rs.getString("b.name"));
-                    map.put("position_trailtour", rs.getInt("position_trailtour"));
-                    map.put("points_trailtour", rs.getDouble("points_trailtour"));
+                    map.put("stages", rs.getString("stages"));
+                    map.put("points_trailtour", rs.getDouble("d.trailtour_points"));
+                    map.put("position_trailtour", rs.getInt("d.trailtour_position"));
                     return map;
                 }
         );
