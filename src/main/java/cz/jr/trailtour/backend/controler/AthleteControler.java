@@ -51,8 +51,8 @@ public class AthleteControler {
 
     @CrossOrigin
     @GetMapping(value = "/getAthleteLadder", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getAthleteLadder(@RequestParam(value = "database") String database, @RequestParam(value = "gender") String gender, @RequestParam("limit") int limit, @RequestParam(value = "offset") int offset) throws SQLException {
-        return new ResponseEntity<>(athleteService.getLadder(database, gender, limit, offset), HttpStatus.OK);
+    public ResponseEntity<List<Map<String, Object>>> getAthleteLadder(@RequestParam(value = "database") String database, @RequestParam(value = "gender") String gender) throws SQLException {
+        return new ResponseEntity<>(athleteService.getLadder(database, gender), HttpStatus.OK);
     }
 
     @CrossOrigin

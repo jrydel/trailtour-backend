@@ -156,7 +156,7 @@ public class AthleteRepository extends BaseRepository {
         return result;
     }
 
-    public List<Map<String, Object>> getLadder(String database, String gender, int limit, int offset) throws SQLException {
+    public List<Map<String, Object>> getLadder(String database, String gender) throws SQLException {
         LocalDateTime lastUdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
@@ -170,14 +170,11 @@ public class AthleteRepository extends BaseRepository {
                         "c.trailtour_points AS trailtour_points " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
-                        "JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
-                        "WHERE a.gender = ? " +
-                        "ORDER BY position DESC LIMIT ? OFFSET ?",
+                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
+                        "WHERE a.gender = ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastUdate),
-                        gender,
-                        limit,
-                        offset
+                        gender
                 },
                 MysqlRepository::loadResultSet
         );
