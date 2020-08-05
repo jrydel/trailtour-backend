@@ -105,7 +105,7 @@ public class StageController {
 
     @CrossOrigin
     @PostMapping(path = "/saveStageRating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> saveStageRating(@RequestParam(value = "database") String database, @RequestBody Map<String, Object> stageInfo) throws SQLException {
-        return new ResponseEntity<>(stageService.saveRating(database, (Double) stageInfo.get("rating"), (Integer) stageInfo.get("stage_number")), HttpStatus.OK);
+    public ResponseEntity<Integer> saveStageRating(@RequestParam(value = "database") String database, @RequestBody Map<String, String> stageInfo) throws SQLException {
+        return new ResponseEntity<>(stageService.saveRating(database, Double.parseDouble(stageInfo.get("rating")), Integer.parseInt(stageInfo.get("stage_number"))), HttpStatus.OK);
     }
 }
