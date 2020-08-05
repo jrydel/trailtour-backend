@@ -1,6 +1,5 @@
 package cz.jr.trailtour.backend.controler;
 
-import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import cz.jr.trailtour.backend.repository.entities.stage.StageInfo;
 import cz.jr.trailtour.backend.service.StageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getStage", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Stage> getStage(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
+    public ResponseEntity<Map<String, Object>> getStage(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
         return new ResponseEntity<>(stageService.get(database, number), HttpStatus.OK);
     }
 
@@ -58,7 +57,7 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getAllStages", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Stage>> getAllStages(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<List<Map<String, Object>>> getAllStages(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(stageService.getAll(database), HttpStatus.OK);
     }
 
@@ -102,5 +101,11 @@ public class StageController {
     @PostMapping(path = "/saveStageInfo", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> saveStageInfo(@RequestParam(value = "database") String database, @RequestBody StageInfo stageInfo) throws SQLException {
         return new ResponseEntity<>(stageService.saveInfo(database, stageInfo), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/saveStageRating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> saveStageRating(@RequestParam(value = "database") String database, @RequestBody Map<String, Object> stageInfo) throws SQLException {
+        return new ResponseEntity<>(stageService.saveRating(database, (Double) stageInfo.get("rating"), (Integer) stageInfo.get("stage_number")), HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package cz.jr.trailtour.backend.repository;
 import com.zaxxer.hikari.HikariDataSource;
 import cz.jr.trailtour.backend.repository.entities.stage.Stage;
 import cz.jr.trailtour.backend.repository.entities.stage.StageInfo;
+import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -21,21 +22,12 @@ public class StageRepository extends BaseRepository {
         super(dataSource);
     }
 
-    public Stage get(String database, int number) throws SQLException {
-        return selectObject("SELECT name, distance, type, elevation, trailtour_url, strava_url, mapycz_url FROM " + database + ".stage WHERE number = ?",
+    public Map<String, Object> get(String database, int number) throws SQLException {
+        return selectObject(
+                "SELECT name, distance, type, elevation, trailtour_url, strava_url, mapycz_url, rating_sum, rating_votes FROM " + database + ".stage WHERE number = ?",
                 new Object[]{number},
-                rs -> {
-                    Stage temp = new Stage();
-                    temp.setNumber(number);
-                    temp.setName(rs.getString("name"));
-                    temp.setType(rs.getString("type"));
-                    temp.setDistance(rs.getInt("distance"));
-                    temp.setElevation(rs.getInt("elevation"));
-                    temp.setTrailtourUrl(rs.getString("trailtour_url"));
-                    temp.setStravaUrl(rs.getString("strava_url"));
-                    temp.setMapyczUrl(rs.getString("mapycz_url"));
-                    return temp;
-                });
+                MysqlRepository::loadResultSet
+        );
     }
 
     public Map<String, Object> getCounts(String database, int number) throws SQLException {
@@ -62,13 +54,11 @@ public class StageRepository extends BaseRepository {
     }
 
     public Map<String, Object> getGPSStart(String database, int number) throws SQLException {
-        return selectObject("SELECT JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage WHERE number = ?", new Object[]{number},
-                rs -> {
-                    Map<String, Object> result = new LinkedHashMap<>();
-                    result.put("latitude", rs.getObject("latitude"));
-                    result.put("longitude", rs.getObject("longitude"));
-                    return result;
-                });
+        return selectObject(
+                "SELECT JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage WHERE number = ?",
+                new Object[]{number},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public List<StageInfo> getInfos(String database, int number) throws SQLException {
@@ -82,19 +72,12 @@ public class StageRepository extends BaseRepository {
         });
     }
 
-    public List<Stage> getAll(String database) throws SQLException {
-        return selectList("SELECT number, name, distance, elevation, type, trailtour_url, strava_url, mapycz_url FROM " + database + ".stage", new Object[]{}, rs -> {
-            Stage stage = new Stage();
-            stage.setNumber(rs.getInt("number"));
-            stage.setName(rs.getString("name"));
-            stage.setDistance(rs.getInt("distance"));
-            stage.setElevation(rs.getInt("elevation"));
-            stage.setType(rs.getString("type"));
-            stage.setTrailtourUrl(rs.getString("trailtour_url"));
-            stage.setStravaUrl(rs.getString("strava_url"));
-            stage.setMapyczUrl(rs.getString("mapycz_url"));
-            return stage;
-        });
+    public List<Map<String, Object>> getAll(String database) throws SQLException {
+        return selectList(
+                "SELECT number, name, distance, elevation, type, trailtour_url, strava_url, mapycz_url, rating_sum, rating_votes FROM " + database + ".stage",
+                new Object[]{},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public Map<Integer, Map<String, Object>> getAllCounts(String database) throws SQLException {
@@ -213,5 +196,9 @@ public class StageRepository extends BaseRepository {
 
     public int saveInfo(String database, StageInfo stageInfo) throws SQLException {
         return execute("INSERT INTO " + database + ".stage_info (author, content) VALUES (?, ?)", new Object[]{stageInfo.getAuthor(), stageInfo.getContent()});
+    }
+
+    public int saveRating(String database, double rating, int stageNumber) throws SQLException {
+        return execute("UPDATE " + database + ".stage SET rating_sum = rating_sum + ?, rating_votes = rating_votes + 1 WHERE number = ?", new Object[]{rating, stageNumber});
     }
 }

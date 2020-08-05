@@ -23,7 +23,7 @@ public class StageService {
         this.stageRepository = stageRepository;
     }
 
-    public Stage get(String database, int number) throws SQLException {
+    public Map<String, Object> get(String database, int number) throws SQLException {
         return stageRepository.get(database, number);
     }
 
@@ -39,7 +39,7 @@ public class StageService {
         return stageRepository.getGPSStart(database, number);
     }
 
-    public List<Stage> getAll(String database) throws SQLException {
+    public List<Map<String, Object>> getAll(String database) throws SQLException {
         return stageRepository.getAll(database);
     }
 
@@ -73,5 +73,9 @@ public class StageService {
 
     public int saveInfo(String database, StageInfo stageInfo) throws SQLException {
         return stageRepository.saveInfo(database, stageInfo);
+    }
+
+    public int saveRating(String database, double rating, int stage_number) throws SQLException {
+        return stageRepository.saveRating(database, rating, stage_number);
     }
 }
