@@ -92,13 +92,13 @@ public class MysqlRepository {
         }
     }
 
-    public long executeReturnId(String sql, Object[] params) throws SQLException {
+    public Long executeReturnId(String sql, Object[] params) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             return executeReturnId(connection, sql, params);
         }
     }
 
-    public long executeReturnId(Connection connection, String sql, Object[] params) throws SQLException {
+    public Long executeReturnId(Connection connection, String sql, Object[] params) throws SQLException {
         LOG.debug("[{}] {}", sql, params);
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             initParams(statement, params);
@@ -106,6 +106,8 @@ public class MysqlRepository {
             try (ResultSet rs = statement.getGeneratedKeys()) {
                 if (rs.next()) {
                     return rs.getLong("GENERATED_KEY");
+                } else {
+                    return null;
                 }
             }
         }
