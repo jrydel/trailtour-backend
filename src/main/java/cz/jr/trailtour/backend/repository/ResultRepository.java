@@ -37,13 +37,13 @@ public class ResultRepository extends BaseRepository {
                         "c.number AS stage_number, " +
                         "c.name AS stage_name, " +
                         "d.points AS points," +
-                        "d.trailtour_points AS trailtour_points " +
+                        "d.trailtour_points AS trailtour_points, " +
                         "e.id AS club_id " +
                         "FROM " + database + ".activity a " +
                         "JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
                         "JOIN " + database + ".stage c ON c.number = a.stage_number " +
                         "LEFT JOIN " + database + ".athlete_result d ON d.athlete_id = b.id AND d.stage_number = c.number AND d.timestamp = ? " +
-                        "LEFT JOIN " + database + ".club e ON e.name = b.club_nane " +
+                        "LEFT JOIN " + database + ".club e ON e.name = b.club_name " +
                         "ORDER BY a.created DESC LIMIT ? OFFSET ?",
                 new Object[]{Timestamp.valueOf(lastUpdate), limit, offset},
                 MysqlRepository::loadResultSet
