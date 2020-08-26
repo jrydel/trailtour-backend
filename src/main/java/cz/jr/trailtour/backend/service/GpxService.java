@@ -97,7 +97,6 @@ public class GpxService {
                 writer.close();
             }
         }
-        return null;
     }
 
     private Collection<GpxEntry> parseXml(byte[] data) throws XMLStreamException, IOException {
