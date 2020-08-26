@@ -104,7 +104,9 @@ public class MysqlRepository {
             initParams(statement, params);
             statement.executeUpdate();
             try (ResultSet rs = statement.getGeneratedKeys()) {
-                return rs.getLong("GENERATED_KEY");
+                if (rs.next()) {
+                    return rs.getLong("GENERATED_KEY");
+                }
             }
         }
     }
