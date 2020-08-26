@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -37,14 +36,14 @@ public class GpxService {
         this.xmlMapper = xmlMapper;
     }
 
-    public void storeFile(String database, MultipartFile file) throws IOException, SQLException {
+    public Long storeFile(String database, MultipartFile file) throws IOException, SQLException {
         if (file.getOriginalFilename() == null) {
             throw new IOException("OriginalFileName is null.");
         }
-        gpxRepository.saveGpx(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
+        return gpxRepository.saveGpx(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
     }
 
-    public Map<String, Object> getFile(String database, Long id) throws SQLException, JAXBException, XMLStreamException, IOException {
+    public Map<String, Object> getFile(String database, Long id) throws SQLException, XMLStreamException, IOException {
         GpxRepository.GpxEntity gpxEntity = gpxRepository.getGpx(database, id);
 
         Map<String, Object> resultMap = new LinkedHashMap<>();

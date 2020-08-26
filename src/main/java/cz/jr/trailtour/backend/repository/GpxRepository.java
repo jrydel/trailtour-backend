@@ -18,8 +18,8 @@ public class GpxRepository extends BaseRepository {
         super(dataSource);
     }
 
-    public void saveGpx(String database, String name, byte[] content) throws SQLException {
-        execute("INSERT INTO " + database + ".gpx (name, content) VALUES (?, ?)", new Object[]{name, content});
+    public Long saveGpx(String database, String name, byte[] content) throws SQLException {
+        return executeReturnId("INSERT INTO " + database + ".gpx (name, content) VALUES (?, ?)", new Object[]{name, content});
     }
 
     public GpxEntity getGpx(String database, Long id) throws SQLException {

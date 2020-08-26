@@ -13,6 +13,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +32,13 @@ public class GpxController {
 
     @CrossOrigin
     @PostMapping(path = "/saveGpx", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> saveGpx(@RequestParam(value = "database") String database, @RequestParam("files") MultipartFile[] files) throws IOException, SQLException {
+    public ResponseEntity<List<Long>> saveGpx(@RequestParam(value = "database") String database, @RequestParam("files") MultipartFile[] files) throws IOException, SQLException {
+        List<Long> result = new LinkedList<>();
         for (MultipartFile file : files) {
-            gpxService.storeFile(database, file);
+            Long id = gpxService.storeFile(database, file);
+            result.add(id);
         }
-        return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @CrossOrigin
