@@ -101,4 +101,11 @@ public class GpxController {
         Long newId = gpxService.cropGpx(database, id, from, to);
         return new ResponseEntity<>(newId, HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @GetMapping(path = "/createFile", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Path> createFile(@RequestParam(value = "database") String database, @RequestParam(value = "outputPath") Path outputPath, @RequestParam("id") Long id) throws IOException, SQLException {
+        Path path = gpxService.createFile(database, outputPath, id);
+        return new ResponseEntity<>(path, HttpStatus.OK);
+    }
 }

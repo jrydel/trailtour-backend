@@ -105,6 +105,11 @@ public class GpxService {
         return list;
     }
 
+    public Path createFile(String database, Path parentPath, Long id) throws SQLException, IOException {
+        GpxRepository.GpxEntity gpx = gpxRepository.getGpx(database, id);
+        return Files.write(Paths.get(parentPath.toString(), gpx.getName()), gpx.getContent());
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GpxEntry {
         @JsonProperty(value = "lat")
