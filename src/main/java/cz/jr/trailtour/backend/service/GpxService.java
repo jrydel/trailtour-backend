@@ -85,6 +85,8 @@ public class GpxService {
             index++;
         }
 
+        document.normalize();
+
         return storeFile(database, System.currentTimeMillis() + ".gpx", document.asXML().getBytes());
     }
 
