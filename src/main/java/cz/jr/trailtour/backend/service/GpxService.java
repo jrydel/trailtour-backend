@@ -47,6 +47,7 @@ public class GpxService {
         GpxRepository.GpxEntity gpxEntity = gpxRepository.getGpx(database, id);
 
         Map<String, Object> resultMap = new LinkedHashMap<>();
+        resultMap.putIfAbsent("id", id);
         resultMap.putIfAbsent("name", gpxEntity.getName());
         resultMap.putIfAbsent("content", parseXml(gpxEntity.getContent()));
         return resultMap;
