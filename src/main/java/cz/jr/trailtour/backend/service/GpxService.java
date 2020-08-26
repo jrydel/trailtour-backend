@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import cz.jr.trailtour.backend.repository.GpxRepository;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -40,7 +44,11 @@ public class GpxService {
         if (file.getOriginalFilename() == null) {
             throw new IOException("OriginalFileName is null.");
         }
-        return gpxRepository.saveGpx(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
+        return storeFile(database, StringUtils.cleanPath(file.getOriginalFilename()), file.getBytes());
+    }
+
+    private Long storeFile(String database, String fileName, byte[] data) throws IOException, SQLException {
+        return gpxRepository.saveGpx(database, fileName, data);
     }
 
     public Map<String, Object> getFile(String database, Long id) throws SQLException, XMLStreamException, IOException {
@@ -60,6 +68,24 @@ public class GpxService {
 
     public List<Map<String, Object>> getAllFiles(String database) throws SQLException {
         return gpxRepository.getAllGpx(database);
+    }
+
+    public Long cropGpx(String database, long id, long from, long to) throws SQLException, DocumentException, IOException {
+        GpxRepository.GpxEntity gpx = gpxRepository.getGpx(database, id);
+
+        SAXReader reader = new SAXReader();
+        Document document = reader.read(new ByteArrayInputStream(gpx.getContent()));
+
+        List<Element> elementList = document.getRootElement().element("trk").element("trkseg").elements("trkpt");
+        int index = 0;
+        for (Element element : elementList) {
+            if (index >= from && index <= to) {
+                element.detach();
+            }
+            index++;
+        }
+
+        return storeFile(database, System.currentTimeMillis() + ".gpx", document.asXML().getBytes());
     }
 
     private Collection<GpxEntry> parseXml(byte[] data) throws XMLStreamException, IOException {

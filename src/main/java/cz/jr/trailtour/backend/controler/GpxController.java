@@ -1,6 +1,7 @@
 package cz.jr.trailtour.backend.controler;
 
 import cz.jr.trailtour.backend.service.GpxService;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -92,5 +93,12 @@ public class GpxController {
         p.waitFor();
 
         return new ResponseEntity<>(Map.of("path", outputPath.toString()), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/cropGpx", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> cropGpx(@RequestParam(value = "database") String database, @RequestParam("id") Long id, @RequestParam("from") Long from, @RequestParam("to") Long to) throws IOException, SQLException, DocumentException {
+        Long newId = gpxService.cropGpx(database, id, from, to);
+        return new ResponseEntity<>(newId, HttpStatus.OK);
     }
 }
