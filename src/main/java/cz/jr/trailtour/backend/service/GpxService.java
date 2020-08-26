@@ -8,7 +8,9 @@ import cz.jr.trailtour.backend.repository.GpxRepository;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,6 +21,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -85,9 +88,16 @@ public class GpxService {
             index++;
         }
 
-        document.normalize();
-
-        return storeFile(database, System.currentTimeMillis() + ".gpx", document.asXML().getBytes());
+        try (StringWriter writer = new StringWriter()) {
+            XMLWriter xmlWriter = new XMLWriter(writer, OutputFormat.createPrettyPrint());
+            try {
+                xmlWriter.write(document);
+                return storeFile(database, gpx.getName(), writer.toString().getBytes());
+            } finally {
+                writer.close();
+            }
+        }
+        return null;
     }
 
     private Collection<GpxEntry> parseXml(byte[] data) throws XMLStreamException, IOException {
