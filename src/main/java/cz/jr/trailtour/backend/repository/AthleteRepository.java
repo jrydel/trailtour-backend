@@ -157,7 +157,7 @@ public class AthleteRepository extends BaseRepository {
     }
 
     public List<Map<String, Object>> getLadder(String database, String gender) throws SQLException {
-        LocalDateTime lastUdate = getLastResultUpdate(database);
+        LocalDateTime lastUpdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
                         "a.id AS athlete_id, " +
@@ -167,13 +167,16 @@ public class AthleteRepository extends BaseRepository {
                         "c.position AS position, " +
                         "c.points AS points, " +
                         "c.trailtour_position AS trailtour_position, " +
-                        "c.trailtour_points AS trailtour_points " +
+                        "c.trailtour_points AS trailtour_points, " +
+                        "COUNT(a.id) AS stage_count " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
-                        "WHERE a.gender = ?",
+                        "LEFT JOIN " + database + ".athlete_result d ON d.athlete_id = a.id AND d.timestamp = ? " +
+                        "WHERE a.gender = ? GROUP BY a.id",
                 new Object[]{
-                        java.sql.Timestamp.valueOf(lastUdate),
+                        java.sql.Timestamp.valueOf(lastUpdate),
+                        java.sql.Timestamp.valueOf(lastUpdate),
                         gender
                 },
                 MysqlRepository::loadResultSet
