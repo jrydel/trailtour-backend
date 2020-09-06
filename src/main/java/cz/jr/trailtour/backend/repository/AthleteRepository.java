@@ -20,38 +20,23 @@ public class AthleteRepository extends BaseRepository {
 
     public Map<String, Object> get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
-        return selectObject("SELECT a.name, a.gender, b.id, b.name, c.position, c.points, c.trailtour_position, c.trailtour_points FROM " + database + ".athlete a " +
+        return selectObject("SELECT " +
+                        "a.name AS athlete_name, " +
+                        "a.gender AS athlete_gender, " +
+                        "b.id AS club_id, " +
+                        "b.name AS club_name, " +
+                        "c.position AS position, " +
+                        "c.points AS points, " +
+                        "c.trailtour_position AS trailtour_position, " +
+                        "c.trailtour_points AS trailtour_points " +
+                        "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? WHERE a.id = ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastResultUpdate),
                         id
                 },
-                rs -> {
-                    String athleteName = rs.getString("a.name");
-                    String athleteGender = rs.getString("a.gender");
-
-                    long clubId = rs.getLong("b.id");
-                    String clubName = rs.getString("b.name");
-
-                    Integer position = rs.getObject("c.position", Integer.class);
-                    Double points = rs.getObject("c.points", Double.class);
-                    Integer trailtourPosition = rs.getObject("c.trailtour_position", Integer.class);
-                    Double trailtourPoints = rs.getObject("c.trailtour_points", Double.class);
-
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("id", id);
-                    map.put("name", athleteName);
-                    map.put("club_id", clubId);
-                    map.put("club_name", clubName);
-                    map.put("gender", athleteGender);
-                    map.put("position", position);
-                    map.put("points", points);
-                    map.put("trailtour_position", trailtourPosition);
-                    map.put("trailtour_points", trailtourPoints);
-
-                    return map;
-                });
+                MysqlRepository::loadResultSet);
     }
 
     public Map<String, List<Map<String, Object>>> getAll(String database) throws SQLException {
@@ -110,22 +95,21 @@ public class AthleteRepository extends BaseRepository {
 
     public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
         return selectList(
-                "SELECT stage_number, stage_name, activity_id, activity_time, activity_date, position, points, trailtour_position, trailtour_points, trailtour_time FROM " + database + ".athlete_data WHERE athlete_id = ?",
-                new Object[]{id,},
-                rs -> {
-                    Map<String, Object> result = new HashMap<>();
-                    result.put("stage_number", rs.getObject("stage_number"));
-                    result.put("stage_name", rs.getObject("stage_name"));
-                    result.put("activity_id", rs.getObject("activity_id"));
-                    result.put("activity_time", rs.getObject("activity_time"));
-                    result.put("activity_date", rs.getObject("activity_date"));
-                    result.put("position", rs.getObject("position"));
-                    result.put("points", rs.getObject("points"));
-                    result.put("trailtour_position", rs.getObject("trailtour_position"));
-                    result.put("trailtour_points", rs.getObject("trailtour_points"));
-                    result.put("trailtour_time", rs.getObject("trailtour_time"));
-                    return result;
-                });
+                "SELECT " +
+                        "stage_number, " +
+                        "stage_name, " +
+                        "activity_id, " +
+                        "activity_time, " +
+                        "activity_date, " +
+                        "position, " +
+                        "points, " +
+                        "trailtour_position, " +
+                        "trailtour_points, " +
+                        "trailtour_time " +
+                        "FROM " + database + ".athlete_data WHERE athlete_id = ?",
+                new Object[]{id},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
