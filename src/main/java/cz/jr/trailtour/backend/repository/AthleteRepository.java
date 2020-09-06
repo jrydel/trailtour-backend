@@ -106,7 +106,7 @@ public class AthleteRepository extends BaseRepository {
                         "points AS points, " +
                         "trailtour_position AS trailtour_position, " +
                         "trailtour_points AS trailtour_points, " +
-                        "trailtour_time AS trailtour_time" +
+                        "trailtour_time AS trailtour_time " +
                         "FROM " + database + ".athlete_data WHERE athlete_id = ?",
                 new Object[]{id},
                 MysqlRepository::loadResultSet
