@@ -153,11 +153,10 @@ public class AthleteRepository extends BaseRepository {
                         "c.points AS points, " +
                         "c.trailtour_position AS trailtour_position, " +
                         "c.trailtour_points AS trailtour_points, " +
-                        "COUNT(a.id) AS stage_count " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = a.id AND d.trailtour_points IS NOT NULL AND d.timestamp = ?) AS stage_count " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
-                        "LEFT JOIN " + database + ".athlete_result d ON d.athlete_id = a.id AND d.timestamp = ? " +
                         "WHERE a.gender = ? GROUP BY a.id",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastUpdate),
