@@ -21,6 +21,7 @@ public class AthleteRepository extends BaseRepository {
     public Map<String, Object> get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectObject("SELECT " +
+                        "a.id AS id, " +
                         "a.name AS athlete_name, " +
                         "a.gender AS athlete_gender, " +
                         "b.id AS club_id, " +
