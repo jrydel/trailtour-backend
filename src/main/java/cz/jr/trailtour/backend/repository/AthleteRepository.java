@@ -96,16 +96,16 @@ public class AthleteRepository extends BaseRepository {
     public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
         return selectList(
                 "SELECT " +
-                        "stage_number, " +
-                        "stage_name, " +
-                        "activity_id, " +
-                        "activity_time, " +
-                        "activity_date, " +
-                        "position, " +
-                        "points, " +
-                        "trailtour_position, " +
-                        "trailtour_points, " +
-                        "trailtour_time " +
+                        "stage_number AS stage_number, " +
+                        "stage_name AS stage_name, " +
+                        "activity_id AS activity_id, " +
+                        "activity_time AS activity_time, " +
+                        "activity_date AS activity_date, " +
+                        "position AS position, " +
+                        "points AS points, " +
+                        "trailtour_position AS trailtour_position, " +
+                        "trailtour_points AS trailtour_points, " +
+                        "trailtour_time AS trailtour_time" +
                         "FROM " + database + ".athlete_data WHERE athlete_id = ?",
                 new Object[]{id},
                 MysqlRepository::loadResultSet
