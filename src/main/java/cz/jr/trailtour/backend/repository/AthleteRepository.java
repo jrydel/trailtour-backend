@@ -6,10 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 2:44 PM
@@ -102,11 +99,11 @@ public class AthleteRepository extends BaseRepository {
     }
 
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
-        Map<Integer, Map<String, Object>> result = new HashMap<>();
+        Map<Integer, Map<String, Object>> result = new LinkedHashMap<>();
         select("SELECT " +
                         "stage_number AS stage_number, " +
                         "athlete_id AS athlete_id, " +
-                        "athlete_name AS athlete_id, " +
+                        "athlete_name AS athlete_name, " +
                         "athlete_gender AS athlete_gender, " +
                         "club_id AS club_id, " +
                         "club_name AS club_name, " +
