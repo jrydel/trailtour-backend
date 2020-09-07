@@ -23,7 +23,7 @@ public class AthleteService {
         return athleteRepository.get(database, id);
     }
 
-    public Map<String, List<Map<String, Object>>> getAll(String database) throws SQLException {
+    public List<Map<String, Object>> getAll(String database) throws SQLException {
         return athleteRepository.getAll(database);
     }
 
