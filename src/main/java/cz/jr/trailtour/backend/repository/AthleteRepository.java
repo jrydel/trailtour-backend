@@ -100,7 +100,7 @@ public class AthleteRepository extends BaseRepository {
                         "e.date AS activity_date " +
                         "FROM " + database + ".athlete_result a " +
                         "JOIN " + database + ".athlete b ON a.athlete_id = b.id AND b.status = ? AND b.id = ? " +
-                        "JOIN " + database + ".club c ON c.name = b.club_name AND c.status = ? " +
+                        "LEFT JOIN " + database + ".club c ON c.name = b.club_name AND c.status = ? " +
                         "JOIN " + database + ".stage d ON d.number = a.stage_number " +
                         "LEFT JOIN " + database + ".activity e ON e.athlete_id = b.id AND e.stage_number = d.number " +
                         "WHERE a.timestamp = ?",
