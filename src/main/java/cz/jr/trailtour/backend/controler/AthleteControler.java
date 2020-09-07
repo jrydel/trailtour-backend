@@ -33,8 +33,8 @@ public class AthleteControler {
 
     @CrossOrigin
     @GetMapping(value = "/getAthletes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getAthletes(@RequestParam(value = "database") String database) throws SQLException {
-        return new ResponseEntity<>(athleteService.getAll(database), HttpStatus.OK);
+    public ResponseEntity<List<Map<String, Object>>> getAthletes(@RequestParam(value = "database") String database, @RequestParam(value = "gender") String gender) throws SQLException {
+        return new ResponseEntity<>(athleteService.getAll(database, gender), HttpStatus.OK);
     }
 
     @CrossOrigin

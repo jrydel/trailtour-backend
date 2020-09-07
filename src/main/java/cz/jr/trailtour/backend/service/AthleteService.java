@@ -23,8 +23,8 @@ public class AthleteService {
         return athleteRepository.get(database, id);
     }
 
-    public List<Map<String, Object>> getAll(String database) throws SQLException {
-        return athleteRepository.getAll(database);
+    public List<Map<String, Object>> getAll(String database, String gender) throws SQLException {
+        return athleteRepository.getAll(database, gender);
     }
 
     public List<Map<String, Object>> getAllFulltext(String database, String match) throws SQLException {

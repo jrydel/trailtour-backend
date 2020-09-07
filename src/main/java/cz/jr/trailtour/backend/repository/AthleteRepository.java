@@ -44,7 +44,7 @@ public class AthleteRepository extends BaseRepository {
         );
     }
 
-    public List<Map<String, Object>> getAll(String database) throws SQLException {
+    public List<Map<String, Object>> getAll(String database, String gender) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectList("SELECT " +
                         "a.id AS athlete_id, " +
@@ -60,8 +60,9 @@ public class AthleteRepository extends BaseRepository {
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result e WHERE e.athlete_id = a.id AND e.timestamp = ? AND e.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
-                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ?",
-                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate)},
+                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
+                        "WHERE a.gender = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), gender},
                 MysqlRepository::loadResultSet
         );
     }
