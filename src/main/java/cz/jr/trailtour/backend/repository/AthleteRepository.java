@@ -70,7 +70,7 @@ public class AthleteRepository extends BaseRepository {
                         "a.name AS athlete_name, " +
                         "a.gender AS athlete_gender, " +
                         "b.id AS club_id, " +
-                        "b.name AS club_name, " +
+                        "b.name AS club_name " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "WHERE a.id LIKE ? OR a.name LIKE ? LIMIT 10",
