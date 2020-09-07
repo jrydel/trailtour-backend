@@ -94,7 +94,10 @@ public class AthleteRepository extends BaseRepository {
                         "a.points AS points, " +
                         "a.trailtour_position AS trailtour_position, " +
                         "a.trailtour_points AS trailtour_points, " +
-                        "a.trailtour_time AS trailtour_time " +
+                        "a.trailtour_time AS trailtour_time, " +
+                        "e.id AS activity_id, " +
+                        "e.time AS activity_time, " +
+                        "e.date AS activity_date " +
                         "FROM " + database + ".athlete_result a " +
                         "JOIN " + database + ".athlete b ON a.athlete_id = b.id AND b.status = ? AND b.id = ? " +
                         "JOIN " + database + ".club c ON c.name = b.club_name AND c.status = ? " +
