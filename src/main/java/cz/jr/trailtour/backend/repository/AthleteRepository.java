@@ -39,7 +39,7 @@ public class AthleteRepository extends BaseRepository {
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
                         "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
                         "WHERE a.id = ?",
-                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), id},
+                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), id},
                 MysqlRepository::loadResultSet
         );
     }
@@ -60,9 +60,8 @@ public class AthleteRepository extends BaseRepository {
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result e WHERE e.athlete_id = a.id AND e.timestamp = ? AND e.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
-                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
-                        "WHERE a.id = ?",
-                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate)},
+                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate)},
                 MysqlRepository::loadResultSet
         );
     }
@@ -104,39 +103,39 @@ public class AthleteRepository extends BaseRepository {
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
         Map<Integer, Map<String, Object>> result = new HashMap<>();
         select("SELECT " +
-                "stage_number AS stage_number, " +
-                "athlete_id AS athlete_id, " +
-                "athlete_name AS athlete_id, " +
-                "athlete_gender AS athlete_gender, " +
-                "club_id AS club_id, " +
-                "club_name AS club_name, " +
-                "activity_id AS activity_id, " +
-                "activity_time AS activity_time " +
-                "FROM " + database + ".athlete_data " +
-                "WHERE position = 1", new Object[]{},
+                        "stage_number AS stage_number, " +
+                        "athlete_id AS athlete_id, " +
+                        "athlete_name AS athlete_id, " +
+                        "athlete_gender AS athlete_gender, " +
+                        "club_id AS club_id, " +
+                        "club_name AS club_name, " +
+                        "activity_id AS activity_id, " +
+                        "activity_time AS activity_time " +
+                        "FROM " + database + ".athlete_data " +
+                        "WHERE position = 1", new Object[]{},
                 rs -> {
-            while (rs.next()) {
-                int stageNumber = rs.getInt("stage_number");
-                long athleteId = rs.getLong("athlete_id");
-                String athleteName = rs.getString("athlete_name");
-                String athleteGender = rs.getString("athlete_gender");
-                long clubId = rs.getLong("club_id");
-                String clubName = rs.getString("club_name");
-                long activityId = rs.getLong("activity_id");
-                int activityTime = rs.getInt("activity_time");
+                    while (rs.next()) {
+                        int stageNumber = rs.getInt("stage_number");
+                        long athleteId = rs.getLong("athlete_id");
+                        String athleteName = rs.getString("athlete_name");
+                        String athleteGender = rs.getString("athlete_gender");
+                        long clubId = rs.getLong("club_id");
+                        String clubName = rs.getString("club_name");
+                        long activityId = rs.getLong("activity_id");
+                        int activityTime = rs.getInt("activity_time");
 
-                Map<String, Object> temp = new HashMap<>();
-                temp.put("athlete_id", athleteId);
-                temp.put("athlete_name", athleteName);
-                temp.put("club_id", clubId);
-                temp.put("club_name", clubName);
-                temp.put("activity_id", activityId);
-                temp.put("activity_time", activityTime);
+                        Map<String, Object> temp = new HashMap<>();
+                        temp.put("athlete_id", athleteId);
+                        temp.put("athlete_name", athleteName);
+                        temp.put("club_id", clubId);
+                        temp.put("club_name", clubName);
+                        temp.put("activity_id", activityId);
+                        temp.put("activity_time", activityTime);
 
-                result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
-            }
-            return null;
-        });
+                        result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
+                    }
+                    return null;
+                });
         return result;
     }
 
