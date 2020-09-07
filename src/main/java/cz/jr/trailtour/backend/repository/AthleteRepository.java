@@ -80,20 +80,28 @@ public class AthleteRepository extends BaseRepository {
     }
 
     public List<Map<String, Object>> getResults(String database, long id) throws SQLException {
+        LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectList(
                 "SELECT " +
-                        "stage_number AS stage_number, " +
-                        "stage_name AS stage_name, " +
-                        "activity_id AS activity_id, " +
-                        "activity_time AS activity_time, " +
-                        "activity_date AS activity_date, " +
-                        "position AS position, " +
-                        "points AS points, " +
-                        "trailtour_position AS trailtour_position, " +
-                        "trailtour_points AS trailtour_points, " +
-                        "trailtour_time AS trailtour_time " +
-                        "FROM " + database + ".athlete_data WHERE athlete_id = ?",
-                new Object[]{id},
+                        "d.number AS stage_number, " +
+                        "d.name AS stage_name, " +
+                        "b.id AS athlete_id, " +
+                        "b.name AS athlete_name, " +
+                        "b.gender AS athlete_gender, " +
+                        "c.id AS club_id, " +
+                        "c.name AS club_name, " +
+                        "a.position AS position, " +
+                        "a.points AS points, " +
+                        "a.trailtour_position AS trailtour_position, " +
+                        "a.trailtour_points AS trailtour_points, " +
+                        "a.trailtour_time AS trailtour_time " +
+                        "FROM " + database + ".athlete_result a " +
+                        "JOIN " + database + ".athlete b ON a.athlete_id = b.id AND b.status = ? AND b.id = ? " +
+                        "JOIN " + database + ".club c ON c.name = b.club_name AND c.status = ? " +
+                        "JOIN " + database + ".stage d ON d.number = a.stage_number " +
+                        "LEFT JOIN " + database + ".activity e ON e.athlete_id = b.id AND e.stage_number = d.number " +
+                        "WHERE a.timestamp = ?",
+                new Object[]{"enabled", id, "enabled", java.sql.Timestamp.valueOf(lastResultUpdate)},
                 MysqlRepository::loadResultSet
         );
     }
