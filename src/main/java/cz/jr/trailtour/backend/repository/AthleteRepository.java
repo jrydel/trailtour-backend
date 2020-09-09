@@ -28,7 +28,7 @@ public class AthleteRepository extends BaseRepository {
                         "b.name AS club_name, " +
                         "c.position AS position, " +
                         "c.points AS points, " +
-                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = a.id AND d.timestamp = ?) AS stages_count, " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = a.id AND d.timestamp = ? AND d.points IS NOT NULL) AS stages_count, " +
                         "c.trailtour_position AS trailtour_position, " +
                         "c.trailtour_points AS trailtour_points, " +
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result e WHERE e.athlete_id = a.id AND e.timestamp = ? AND e.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
