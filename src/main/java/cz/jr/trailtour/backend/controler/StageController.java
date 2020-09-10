@@ -81,8 +81,8 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getStageResults", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getStageResults(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
-        return new ResponseEntity<>(stageService.getResults(database, number), HttpStatus.OK);
+    public ResponseEntity<List<Map<String, Object>>> getStageResults(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number, @RequestParam(value = "gender") String gender) throws SQLException {
+        return new ResponseEntity<>(stageService.getResults(database, number, gender), HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -93,7 +93,7 @@ public class StageController {
 
     @CrossOrigin
     @GetMapping(value = "/getStageInfos", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<StageInfo>> getStageInfos(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
+    public ResponseEntity<List<Map<String, Object>>> getStageInfos(@RequestParam(value = "database") String database, @RequestParam(value = "number") Integer number) throws SQLException {
         return new ResponseEntity<>(stageService.getInfo(database, number), HttpStatus.OK);
     }
 

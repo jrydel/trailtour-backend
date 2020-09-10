@@ -7,6 +7,7 @@ import cz.jr.trailtour.backend.repository.mysql.MysqlRepository;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,26 +56,40 @@ public class StageRepository extends BaseRepository {
 
     public Map<String, Object> getGPSStart(String database, int number) throws SQLException {
         return selectObject(
-                "SELECT JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage WHERE number = ?",
+                "SELECT " +
+                        "JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, " +
+                        "JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude " +
+                        "FROM " + database + ".stage WHERE number = ?",
                 new Object[]{number},
                 MysqlRepository::loadResultSet
         );
     }
 
-    public List<StageInfo> getInfos(String database, int number) throws SQLException {
-        return selectList("SELECT author, title, content, created FROM " + database + ".stage_info WHERE stage_number = ?", new Object[]{number}, rs -> {
-            StageInfo stageInfo = new StageInfo();
-            stageInfo.setAuthor(rs.getString("author"));
-            stageInfo.setTitle(rs.getString("title"));
-            stageInfo.setContent(rs.getString("content"));
-            stageInfo.setCreated(rs.getTimestamp("created").toLocalDateTime());
-            return stageInfo;
-        });
+    public List<Map<String, Object>> getInfos(String database, int number) throws SQLException {
+        return selectList("SELECT " +
+                        "author AS author, " +
+                        "title AS title, " +
+                        "content AS content, " +
+                        "created AS created " +
+                        "FROM " + database + ".stage_info WHERE stage_number = ?",
+                new Object[]{number},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public List<Map<String, Object>> getAll(String database) throws SQLException {
-        return selectList(
-                "SELECT number, name, distance, elevation, type, trailtour_url, strava_url, mapycz_url, rating_sum, rating_votes FROM " + database + ".stage",
+        return selectList("SELECT " +
+                        "number AS number, " +
+                        "name AS name, " +
+                        "distance AS distance, " +
+                        "elevation AS elevation, " +
+                        "type AS type, " +
+                        "trailtour_url AS trailtour_url, " +
+                        "strava_url AS strava_url, " +
+                        "mapycz_url AS mapycz_url, " +
+                        "rating_sum AS rating_sum, " +
+                        "rating_votes AS rating_votes" +
+                        " FROM " + database + ".stage",
                 new Object[]{},
                 MysqlRepository::loadResultSet
         );
@@ -129,37 +144,38 @@ public class StageRepository extends BaseRepository {
     }
 
     public List<Map<String, Object>> getAllGPSStart(String database) throws SQLException {
-        return selectList("SELECT number, name, JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude FROM " + database + ".stage", new Object[]{},
-                rs -> {
-                    Map<String, Object> temp = new LinkedHashMap<>();
-                    temp.put("stage_number", rs.getObject("number"));
-                    temp.put("stage_name", rs.getObject("name"));
-                    temp.put("latitude", rs.getObject("latitude"));
-                    temp.put("longitude", rs.getObject("longitude"));
-                    return temp;
-                });
+        return selectList("SELECT " +
+                        "number AS stage_number, " +
+                        "name AS name, " +
+                        "JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, " +
+                        "JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude " +
+                        "FROM " + database + ".stage",
+                new Object[]{},
+                MysqlRepository::loadResultSet
+        );
     }
 
-    public List<Map<String, Object>> getResults(String database, int number) throws SQLException {
-        return selectList(
-                "SELECT athlete_id, athlete_name, athlete_gender, club_id, club_name, activity_id, activity_time, position, points, trailtour_position, trailtour_points, trailtour_time FROM " + database + ".athlete_data WHERE stage_number = ?",
-                new Object[]{number},
-                rs -> {
-                    Map<String, Object> result = new LinkedHashMap<>();
-                    result.put("athlete_id", rs.getObject("athlete_id"));
-                    result.put("athlete_name", rs.getObject("athlete_name"));
-                    result.put("athlete_gender", rs.getObject("athlete_gender"));
-                    result.put("club_id", rs.getObject("club_id"));
-                    result.put("club_name", rs.getObject("club_name"));
-                    result.put("activity_id", rs.getObject("activity_id"));
-                    result.put("activity_time", rs.getObject("activity_time"));
-                    result.put("position", rs.getObject("position"));
-                    result.put("points", rs.getObject("points"));
-                    result.put("trailtour_position", rs.getObject("trailtour_position"));
-                    result.put("trailtour_points", rs.getObject("trailtour_points"));
-                    result.put("trailtour_time", rs.getObject("trailtour_time"));
-                    return result;
-                });
+    public List<Map<String, Object>> getResults(String database, int number, String gender) throws SQLException {
+        LocalDateTime lastResultUpdate = getLastResultUpdate(database);
+        return selectList("SELECT " +
+                        "b.id AS athlete_id, " +
+                        "b.name AS athlete_name, " +
+                        "b.gender AS athlete_gender, " +
+                        "c.id AS club_id, " +
+                        "c.name AS club_name, " +
+                        "a.position AS position, " +
+                        "a.points AS points, " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ?) AS stages_count, " +
+                        "a.trailtour_position AS trailtour_position, " +
+                        "a.trailtour_points AS trailtour_points, " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result e WHERE e.athlete_id = b.id AND e.timestamp = ? AND e.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
+                        "FROM " + database + ".athlete_result a " +
+                        "JOIN " + database + ".athlete b ON a.athlete_id = b.id " +
+                        "LEFT JOIN " + database + ".club c ON c.name = b.club_name " +
+                        "WHERE b.gender = ? AND a.stage_number = ? AND a.timestamp = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), gender, number, java.sql.Timestamp.valueOf(lastResultUpdate)},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public Map<String, Integer> getResultsCounts(String database, int stageNumber) throws SQLException {

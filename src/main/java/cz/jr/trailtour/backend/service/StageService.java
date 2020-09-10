@@ -59,15 +59,15 @@ public class StageService {
         return stageRepository.getFulltext(database, match);
     }
 
-    public List<Map<String, Object>> getResults(String database, int number) throws SQLException {
-        return stageRepository.getResults(database, number);
+    public List<Map<String, Object>> getResults(String database, int number, String gender) throws SQLException {
+        return stageRepository.getResults(database, number, gender);
     }
 
     public Map<String, Integer> getResultsCounts(String database, int number) throws SQLException {
         return stageRepository.getResultsCounts(database, number);
     }
 
-    public List<StageInfo> getInfo(String database, int number) throws SQLException {
+    public List<Map<String, Object>> getInfo(String database, int number) throws SQLException {
         return stageRepository.getInfos(database, number);
     }
 

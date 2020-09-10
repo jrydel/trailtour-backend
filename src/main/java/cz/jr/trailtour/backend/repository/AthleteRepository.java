@@ -6,7 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jiří Rýdel on 4/29/20, 2:44 PM
@@ -60,21 +63,6 @@ public class AthleteRepository extends BaseRepository {
                         "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
                         "WHERE a.gender = ?",
                 new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), java.sql.Timestamp.valueOf(lastResultUpdate), gender},
-                MysqlRepository::loadResultSet
-        );
-    }
-
-    public List<Map<String, Object>> getFulltext(String database, String match) throws SQLException {
-        return selectList("SELECT " +
-                        "a.id AS athlete_id, " +
-                        "a.name AS athlete_name, " +
-                        "a.gender AS athlete_gender, " +
-                        "b.id AS club_id, " +
-                        "b.name AS club_name " +
-                        "FROM " + database + ".athlete a " +
-                        "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
-                        "WHERE a.id LIKE ? OR a.name LIKE ? LIMIT 10",
-                new Object[]{"%" + match + "%", "%" + match + "%"},
                 MysqlRepository::loadResultSet
         );
     }
@@ -148,62 +136,18 @@ public class AthleteRepository extends BaseRepository {
         return result;
     }
 
-    public List<Map<String, Object>> getLadder(String database, String gender) throws SQLException {
-        LocalDateTime lastUpdate = getLastResultUpdate(database);
-        return selectList(
-                "SELECT " +
+    public List<Map<String, Object>> getFulltext(String database, String match) throws SQLException {
+        return selectList("SELECT " +
                         "a.id AS athlete_id, " +
                         "a.name AS athlete_name, " +
+                        "a.gender AS athlete_gender, " +
                         "b.id AS club_id, " +
-                        "b.name AS club_name, " +
-                        "c.position AS position, " +
-                        "c.points AS points, " +
-                        "c.trailtour_position AS trailtour_position, " +
-                        "c.trailtour_points AS trailtour_points, " +
-                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = a.id AND d.trailtour_points IS NOT NULL AND d.timestamp = ?) AS stage_count " +
+                        "b.name AS club_name " +
                         "FROM " + database + ".athlete a " +
                         "LEFT JOIN " + database + ".club b ON b.name = a.club_name " +
-                        "LEFT JOIN " + database + ".athlete_ladder c ON c.athlete_id = a.id AND c.timestamp = ? " +
-                        "WHERE a.gender = ? GROUP BY a.id",
-                new Object[]{
-                        java.sql.Timestamp.valueOf(lastUpdate),
-                        java.sql.Timestamp.valueOf(lastUpdate),
-                        gender
-                },
+                        "WHERE a.id LIKE ? OR a.name LIKE ? LIMIT 10",
+                new Object[]{"%" + match + "%", "%" + match + "%"},
                 MysqlRepository::loadResultSet
         );
-    }
-
-    public List<Map<String, Object>> getHistory(String database, List<Long> ids) throws SQLException {
-        List<Map<String, Object>> result = new ArrayList<>();
-        for (Long id : ids) {
-            Map<String, Object> map = selectObject(
-                    "SELECT " +
-                            "a.id AS athlete_id, " +
-                            "a.name AS athlete_name, " +
-                            "a.gender AS athlete_gender, " +
-                            "b.id AS club_id, " +
-                            "b.name AS club_name " +
-                            "FROM " + database + ".athlete a " +
-                            "LEFT JOIN " + database + ".club b ON a.club_name = b.name WHERE a.id = ?",
-                    new Object[]{id},
-                    MysqlRepository::loadResultSet
-            );
-            List<Map<String, Object>> map2 = selectList(
-                    "SELECT " +
-                            "a.position AS position, " +
-                            "a.points AS points, " +
-                            "a.trailtour_position AS trailtour_position, " +
-                            "a.trailtour_points AS trailtour_points, " +
-                            "a.timestamp AS timestamp " +
-                            "FROM " + database + ".athlete_ladder a " +
-                            "WHERE a.athlete_id = ? AND a.timestamp = (SELECT MAX(x.timestamp) FROM " + database + ".athlete_ladder x WHERE DATE(x.timestamp) = DATE(a.timestamp) AND x.athlete_id = a.athlete_id)",
-                    new Object[]{id},
-                    MysqlRepository::loadResultSet
-            );
-            map.put("data", map2);
-            result.add(map);
-        }
-        return result;
     }
 }

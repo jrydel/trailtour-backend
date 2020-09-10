@@ -38,12 +38,4 @@ public class AthleteService {
     public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
         return athleteRepository.getKomResults(database);
     }
-
-    public List<Map<String, Object>> getLadder(String database, String gender) throws SQLException {
-        return athleteRepository.getLadder(database, gender);
-    }
-
-    public List<Map<String, Object>> getHistory(String database, List<Long> ids) throws SQLException {
-        return athleteRepository.getHistory(database, ids);
-    }
 }

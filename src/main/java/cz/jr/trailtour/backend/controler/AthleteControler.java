@@ -48,16 +48,4 @@ public class AthleteControler {
     public ResponseEntity<Map<Integer, Map<String, Object>>> getKomResults(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(athleteService.getKomResults(database), HttpStatus.OK);
     }
-
-    @CrossOrigin
-    @GetMapping(value = "/getAthleteLadder", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getAthleteLadder(@RequestParam(value = "database") String database, @RequestParam(value = "gender") String gender) throws SQLException {
-        return new ResponseEntity<>(athleteService.getLadder(database, gender), HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @GetMapping(value = "/getAthleteHistory", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getAthleteLadder(@RequestParam(value = "database") String database, @RequestParam(name = "id") List<Long> ids) throws SQLException {
-        return new ResponseEntity<>(athleteService.getHistory(database, ids), HttpStatus.OK);
-    }
 }
