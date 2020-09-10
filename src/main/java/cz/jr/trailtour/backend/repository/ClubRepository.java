@@ -23,7 +23,14 @@ public class ClubRepository extends BaseRepository {
 
     public Map<String, Object> get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
-        return selectObject("SELECT a.name, b.position, b.points, b.trailtour_position, b.trailtour_points FROM " + database + ".club a " +
+        return selectObject("SELECT " +
+                        "a.name AS club_name, " +
+                        "b.position AS position, " +
+                        "b.points AS points, " +
+                        "b.trailtour_position AS trailtour_position, " +
+                        "b.trailtour_points AS trailtour_points," +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete c WHERE c.club_name = a.name) AS athletes_count " +
+                        "FROM " + database + ".club a " +
                         "LEFT JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ? WHERE a.id = ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastResultUpdate),
