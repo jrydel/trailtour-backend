@@ -108,8 +108,8 @@ public class ClubRepository extends BaseRepository {
                         "b.name AS athlete_name, " +
                         "b.gender AS athlete_gender" +
                         "c.trailtour_points, " +
-                        "c.trailtour_position " +
-                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ? AND d.trailtour_points IS NOT NULL) AS trailtour_stages_count, " +
+                        "c.trailtour_position, " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ? AND d.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
                         "FROM trailtour.athlete a " +
                         "LEFT JOIN trailtour.athlete b ON a.name = b.club_name " +
                         "LEFT JOIN trailtour.athlete_ladder c ON c.athlete_id = b.id AND c.timestamp = ? " +
