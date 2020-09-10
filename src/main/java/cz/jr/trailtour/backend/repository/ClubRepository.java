@@ -29,31 +29,16 @@ public class ClubRepository extends BaseRepository {
                         "b.points AS points, " +
                         "b.trailtour_position AS trailtour_position, " +
                         "b.trailtour_points AS trailtour_points," +
-                        "(SELECT COUNT(c.id) FROM " + database + ".athlete c WHERE c.club_name = club_name) AS athletes_count " +
+                        "(SELECT COUNT(c.id) FROM " + database + ".athlete c WHERE c.club_name = a.name) AS athletes_count " +
                         "FROM " + database + ".club a " +
-                        "LEFT JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ? WHERE a.id = ?",
+                        "LEFT JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ? " +
+                        "WHERE a.id = ?",
                 new Object[]{
                         java.sql.Timestamp.valueOf(lastResultUpdate),
                         id
                 },
-                rs -> {
-                    String clubName = rs.getString("a.name");
-
-                    Integer position = rs.getObject("b.position", Integer.class);
-                    Double points = rs.getObject("b.points", Double.class);
-                    Integer trailtourPosition = rs.getObject("b.trailtour_position", Integer.class);
-                    Double trailtourPoints = rs.getObject("b.trailtour_points", Double.class);
-
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("id", id);
-                    map.put("name", clubName);
-                    map.put("position", position);
-                    map.put("points", points);
-                    map.put("trailtourPosition", trailtourPosition);
-                    map.put("trailtourPoints", trailtourPoints);
-
-                    return map;
-                });
+                MysqlRepository::loadResultSet
+        );
     }
 
     public List<Map<String, Object>> getAll(String database) throws SQLException {
