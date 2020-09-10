@@ -29,7 +29,7 @@ public class ClubRepository extends BaseRepository {
                         "b.points AS points, " +
                         "b.trailtour_position AS trailtour_position, " +
                         "b.trailtour_points AS trailtour_points," +
-                        "(SELECT COUNT(*) FROM " + database + ".athlete c WHERE c.club_name = club_name) AS athletes_count " +
+                        "(SELECT COUNT(c.id) FROM " + database + ".athlete c WHERE c.club_name = club_name) AS athletes_count " +
                         "FROM " + database + ".club a " +
                         "LEFT JOIN " + database + ".club_ladder b ON b.club_name = a.name AND b.timestamp = ? WHERE a.id = ?",
                 new Object[]{
