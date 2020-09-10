@@ -106,7 +106,7 @@ public class ClubRepository extends BaseRepository {
                 "SELECT " +
                         "b.id AS athlete_id, " +
                         "b.name AS athlete_name, " +
-                        "b.gender AS athlete_gender" +
+                        "b.gender AS athlete_gender, " +
                         "c.trailtour_points, " +
                         "c.trailtour_position, " +
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ? AND d.trailtour_points IS NOT NULL) AS trailtour_stages_count " +
