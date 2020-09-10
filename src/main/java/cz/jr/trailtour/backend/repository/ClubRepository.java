@@ -24,7 +24,7 @@ public class ClubRepository extends BaseRepository {
     public Map<String, Object> get(String database, long id) throws SQLException {
         LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectObject("SELECT " +
-                        "a.name AS club_name, " +
+                        "a.name AS name, " +
                         "b.position AS position, " +
                         "b.points AS points, " +
                         "b.trailtour_position AS trailtour_position, " +
