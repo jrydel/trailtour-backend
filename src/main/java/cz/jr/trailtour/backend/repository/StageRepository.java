@@ -168,6 +168,7 @@ public class StageRepository extends BaseRepository {
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ?) AS stages_count, " +
                         "a.trailtour_position AS trailtour_position, " +
                         "a.trailtour_points AS trailtour_points, " +
+                        "a.trailtour_time AS trailtour_time, " +
                         "(SELECT COUNT(*) FROM " + database + ".athlete_result e WHERE e.athlete_id = b.id AND e.timestamp = ? AND e.trailtour_points IS NOT NULL) AS trailtour_stages_count ," +
                         "f.id AS activity_id, " +
                         "f.time AS activity_time, " +
