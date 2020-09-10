@@ -103,22 +103,19 @@ public class ClubRepository extends BaseRepository {
     public List<Map<String, Object>> getAllAthletes(String database, long id) throws SQLException {
         LocalDateTime lastUpdate = getLastResultUpdate(database);
         return selectList(
-                "SELECT b.id, b.name, COUNT(c.athlete_id) AS stages, d.trailtour_points, d.trailtour_position FROM trailtour.club a " +
-                        "JOIN trailtour.athlete b ON a.name  = b.club_name " +
-                        "LEFT JOIN trailtour.athlete_result c ON c.athlete_id  = b.id " +
-                        "LEFT JOIN trailtour.athlete_ladder d ON d.athlete_id = b.id " +
-                        "WHERE a.id = ? AND b.status = ? AND c.timestamp = ? AND d.timestamp = ? " +
-                        "GROUP BY b.id",
-                new Object[]{id, "enabled", java.sql.Timestamp.valueOf(lastUpdate), java.sql.Timestamp.valueOf(lastUpdate)},
-                rs -> {
-                    Map<String, Object> map = new LinkedHashMap<>();
-                    map.put("athlete_id", rs.getLong("b.id"));
-                    map.put("athlete_name", rs.getString("b.name"));
-                    map.put("stage_count", rs.getInt("stages"));
-                    map.put("trailtour_points", rs.getDouble("d.trailtour_points"));
-                    map.put("trailtour_position", rs.getInt("d.trailtour_position"));
-                    return map;
-                }
+                "SELECT " +
+                        "b.id AS athlete_id, " +
+                        "b.name AS athlete_name, " +
+                        "b.gender AS athlete_gender" +
+                        "c.trailtour_points, " +
+                        "c.trailtour_position " +
+                        "(SELECT COUNT(*) FROM " + database + ".athlete_result d WHERE d.athlete_id = b.id AND d.timestamp = ? AND d.trailtour_points IS NOT NULL) AS trailtour_stages_count, " +
+                        "FROM trailtour.athlete a " +
+                        "LEFT JOIN trailtour.athlete b ON a.name = b.club_name " +
+                        "LEFT JOIN trailtour.athlete_ladder c ON c.athlete_id = b.id AND c.timestamp = ? " +
+                        "WHERE a.id = ?",
+                new Object[]{java.sql.Timestamp.valueOf(lastUpdate), java.sql.Timestamp.valueOf(lastUpdate), id},
+                MysqlRepository::loadResultSet
         );
     }
 
