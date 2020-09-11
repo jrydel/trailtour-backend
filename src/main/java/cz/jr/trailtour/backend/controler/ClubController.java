@@ -26,21 +26,15 @@ public class ClubController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getClubs", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getClubs(@RequestParam(value = "database") String database) throws SQLException {
-        return new ResponseEntity<>(clubService.getAll(database), HttpStatus.OK);
-    }
-
-    @CrossOrigin
     @GetMapping(value = "/getClub", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getClub(@RequestParam(value = "database") String database, @RequestParam(value = "id") Long id) throws SQLException {
         return new ResponseEntity<>(clubService.get(database, id), HttpStatus.OK);
     }
 
     @CrossOrigin
-    @GetMapping(value = "/getClubLadder", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Map<String, Object>>> getClubLadder(@RequestParam(value = "database") String database) throws SQLException {
-        return new ResponseEntity<>(clubService.getLadder(database), HttpStatus.OK);
+    @GetMapping(value = "/getClubs", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getClubs(@RequestParam(value = "database") String database) throws SQLException {
+        return new ResponseEntity<>(clubService.getAll(database), HttpStatus.OK);
     }
 
     @CrossOrigin

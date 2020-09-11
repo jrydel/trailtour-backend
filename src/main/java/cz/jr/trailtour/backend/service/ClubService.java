@@ -31,10 +31,6 @@ public class ClubService {
         return clubRepository.getAllAthletes(database, id);
     }
 
-    public List<Map<String, Object>> getLadder(String database) throws SQLException {
-        return clubRepository.getLadder(database);
-    }
-
     public List<Map<String, Object>> getAllFulltext(String database, String match) throws SQLException {
         return clubRepository.getFulltext(database, match);
     }
