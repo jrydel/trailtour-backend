@@ -145,7 +145,7 @@ public class StageRepository extends BaseRepository {
 
     public List<Map<String, Object>> getAllGPSStart(String database) throws SQLException {
         return selectList("SELECT " +
-                        "number AS stage_number, " +
+                        "number AS number, " +
                         "name AS name, " +
                         "JSON_EXTRACT(strava_data , '$.latlng[0][0]') AS latitude, " +
                         "JSON_EXTRACT(strava_data , '$.latlng[0][1]') AS longitude " +
