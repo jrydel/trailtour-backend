@@ -36,7 +36,9 @@ public class ResultRepository extends BaseRepository {
                         "b.club_name AS club_name, " +
                         "c.number AS stage_number, " +
                         "c.name AS stage_name, " +
+                        "d.position AS position," +
                         "d.points AS points," +
+                        "d.trailtour_position AS trailtour_position, " +
                         "d.trailtour_points AS trailtour_points, " +
                         "e.id AS club_id " +
                         "FROM " + database + ".activity a " +
