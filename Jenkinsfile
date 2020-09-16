@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'cp target/trailtour.war /data/tomcat/webapps'
+                sh 'cp target/trailtour-backend.war /data/tomcat/webapps'
             }
         }
     }

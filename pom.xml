@@ -82,7 +82,7 @@
     </dependencies>
 
     <build>
-        <finalName>trailtour</finalName>
+        <finalName>trailtour-backend</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
