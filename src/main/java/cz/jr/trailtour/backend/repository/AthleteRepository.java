@@ -105,7 +105,7 @@ public class AthleteRepository extends BaseRepository {
                         "d.name AS club_name, " +
                         "e.activity_id AS activity_id, " +
                         "e.activity_time AS activity_time " +
-                        "FROM " + database + ".staget a " +
+                        "FROM " + database + ".stage a " +
                         "JOIN " + database + ".athlete_result b ON b.stage_number = a.number " +
                         "JOIN " + database + ".athlete c ON c.id = b.athlete_id " +
                         "LEFT JOIN " + database + ".club d ON d.name = c.club_name " +
