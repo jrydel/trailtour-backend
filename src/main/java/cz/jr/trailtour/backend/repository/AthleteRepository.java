@@ -96,6 +96,7 @@ public class AthleteRepository extends BaseRepository {
     }
 
     public List<Map<String, Object>> getKomResults(String database) throws SQLException {
+        LocalDateTime lastResultUpdate = getLastResultUpdate(database);
         return selectList("SELECT " +
                         "a.number AS stage_number, " +
                         "c.id AS athlete_id, " +
@@ -110,8 +111,8 @@ public class AthleteRepository extends BaseRepository {
                         "JOIN " + database + ".athlete c ON c.id = b.athlete_id " +
                         "LEFT JOIN " + database + ".club d ON d.name = c.club_name " +
                         "JOIN " + database + ".activity e ON e.athlete_id = c.id AND e.stage_number = a.number " +
-                        "WHERE b.trailtour_position = 1",
-                new Object[]{},
+                        "WHERE b.timestamp = ? AND b.trailtour_position = 1",
+                new Object[]{java.sql.Timestamp.valueOf(lastResultUpdate)},
                 MysqlRepository::loadResultSet
         );
     }
