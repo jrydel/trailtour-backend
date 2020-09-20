@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,43 +95,25 @@ public class AthleteRepository extends BaseRepository {
         );
     }
 
-    public Map<Integer, Map<String, Object>> getKomResults(String database) throws SQLException {
-        Map<Integer, Map<String, Object>> result = new LinkedHashMap<>();
-        select("SELECT " +
-                        "stage_number AS stage_number, " +
-                        "athlete_id AS athlete_id, " +
-                        "athlete_name AS athlete_name, " +
-                        "athlete_gender AS athlete_gender, " +
-                        "club_id AS club_id, " +
-                        "club_name AS club_name, " +
-                        "activity_id AS activity_id, " +
-                        "activity_time AS activity_time " +
-                        "FROM " + database + ".athlete_data " +
-                        "WHERE position = 1", new Object[]{},
-                rs -> {
-                    while (rs.next()) {
-                        int stageNumber = rs.getInt("stage_number");
-                        long athleteId = rs.getLong("athlete_id");
-                        String athleteName = rs.getString("athlete_name");
-                        String athleteGender = rs.getString("athlete_gender");
-                        long clubId = rs.getLong("club_id");
-                        String clubName = rs.getString("club_name");
-                        long activityId = rs.getLong("activity_id");
-                        int activityTime = rs.getInt("activity_time");
-
-                        Map<String, Object> temp = new HashMap<>();
-                        temp.put("athlete_id", athleteId);
-                        temp.put("athlete_name", athleteName);
-                        temp.put("club_id", clubId);
-                        temp.put("club_name", clubName);
-                        temp.put("activity_id", activityId);
-                        temp.put("activity_time", activityTime);
-
-                        result.computeIfAbsent(stageNumber, k -> new HashMap<>()).put(athleteGender, temp);
-                    }
-                    return null;
-                });
-        return result;
+    public List<Map<String, Object>> getKomResults(String database) throws SQLException {
+        return selectList("SELECT " +
+                        "a.number AS stage_number, " +
+                        "c.id AS athlete_id, " +
+                        "c.name AS athlete_name, " +
+                        "c.gender AS athlete_gender, " +
+                        "d.id AS club_id, " +
+                        "d.name AS club_name, " +
+                        "e.activity_id AS activity_id, " +
+                        "e.activity_time AS activity_time " +
+                        "FROM " + database + ".staget a " +
+                        "JOIN " + database + ".athlete_result b ON b.stage_number = a.number " +
+                        "JOIN " + database + ".athlete c ON c.id = b.athlete_id " +
+                        "LEFT JOIN " + database + ".club d ON d.name = c.club_name " +
+                        "JOIN " + database + ".activity e ON e.athlete_id = c.id AND e.stage_number = a.number " +
+                        "WHERE b.trailtour_position = 1",
+                new Object[]{},
+                MysqlRepository::loadResultSet
+        );
     }
 
     public List<Map<String, Object>> getFulltext(String database, String match) throws SQLException {

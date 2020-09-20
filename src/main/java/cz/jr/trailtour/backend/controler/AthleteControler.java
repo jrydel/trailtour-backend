@@ -45,7 +45,7 @@ public class AthleteControler {
 
     @CrossOrigin
     @GetMapping(value = "/getKomResults", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<Integer, Map<String, Object>>> getKomResults(@RequestParam(value = "database") String database) throws SQLException {
+    public ResponseEntity<List<Map<String, Object>>> getKomResults(@RequestParam(value = "database") String database) throws SQLException {
         return new ResponseEntity<>(athleteService.getKomResults(database), HttpStatus.OK);
     }
 }
