@@ -9,7 +9,7 @@ public class Constants {
     public static final String DATABASE_URL = "jdbc:mysql://37.205.12.14:3306";
     public static final String DATABASE_NAME = "trailtour";
     public static final String DATABASE_USER = "admin";
-    public static final String DATABASE_PASSWORD = "klekanice17081992";
+    public static final String DATABASE_PASSWORD = "*****";
 
     public static final String TIMEZONE = "Europe/Prague";
     public static final String DATE_FORMAT = "yyyy-MM-dd";
